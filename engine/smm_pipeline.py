@@ -157,8 +157,10 @@ def render_vertical_mp4(ep: dict) -> dict:
     srt_file = SUBTITLES_DIR / f"{ep_id}.srt"
     hash_file = VIDEOS_DIR / f"{ep_id}.sha256"
 
+    visual_asset = Path(__file__).resolve().parent / "brand_assets" / "og-preview.png"
+    visual_hash = hashlib.sha256(visual_asset.read_bytes()).hexdigest() if visual_asset.exists() else "missing"
     content_fingerprint = hashlib.sha256(
-        (ep["voiceover_script"] + json.dumps(ep["slides"], sort_keys=True)).encode("utf-8")
+        (ep["voiceover_script"] + json.dumps(ep["slides"], sort_keys=True) + visual_hash).encode("utf-8")
     ).hexdigest()
 
     if (
@@ -168,11 +170,20 @@ def render_vertical_mp4(ep: dict) -> dict:
         and hash_file.exists()
         and hash_file.read_text(encoding="utf-8").strip() == content_fingerprint
     ):
+        duration = None
+        ffprobe = shutil.which("ffprobe")
+        if ffprobe:
+            probe = subprocess.run([ffprobe, "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", str(out_mp4)], capture_output=True, text=True)
+            if probe.returncode == 0:
+                try:
+                    duration = round(float(probe.stdout.strip()), 1)
+                except ValueError:
+                    pass
         return {
             "video_file": f"marketing_outbox/videos/{ep_id}.mp4",
             "subtitle_file": f"marketing_outbox/subtitles/{ep_id}.srt",
             "content_sha256": content_fingerprint,
-            "duration_sec": 24.0,
+            "duration_sec": duration,
             "file_size_bytes": out_mp4.stat().st_size
         }
 
