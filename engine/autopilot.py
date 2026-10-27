@@ -63,7 +63,7 @@ def compute_expected_saas(mode: str, a: float, b: float, c: float, d: float) -> 
         payback = (d / (a * (b / 100.0))) if (a * (b / 100.0)) > 0 else 0.0
         return fmt_money(ltv), f"{ratio:.2f}x", f"{payback:.1f} months"
     if mode == "roas":
-        margin = max(0.01, a - b)
+        margin = a - b
         margin_pct = (margin / a) if a > 0 else 0.01
         be_roas = 1.0 / margin_pct
         gross_rev = c * d
@@ -90,7 +90,7 @@ def compute_expected_saas(mode: str, a: float, b: float, c: float, d: float) -> 
         monthly_lift = extra_sales * d
         return fmt_money(monthly_lift), fmt_money(monthly_lift * 12.0), f"+{extra_sales:.1f}"
     if mode == "hourly_rate":
-        gross_needed = (a + b) / max(0.1, 1.0 - d / 100.0)
+        gross_needed = (a + b) / (1.0 - d / 100.0)
         annual_hours = max(1.0, c * 48.0)
         hourly = gross_needed / annual_hours
         return f"{fmt_money(hourly)}/hr", f"{fmt_money(hourly * 8.0)}/day", fmt_money(gross_needed)
@@ -190,6 +190,7 @@ function runToolInSandbox(tool, queryStr = '', customInputs = {}) {
 
   const cfg = tool.config;
   if (tool.tool_type === 'corridor_engine') {
+    makeEl('in-include-mor').checked = customInputs.include_mor === true;
     makeEl('in-country', customInputs.country || cfg.default_country || 'AM');
     makeEl('in-amount', customInputs.amount !== undefined ? customInputs.amount : cfg.default_amount);
     makeEl('in-origin-pct', customInputs.origin_pct !== undefined ? customInputs.origin_pct : cfg.default_origin_pct);
@@ -246,6 +247,7 @@ function runToolInSandbox(tool, queryStr = '', customInputs = {}) {
     makeEl('lbl-r2'); makeEl('val-r2');
     makeEl('lbl-r3'); makeEl('val-r3');
   } else if (tool.tool_type === 'dev_tool') {
+    makeEl('dev-operation', customInputs.operation || 'encode');
     makeEl('dev-input', customInputs.input !== undefined ? customInputs.input : cfg.sample_input);
     makeEl('dev-output');
     makeEl('btn-run-dev');
@@ -285,6 +287,8 @@ function runToolInSandbox(tool, queryStr = '', customInputs = {}) {
     URLSearchParams,
     URL,
     TextEncoder,
+    TextDecoder,
+    Uint8Array,
     Uint32Array,
     atob: (s) => Buffer.from(s, 'base64').toString('binary'),
     btoa: (s) => Buffer.from(s, 'binary').toString('base64'),
@@ -418,23 +422,24 @@ console.log(JSON.stringify(results));
             fix = float(cfg["fixed_fee"])
             fx = float(cfg["fx_markup_percent"])
 
+            money = (lambda n: fmt_money(n).replace('$', 'AMD ')) if cfg.get('currency') == 'AMD' else fmt_money
             total_rate = (pct + fx) / 100.0
             expected_fee = gross * total_rate + fix
             expected_net = max(0.0, gross - expected_fee)
             expected_rate = (expected_fee / gross) * 100.0 if gross > 0 else 0.0
             expected_reverse = (gross + fix) / (1.0 - total_rate)
 
-            if res.get("net") != fmt_money(expected_net):
-                failures.append(f"{slug}: JS net {res.get('net')} != expected {fmt_money(expected_net)}")
-            if res.get("fee") != fmt_money(expected_fee):
-                failures.append(f"{slug}: JS fee {res.get('fee')} != expected {fmt_money(expected_fee)}")
+            if res.get("net") != money(expected_net):
+                failures.append(f"{slug}: JS net {res.get('net')} != expected {money(expected_net)}")
+            if res.get("fee") != money(expected_fee):
+                failures.append(f"{slug}: JS fee {res.get('fee')} != expected {money(expected_fee)}")
             if res.get("rate") != f"{expected_rate:.2f}%":
                 failures.append(f"{slug}: JS rate {res.get('rate')} != expected {expected_rate:.2f}%")
-            if res.get("reverse") != fmt_money(expected_reverse):
-                failures.append(f"{slug}: JS reverse {res.get('reverse')} != expected {fmt_money(expected_reverse)}")
+            if res.get("reverse") != money(expected_reverse):
+                failures.append(f"{slug}: JS reverse {res.get('reverse')} != expected {money(expected_reverse)}")
             if res.get("matrix_rows") != 6:
                 failures.append(f"{slug}: Expected 6 sensitivity matrix rows, got {res.get('matrix_rows')}")
-            if res.get("negative_guard_net") != "$0.00":
+            if res.get("negative_guard_net") != money(0):
                 failures.append(f"{slug}: Negative input guard failed, got {res.get('negative_guard_net')}")
 
             if slug == "upwork-freelancer-fee-calculator":

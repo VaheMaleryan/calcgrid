@@ -23,7 +23,7 @@
     <meta name="twitter:description" content="Inspect JSON Web Token (JWT) headers, claims, and expiration timestamps 100% client-side without exposing secrets over the network." />
     <meta name="twitter:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Private JWT decoder", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Inspect JSON Web Token (JWT) headers, claims, and expiration timestamps 100% client-side without exposing secrets over the network.", "url": "https://vahemaleryan.github.io/calcgrid/tools/jwt-token-decoder.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is it safer to decode JWTs in a client-side static tool?", "acceptedAnswer": {"@type": "Answer", "text": "Many online decoders log requests on their servers. Because this page is a static client-side script, your token never leaves your browser tab."}}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Private JWT decoder", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Inspect JSON Web Token (JWT) headers, claims, and expiration timestamps 100% client-side without exposing secrets over the network.", "url": "https://vahemaleryan.github.io/calcgrid/tools/jwt-token-decoder.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does decoding prove that a token is authentic or still valid?", "acceptedAnswer": {"@type": "Answer", "text": "No. This tool only displays decoded JSON. It does not verify the signature, issuer, audience, or access rights. Do not trust a token solely because its payload can be decoded."}}]}]}</script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -55,6 +55,7 @@
             <span>FIG. 01 — SOURCE PAYLOAD</span>
             <span>LOCAL BROWSER EXECUTION</span>
           </div>
+
           <div class="field-group">
             <label for="dev-input">Input Buffer (Processed 100% Client-Side)</label>
             <textarea id="dev-input">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzkwMSIsIm5hbWUiOiJWYWhlIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzMwMDAwMDAwLCJleHAiOjE5MDAwMDAwMDB9.signature_placeholder</textarea>
@@ -72,13 +73,13 @@
           <h3>Technical Notes</h3>
           <div class="formula-block">Splits the token on &#x27;.&#x27; delimiters and Base64Url-decodes the Header (Part 1) and Payload Claims (Part 2), formatting `iat` and `exp` Unix timestamps into ISO dates.</div>
           <h3>Frequently Asked Questions</h3>
-          <div class="faq-item"><h4>Why is it safer to decode JWTs in a client-side static tool?</h4><p>Many online decoders log requests on their servers. Because this page is a static client-side script, your token never leaves your browser tab.</p></div>
+          <div class="faq-item"><h4>Does decoding prove that a token is authentic or still valid?</h4><p>No. This tool only displays decoded JSON. It does not verify the signature, issuer, audience, or access rights. Do not trust a token solely because its payload can be decoded.</p></div>
         </div></div><aside class="workspace-reference"><div class="reference-card" id="pro-offline-bundle">
       <span class="kicker">For your working files</span><h3>A little more control.<br/>Entirely offline.</h3>
-      <p>Batch reconciliation and financial models for freelancers and small teams who prefer to keep their work local.</p>
-      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three financial workbooks and CSV models</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
+      <p>Batch reconciliation and illustrative model tables for freelancers and small teams who prefer to keep their work local.</p>
+      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three sample model tables in XLSX and CSV</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
     </div><div class="reference-card" style="background:var(--surface)"><span class="kicker">Keep exploring</span>
-      <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cron-expression-explainer.html">Cron Expression Explainer &amp; Schedule Validator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="base64-url-hash-encoder.html">UTF-8 Safe Base64 &amp; URL Encoder / Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="csv-to-json-converter.html">Instant Browser CSV to JSON &amp; SQL Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="regex-pattern-tester.html">Live Regular Expression Matcher &amp; Group Extractor &rarr;</a></li></ul></div></aside></div>
+      <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cron-expression-explainer.html">Cron Expression Explainer &amp; Schedule Validator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="base64-url-hash-encoder.html">UTF-8 Safe Base64 &amp; URL Encoder / Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="csv-to-json-converter.html">Instant Browser CSV to JSON &amp; SQL Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="regex-pattern-tester.html">Email &amp; Invoice Reference Finder &rarr;</a></li></ul></div></aside></div>
   </main>
 
   <footer>

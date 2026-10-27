@@ -13,13 +13,13 @@
     <item>
       <title>Private Browser CSV Transaction &amp; Hidden FX Fee Auditor</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html</link>
-      <description>Audit Stripe, Payoneer, Wise, Upwork, and Lemon Squeezy CSV payout statements 100% locally in your browser to detect hidden FX markups and fee variances.</description>
+      <description>Check a standardized four-column transaction CSV against illustrative provider baselines, entirely in your browser. Raw provider exports need conversion first.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html</guid>
     </item>
     <item>
       <title>Payoneer Fee &amp; Net Payout Calculator</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/payoneer-fee-calculator.html</link>
-      <description>Calculate exact Payoneer receiving fees, local bank withdrawal deductions, and FX conversion markup.</description>
+      <description>Model Payoneer receiving fees, local bank withdrawal deductions, and FX conversion markup.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/payoneer-fee-calculator.html</guid>
     </item>
     <item>
@@ -49,7 +49,7 @@
     <item>
       <title>Upwork Variable Freelancer Fee Calculator (0%–15%)</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/upwork-freelancer-fee-calculator.html</link>
-      <description>Calculate Upwork&#x27;s variable 0% to 15% freelancer service fee, withdrawal costs, and exact gross bid required to reach your target net pay.</description>
+      <description>Calculate Upwork&#x27;s variable 0% to 15% freelancer service fee, withdrawal costs, and modeled gross bid required to reach your target net pay.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/upwork-freelancer-fee-calculator.html</guid>
     </item>
     <item>
@@ -73,7 +73,7 @@
     <item>
       <title>Armenia Freelancer, Sole Proprietor &amp; Gross Turnover Tax Calculator (Art. 257)</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/armenia-it-tax-turnover-calculator.html</link>
-      <description>Estimate net take-home income in Armenia with turnover tax assessed on full gross sales revenue (RA Tax Code Art. 257), fixed social/stamp contributions, and banking fees.</description>
+      <description>Model an Armenian dram turnover scenario using editable percentage and fixed reserves. Tax eligibility, thresholds and social contributions are not determined automatically.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/armenia-it-tax-turnover-calculator.html</guid>
     </item>
     <item>
@@ -101,9 +101,9 @@
       <guid>https://vahemaleryan.github.io/calcgrid/tools/shopify-profit-margin-calculator.html</guid>
     </item>
     <item>
-      <title>Email Marketing &amp; Newsletter ROI Calculator</title>
+      <title>Email Campaign Contribution Calculator</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/email-marketing-roi-calculator.html</link>
-      <description>Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns.</description>
+      <description>Estimate conversions and contribution before campaign costs from subscribers, click-through rate, conversion rate and contribution per sale.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/email-marketing-roi-calculator.html</guid>
     </item>
     <item>
@@ -139,7 +139,7 @@
     <item>
       <title>UTF-8 Safe Base64 &amp; URL Encoder / Decoder</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/base64-url-hash-encoder.html</link>
-      <description>Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.</description>
+      <description>Encode UTF-8 text to Base64, Base64Url and URL encoding, or select a decoding operation.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/base64-url-hash-encoder.html</guid>
     </item>
     <item>
@@ -149,15 +149,15 @@
       <guid>https://vahemaleryan.github.io/calcgrid/tools/csv-to-json-converter.html</guid>
     </item>
     <item>
-      <title>Live Regular Expression Matcher &amp; Group Extractor</title>
+      <title>Email &amp; Invoice Reference Finder</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/regex-pattern-tester.html</link>
-      <description>Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups.</description>
+      <description>Extract email-like strings and #INV-123 style invoice references from text using the documented built-in pattern.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/regex-pattern-tester.html</guid>
     </item>
     <item>
       <title>SVG to CSS Data URI &amp; React JSX Component Converter</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/svg-to-data-uri-optimizer.html</link>
-      <description>Convert raw SVG markup into URL-encoded CSS `background-image` Data URIs and clean React JSX components.</description>
+      <description>URL-encode SVG markup for a CSS data URI and apply basic class/stroke-width JSX attribute substitutions. Review complex SVG manually.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/svg-to-data-uri-optimizer.html</guid>
     </item>
     <item>
@@ -175,7 +175,7 @@
     <item>
       <title>AI LLM API Token &amp; Monthly Cost Calculator</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/cloud-llm-token-cost-calculator.html</link>
-      <description>Estimate monthly LLM API costs from daily requests, prompt input tokens, completion output tokens, and model pricing per 1M tokens.</description>
+      <description>Estimate a 30-day token budget using total tokens per request, a manually blended price per million tokens, and a blended effective discount.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/cloud-llm-token-cost-calculator.html</guid>
     </item>
     <item>
@@ -185,9 +185,9 @@
       <guid>https://vahemaleryan.github.io/calcgrid/tools/password-entropy-generator.html</guid>
     </item>
     <item>
-      <title>Instant Markdown to Clean Semantic HTML Converter</title>
+      <title>Basic Markdown to HTML Snippet Converter</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/markdown-to-html-converter.html</link>
-      <description>Convert Markdown headings, lists, code blocks, and links into clean semantic HTML snippets ready to paste into any CMS.</description>
+      <description>Convert basic headings, bold text and simple list items to an HTML snippet. Full Markdown parsing and HTML sanitization are not provided.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/markdown-to-html-converter.html</guid>
     </item>
     <item>

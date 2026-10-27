@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Email campaign returns — PayoutFolio</title>
-  <meta name="description" content="Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns." />
+  <title>Email campaign contribution — PayoutFolio</title>
+  <meta name="description" content="Estimate conversions and contribution before campaign costs from subscribers, click-through rate, conversion rate and contribution per sale." />
   <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/email-marketing-roi-calculator.html" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <meta name="theme-color" content="#174f46" />
@@ -13,17 +13,17 @@
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PayoutFolio" />
-    <meta property="og:title" content="Email campaign returns" />
-    <meta property="og:description" content="Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns." />
+    <meta property="og:title" content="Email campaign contribution" />
+    <meta property="og:description" content="Estimate conversions and contribution before campaign costs from subscribers, click-through rate, conversion rate and contribution per sale." />
     <meta property="og:url" content="https://vahemaleryan.github.io/calcgrid/tools/email-marketing-roi-calculator.html" />
     <meta property="og:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
     <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Email campaign returns" />
-    <meta name="twitter:description" content="Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns." />
+    <meta name="twitter:title" content="Email campaign contribution" />
+    <meta name="twitter:description" content="Estimate conversions and contribution before campaign costs from subscribers, click-through rate, conversion rate and contribution per sale." />
     <meta name="twitter:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Email campaign returns", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns.", "url": "https://vahemaleryan.github.io/calcgrid/tools/email-marketing-roi-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is a realistic Click-to-Conversion rate for targeted email lists?", "acceptedAnswer": {"@type": "Answer", "text": "Warm newsletter subscribers typically convert at 2% to 5% on relevant digital products or SaaS offers."}}, {"@type": "Question", "name": "How is Email Revenue Per Subscriber (RPS) calculated?", "acceptedAnswer": {"@type": "Answer", "text": "Divide monthly email-attributed net revenue by your total active subscriber count."}}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Email campaign contribution", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Estimate conversions and contribution before campaign costs from subscribers, click-through rate, conversion rate and contribution per sale.", "url": "https://vahemaleryan.github.io/calcgrid/tools/email-marketing-roi-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is this a net ROI calculation?", "acceptedAnswer": {"@type": "Answer", "text": "No. The model estimates contribution before campaign expenses. Subtract email-platform, creative and other campaign costs separately to assess net profit and ROI."}}]}]}</script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -44,8 +44,8 @@
       <span>MODEL BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (2026-10-27)</span>
     </div>
     <header class="tool-header">
-      <h1>Email campaign returns</h1>
-      <p>Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns.</p>
+      <h1>Email campaign contribution</h1>
+      <p>Estimate conversions and contribution before campaign costs from subscribers, click-through rate, conversion rate and contribution per sale.</p>
       <div class="estimate-notice">Planning estimate · Rates and FX inputs are illustrative, editable assumptions. Confirm availability, fees and tax eligibility with your provider and adviser. <a href="../legal.html" style="text-decoration:underline">Methodology &amp; privacy &rarr;</a></div>
     </header>
 
@@ -53,9 +53,10 @@
         <div class="workspace-grid" id="interactive-tool-root" data-tool-type="saas_calc" data-tool-config="{&quot;label_a&quot;: &quot;Total Subscribers Sent&quot;, &quot;default_a&quot;: 5000, &quot;label_b&quot;: &quot;Click-Through Rate (CTR % of Total Sent)&quot;, &quot;default_b&quot;: 3.2, &quot;label_c&quot;: &quot;Landing Page Conversion Rate (%)&quot;, &quot;default_c&quot;: 4.0, &quot;label_d&quot;: &quot;Net Profit Per Conversion ($)&quot;, &quot;default_d&quot;: 45, &quot;mode&quot;: &quot;email_roi&quot;}"><div class="parameters-sheet">
               <div class="sheet-heading">
                 <span>FIG. 01 — MODEL ASSUMPTIONS</span>
-                <span>VERIFIED: 2026-10-27</span>
+                <span>MODEL: 2026-10-27</span>
               </div>
               <div class="field-group">
+                <p id="model-status" class="field-hint" role="status" aria-live="polite"></p>
                 <label for="in-a">Total Subscribers Sent</label>
                 <input type="number" id="in-a" value="5000" step="any" />
               </div>
@@ -97,17 +98,17 @@
             </div><div class="workspace-notes"><div class="doc-section">
               <span class="kicker">SPECIFICATION &amp; FORMULA</span>
               <h3>Calculation Methodology</h3>
-              <div class="formula-block">Total Clicks = Subscribers × CTR%. Conversions = Clicks × Conv%. Net Revenue = Conversions × Profit per Sale.</div>
+              <div class="formula-block">Conversions = Subscribers × CTR × Conversion Rate. Campaign Contribution = Conversions × Contribution Per Conversion. Campaign spend and fixed costs are excluded; this is not net ROI.</div>
               <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
                 REFERENCE BASIS: Standard Industry Financial &amp; Technical Formula &bull; ASSUMPTIONS MODEL: 2026-10-27
               </p>
               <h3>Reference Notes &amp; FAQ</h3>
-              <div class="faq-item"><h4>What is a realistic Click-to-Conversion rate for targeted email lists?</h4><p>Warm newsletter subscribers typically convert at 2% to 5% on relevant digital products or SaaS offers.</p></div><div class="faq-item"><h4>How is Email Revenue Per Subscriber (RPS) calculated?</h4><p>Divide monthly email-attributed net revenue by your total active subscriber count.</p></div>
+              <div class="faq-item"><h4>Is this a net ROI calculation?</h4><p>No. The model estimates contribution before campaign expenses. Subtract email-platform, creative and other campaign costs separately to assess net profit and ROI.</p></div>
             </div></div><aside class="workspace-reference">
             <div class="reference-card" id="pro-offline-bundle">
       <span class="kicker">For your working files</span><h3>A little more control.<br/>Entirely offline.</h3>
-      <p>Batch reconciliation and financial models for freelancers and small teams who prefer to keep their work local.</p>
-      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three financial workbooks and CSV models</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
+      <p>Batch reconciliation and illustrative model tables for freelancers and small teams who prefer to keep their work local.</p>
+      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three sample model tables in XLSX and CSV</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
     </div><div class="reference-card" style="background:var(--surface)"><span class="kicker">Keep exploring</span>
       <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="saas-mrr-churn-ltv-calculator.html">SaaS Customer Lifetime Value (LTV) &amp; Churn Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="roas-break-even-calculator.html">Break-Even ROAS &amp; Target CPA Ad Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cpm-cpc-ctr-ad-revenue-calculator.html">Website Display Ad &amp; Game eCPM Revenue Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="shopify-profit-margin-calculator.html">E-Commerce &amp; Dropshipping Net Margin Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="ab-test-sample-size-calculator.html">Conversion Rate Lift &amp; Monthly Revenue Impact Calculator &rarr;</a></li></ul></div>
           </aside></div>

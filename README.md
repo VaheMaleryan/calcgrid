@@ -49,3 +49,13 @@ Reverse calculations use the same multi-stage equation as forward payouts, inclu
 FeeAtlas was rejected after finding an existing NAOHP fee-benchmarking product and another fee-research use. `feeatlas.com` is registered and offered for sale; no purchase was made. `feeatlas.io` returned no RDAP registration record, which is not a reservation or guarantee of availability.
 
 PayoutFolio is the working replacement: exact-name web screening found no indexed exact commercial use, USPTO Wordmark queries for `PayoutFolio` and `payout folio` returned no records, and `payoutfolio.com` returned RDAP HTTP 404. This is a preliminary conflict screen, not full international or similarity-based trademark clearance. No domain has been purchased and no claim of trademark registration is made. The display name remains configurable.
+
+## Readiness audit follow-up
+
+The deeper review distinguishes a working free planning beta from a paid launch. The current paid workbook contains sample values rather than calculation formulas and is not approved for sale. The public generator can reconstruct the package; keeping the ZIP untracked does not make its implementation proprietary.
+
+The CSV auditor requires a standardized four-column format and uses illustrative fixed baselines; it does not automatically import native provider statements. Tax inputs are flat reserve assumptions rather than complete statutory tax calculations. The weekly freshness check checks age metadata and does not autonomously re-verify provider schedules or tax law.
+
+A normal static deployment does not provide visitor/conversion analytics, paid checkout fulfillment or autonomous social distribution. Those capabilities require separate implementation, verification and any required owner authorizations. Existing narrated videos use a branded static visual; their episode-specific visuals and legal/fee claims need review before publication.
+
+The audit added edge-case coverage for negative contribution margins, zero/100% denominators, AMD currency output, supported account eligibility, quoted CSV conversion, nested schemas, Unicode decoding, cron bounds, preserved SQL literals, existing UTM fragments, and private-CLI validation. Deliberately limited Markdown, SVG and reference-extraction helpers now describe their actual scope.

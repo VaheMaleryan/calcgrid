@@ -50,12 +50,13 @@
     </header>
 
     
-        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="saas_calc" data-tool-config="{&quot;label_a&quot;: &quot;Target Annual Net Income ($ USD)&quot;, &quot;default_a&quot;: 48000, &quot;label_b&quot;: &quot;Annual Business Overhead &amp; Software ($)&quot;, &quot;default_b&quot;: 2400, &quot;label_c&quot;: &quot;Billable Hours Per Week (After Admin/Sales)&quot;, &quot;default_c&quot;: 25, &quot;label_d&quot;: &quot;Effective Tax &amp; Platform Fee Rate (%)&quot;, &quot;default_d&quot;: 15, &quot;mode&quot;: &quot;hourly_rate&quot;}"><div class="parameters-sheet">
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="saas_calc" data-tool-config="{&quot;label_a&quot;: &quot;Target Annual Net Income ($ USD)&quot;, &quot;default_a&quot;: 48000, &quot;label_b&quot;: &quot;Annual Business Overhead &amp; Software ($)&quot;, &quot;default_b&quot;: 2400, &quot;label_c&quot;: &quot;Billable Hours Per Week (After Admin/Sales)&quot;, &quot;default_c&quot;: 25, &quot;label_d&quot;: &quot;Effective deductions on gross billings (%)&quot;, &quot;default_d&quot;: 15, &quot;mode&quot;: &quot;hourly_rate&quot;}"><div class="parameters-sheet">
               <div class="sheet-heading">
                 <span>FIG. 01 — MODEL ASSUMPTIONS</span>
-                <span>VERIFIED: 2026-10-27</span>
+                <span>MODEL: 2026-10-27</span>
               </div>
               <div class="field-group">
+                <p id="model-status" class="field-hint" role="status" aria-live="polite"></p>
                 <label for="in-a">Target Annual Net Income ($ USD)</label>
                 <input type="number" id="in-a" value="48000" step="any" />
               </div>
@@ -68,7 +69,7 @@
                 <input type="number" id="in-c" value="25" step="any" />
               </div>
               <div class="field-group">
-                <label for="in-d">Effective Tax &amp; Platform Fee Rate (%)</label>
+                <label for="in-d">Effective deductions on gross billings (%)</label>
                 <input type="number" id="in-d" value="15" step="any" />
               </div>
             </div><div class="ledger-sheet" aria-live="polite" aria-atomic="true">
@@ -97,7 +98,7 @@
             </div><div class="workspace-notes"><div class="doc-section">
               <span class="kicker">SPECIFICATION &amp; FORMULA</span>
               <h3>Calculation Methodology</h3>
-              <div class="formula-block">Gross Required = (Target Net + Overhead) / (1 - Tax%). Billable Hours/Year = Billable Hours/Week × 48 Working Weeks. Minimum Hourly Rate = Gross Required / Billable Hours/Year.</div>
+              <div class="formula-block">Gross Required = (Target Net + Overhead) / (1 - Tax%). Billable Hours/Year = Billable Hours/Week × 48 Working Weeks. Minimum Hourly Rate = Gross Required / Billable Hours/Year. The deduction rate is assumed to apply to gross billings, not taxable profit after deductible expenses. Zero billable hours and deductions of 100% or more are infeasible.</div>
               <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
                 REFERENCE BASIS: Standard Industry Financial &amp; Technical Formula &bull; ASSUMPTIONS MODEL: 2026-10-27
               </p>
@@ -106,10 +107,10 @@
             </div></div><aside class="workspace-reference">
             <div class="reference-card" id="pro-offline-bundle">
       <span class="kicker">For your working files</span><h3>A little more control.<br/>Entirely offline.</h3>
-      <p>Batch reconciliation and financial models for freelancers and small teams who prefer to keep their work local.</p>
-      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three financial workbooks and CSV models</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
+      <p>Batch reconciliation and illustrative model tables for freelancers and small teams who prefer to keep their work local.</p>
+      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three sample model tables in XLSX and CSV</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
     </div><div class="reference-card" style="background:var(--surface)"><span class="kicker">Keep exploring</span>
-      <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="software-project-estimation-calculator.html">PERT 3-Point Software Project Time &amp; Quote Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cloud-llm-token-cost-calculator.html">AI LLM API Token &amp; Monthly Cost Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="password-entropy-generator.html">Cryptographic Password &amp; Entropy Bits Generator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="markdown-to-html-converter.html">Instant Markdown to Clean Semantic HTML Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="utm-campaign-link-builder.html">UTM Marketing URL Builder &amp; Campaign Tag Generator &rarr;</a></li></ul></div>
+      <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="software-project-estimation-calculator.html">PERT 3-Point Software Project Time &amp; Quote Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cloud-llm-token-cost-calculator.html">AI LLM API Token &amp; Monthly Cost Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="password-entropy-generator.html">Cryptographic Password &amp; Entropy Bits Generator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="markdown-to-html-converter.html">Basic Markdown to HTML Snippet Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="utm-campaign-link-builder.html">UTM Marketing URL Builder &amp; Campaign Tag Generator &rarr;</a></li></ul></div>
           </aside></div>
   </main>
 

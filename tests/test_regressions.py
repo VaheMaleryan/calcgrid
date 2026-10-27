@@ -100,6 +100,72 @@ assert.ok(global.exportedCsv.startsWith('"tx_id","provider"'));
         finally:
             self.harness = original
 
+    def test_economic_edge_cases_do_not_invent_profit_or_safe_rates(self):
+        self.run_js(r'''
+const tool = mode => tools.find(t => t.config.mode === mode);
+let run = runToolInSandbox(tool('roas'),'',{a:80,b:100,c:1500,d:2.5});
+assert.equal(run.elements['val-r1'].textContent,'Not achievable');
+assert.equal(run.elements['val-r3'].textContent,'$-2,437.50');
+run = runToolInSandbox(tool('hourly_rate'),'',{a:48000,b:2400,c:25,d:99});
+assert.equal(run.elements['val-r1'].textContent,'$4,200.00/hr');
+for (const values of [{c:0},{d:100},{d:120}]) assert.equal(runToolInSandbox(tool('hourly_rate'),'',values).elements['val-r1'].textContent,'—');
+assert.equal(runToolInSandbox(tool('ltv'),'',{c:0}).elements['val-r1'].textContent,'Unbounded at zero churn');
+assert.equal(runToolInSandbox(tool('ltv'),'',{a:0,c:0}).elements['val-r1'].textContent,'$0.00');
+assert.equal(runToolInSandbox(tool('pert'),'',{a:120,b:65,c:40}).elements['val-r1'].textContent,'—');
+assert.equal(runToolInSandbox(tool('cro'),'',{a:10000,b:3,c:2,d:10}).elements['val-r3'].textContent,'-100.0');
+''')
+
+    def test_amd_currency_and_country_eligibility(self):
+        self.run_js(r'''
+const am = tools.find(t => t.slug === 'armenia-it-tax-turnover-calculator');
+assert.equal(runToolInSandbox(am).elements['out-net'].textContent,'AMD 975,000.00');
+const tool = tools.find(t => t.tool_type === 'corridor_engine');
+const rs = runToolInSandbox(tool,'?country=RS');
+assert.ok(!rs.elements['out-best-rail'].textContent.startsWith('Wise'));
+const amRun = runToolInSandbox(tool,'?country=AM&tax=60');
+assert.ok(amRun.elements['corridor-comparison-body'].children[3].innerHTML.includes('EXCLUDED'));
+amRun.elements['in-country'].value = 'GE';
+amRun.elements['in-country'].listeners.change();
+assert.equal(Number(amRun.elements['in-tax-pct'].value),1);
+''')
+
+    def test_unicode_decoders_and_nested_schema_generation(self):
+        self.run_js(r'''
+const dev = mode => tools.find(t => t.config.dev_mode === mode);
+const input = 'Բարեւ 🌍';
+const encoded = Buffer.from(input).toString('base64');
+assert.equal(runToolInSandbox(dev('base64'),'',{input:encoded,operation:'decode'}).elements['dev-output'].textContent,input);
+assert.equal(runToolInSandbox(dev('base64'),'',{input:'hello%20world%23x',operation:'decode-url'}).elements['dev-output'].textContent,'hello world#x');
+const token = Buffer.from('{"alg":"none"}').toString('base64url')+'.'+Buffer.from(JSON.stringify({name:input})).toString('base64url')+'.';
+const jwt = runToolInSandbox(dev('jwt'),'',{input:token}).elements['dev-output'].textContent;
+assert.ok(jwt.includes(input)); assert.ok(jwt.includes('SIGNATURE NOT VERIFIED'));
+const schema = runToolInSandbox(dev('json_to_ts'),'',{input:'{"full name":"A","profile":{"id":2},"values":[1,"x"],"nullable":null}'}).elements['dev-output'].textContent;
+assert.ok(schema.includes('"full name": string')); assert.ok(schema.includes('z.null()')); assert.ok(schema.includes('z.union([')); assert.ok(schema.includes('"id": number'));
+''')
+
+    def test_cron_validation_and_quoted_csv_conversion(self):
+        self.run_js(r'''
+const dev = mode => tools.find(t => t.config.dev_mode === mode);
+for (const input of ['99 99 99 99 99','a b c d e','*/0 * * * *','5-2 * * * *']) assert.ok(runToolInSandbox(dev('cron'),'',{input}).elements['dev-output'].textContent.startsWith('Error:'));
+assert.ok(runToolInSandbox(dev('cron'),'',{input:'*/15 9-17 * * 1-5'}).elements['dev-output'].textContent.startsWith('Valid'));
+const csv = 'name,id,active\n"Doe, Jane",001,true';
+const data = JSON.parse(runToolInSandbox(dev('csv_to_json'),'',{input:csv}).elements['dev-output'].textContent);
+assert.deepEqual(data,[{name:'Doe, Jane',id:'001',active:true}]);
+assert.ok(runToolInSandbox(dev('csv_to_json'),'',{input:'name,name\nx,y'}).elements['dev-output'].textContent.startsWith('Error:'));
+const proto = JSON.parse(runToolInSandbox(dev('csv_to_json'),'',{input:'__proto__,value\nsafe,3'}).elements['dev-output'].textContent);
+assert.equal(proto[0]['__proto__'],'safe');
+''')
+
+    def test_sql_literals_and_existing_utm_links_are_preserved(self):
+        self.run_js(r'''
+const dev = mode => tools.find(t => t.config.dev_mode === mode);
+const sql = runToolInSandbox(dev('sql'),'',{input:"select 'select from where' as value from records where id=1"}).elements['dev-output'].textContent;
+assert.ok(sql.includes("'select from where'"));
+const utm = runToolInSandbox(dev('utm'),'',{input:'https://example.com/p?a=1&utm_source=old#details|Reddit|Organic_Post|Q4_Launch'}).elements['dev-output'].textContent;
+const url = new URL(utm); assert.equal(url.hash,'#details'); assert.equal(url.searchParams.get('a'),'1'); assert.equal(url.searchParams.getAll('utm_source').length,1); assert.equal(url.searchParams.get('utm_source'),'reddit');
+''')
+
+
 
 class ReleaseBoundaries(unittest.TestCase):
     def test_private_paths_never_tracked_or_published(self):
@@ -146,6 +212,33 @@ class ReleaseBoundaries(unittest.TestCase):
 
     def test_automation_never_discards_source_changes(self):
         self.assertNotIn('"checkout", "--", "dist/", "engine/"', inspect.getsource(autopilot.run_autopilot_cycle))
+
+    def test_private_cli_rejects_bad_amounts_and_protects_export(self):
+        import zipfile
+        with tempfile.TemporaryDirectory() as directory:
+            folder = Path(directory)
+            with zipfile.ZipFile(ROOT/'private_products/calcgrid-pro-offline-suite.zip') as archive:
+                cli = folder/'reconcile.py'
+                cli.write_bytes(archive.read('01_cli_batch_auditor/calcgrid_batch_reconciler.py'))
+            source = folder/'transactions.csv'
+            output = folder/'output.csv'
+            for row in ['x,unknown,100,95','x,wise,NaN,95','x,wise,-1,95','x,wise,Infinity,95']:
+                source.write_text('tx_id,provider,gross_usd,actual_net_usd\n'+row)
+                result = subprocess.run([sys.executable,str(cli),'--input',str(source),'--output',str(output)],capture_output=True,text=True)
+                self.assertNotEqual(result.returncode,0)
+            source.write_text('tx_id,provider,gross_usd,actual_net_usd\n=1+2,wise,100,95.21')
+            result = subprocess.run([sys.executable,str(cli),'--input',str(source),'--output',str(output)],capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stderr)
+            self.assertIn("'=1+2",output.read_text())
+
+    def test_social_disable_cannot_be_bypassed_by_direct_publish_call(self):
+        from unittest.mock import patch
+        import smm_pipeline
+        with patch('urllib.request.urlopen',side_effect=AssertionError('No external publishing is allowed')):
+            result = smm_pipeline.publish_verified_episode_via_api({'math_claims_verified':True},'fake-test-token','','')
+        self.assertFalse(result['published'])
+        self.assertIn('disabled',result['reason'])
+
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-CalcGrid Static Preview, Telemetry Receiver & Health Monitoring Server.
-Serves the compiled static site from `dist/` and logs client telemetry/error beacons to `logs/telemetry.jsonl`.
+PayoutFolio local preview and private operator dashboard.
+Serves `dist/` on loopback only. This server does not ingest telemetry or receive payments.
 """
 
 import json
@@ -33,7 +33,7 @@ class CalcGridServerHandler(SimpleHTTPRequestHandler):
                     report = json.loads(REPORT_FILE.read_text(encoding="utf-8"))
                 except Exception:
                     pass
-            self._send_json(200, {"ok": True, "status": "healthy", "autopilot": report})
+            self._send_json(200, {"ok": True, "status": "passed" if report.get("all_checks_passed") else "not_verified", "autopilot": report})
             return
         if self.path.startswith("/admin/dashboard"):
             priv_dash = LOGS_DIR / "private_dashboard.html"
@@ -49,15 +49,17 @@ class CalcGridServerHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
-        if self.path == "/api/telemetry":
-            length = int(self.headers.get("Content-Length", 0))
-            raw = self.rfile.read(length).decode("utf-8", errors="ignore")
-            LOGS_DIR.mkdir(parents=True, exist_ok=True)
-            with open(TELEMETRY_LOG, "a", encoding="utf-8") as f:
-                f.write(raw.strip() + "\n")
-            self._send_json(200, {"ok": True})
-            return
+        # The static release has no telemetry ingestion or payment receiver.
         self._send_json(404, {"ok": False})
+
+    def end_headers(self):
+        headers = DIST_DIR / "_headers"
+        if headers.exists():
+            for line in headers.read_text(encoding="utf-8").splitlines():
+                if line.startswith("  ") and ":" in line:
+                    name, value = line.strip().split(":", 1)
+                    self.send_header(name, value.strip())
+        super().end_headers()
 
     def _send_json(self, code: int, data: dict):
         body = json.dumps(data).encode("utf-8")
@@ -71,5 +73,5 @@ class CalcGridServerHandler(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8098))
     server = HTTPServer(("127.0.0.1", port), CalcGridServerHandler)
-    print(f"🚀 CalcGrid Live Server + Telemetry Monitor running at http://localhost:{port}")
+    print(f"PayoutFolio local preview running at http://localhost:{port}")
     server.serve_forever()

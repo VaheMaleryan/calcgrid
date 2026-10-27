@@ -266,8 +266,8 @@ def _fmt_usd(n: float) -> str:
 
 def verify_episode_financial_claims(ep: dict) -> dict:
     """
-    Programmatically verifies every financial figure and statutory tax disclaimer in the episode's
-    slides and caption against CalcGrid's independent reference formulas BEFORE any social publishing is allowed.
+    Checks selected arithmetic figures and required disclaimer tokens in prepared episodes.
+    This does not verify current provider pricing, tax law, eligibility, or the accuracy of every spoken claim.
     """
     ep_id = ep["episode_id"]
     blob = ep["voiceover_script"] + " " + json.dumps(ep["slides"]) + " " + ep["caption"]
@@ -323,6 +323,8 @@ def publish_verified_episode_via_api(ep_record: dict, yt_token: str, ig_token: s
     (YouTube Data API v3, Instagram Graph API, TikTok Content Posting API) when OAuth tokens are provided.
     Never executes if `math_claims_verified` is False.
     """
+    if _load_launch_config().get("social_publishing_enabled") is not True:
+        return {"published": False, "reason": "Social publishing is disabled in launch configuration"}
     if not ep_record.get("math_claims_verified"):
         return {"published": False, "reason": "Blocked by pre-publish mathematical audit gate"}
 

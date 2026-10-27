@@ -23,7 +23,7 @@
     <meta name="twitter:description" content="Use the engineering PERT formula (Optimistic, Most Likely, Pessimistic hours) to calculate realistic project timelines and fixed-price quotes." />
     <meta name="twitter:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Project time & quote estimator", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Use the engineering PERT formula (Optimistic, Most Likely, Pessimistic hours) to calculate realistic project timelines and fixed-price quotes.", "url": "https://vahemaleryan.github.io/calcgrid/tools/software-project-estimation-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why should fixed-price contracts be quoted at the 95% Confidence level?", "acceptedAnswer": {"@type": "Answer", "text": "Quoting at Expected + 2 Standard Deviations protects your margin against unexpected API changes, scope creep, and edge-case bugs."}}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Project time & quote estimator", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Use the engineering PERT formula (Optimistic, Most Likely, Pessimistic hours) to calculate realistic project timelines and fixed-price quotes.", "url": "https://vahemaleryan.github.io/calcgrid/tools/software-project-estimation-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is the two-sigma estimate guaranteed to cover 95% of projects?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is a planning heuristic based on your three estimates. Real project risks, dependencies and scope changes may not follow the assumed distribution."}}]}]}</script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -53,9 +53,10 @@
         <div class="workspace-grid" id="interactive-tool-root" data-tool-type="saas_calc" data-tool-config="{&quot;label_a&quot;: &quot;Optimistic Hours (Best Case)&quot;, &quot;default_a&quot;: 40, &quot;label_b&quot;: &quot;Most Likely Hours (Realistic)&quot;, &quot;default_b&quot;: 65, &quot;label_c&quot;: &quot;Pessimistic Hours (Worst Case / Bugs)&quot;, &quot;default_c&quot;: 120, &quot;label_d&quot;: &quot;Hourly Billing Rate ($/hr)&quot;, &quot;default_d&quot;: 50, &quot;mode&quot;: &quot;pert&quot;}"><div class="parameters-sheet">
               <div class="sheet-heading">
                 <span>FIG. 01 — MODEL ASSUMPTIONS</span>
-                <span>VERIFIED: 2026-10-27</span>
+                <span>MODEL: 2026-10-27</span>
               </div>
               <div class="field-group">
+                <p id="model-status" class="field-hint" role="status" aria-live="polite"></p>
                 <label for="in-a">Optimistic Hours (Best Case)</label>
                 <input type="number" id="in-a" value="40" step="any" />
               </div>
@@ -97,19 +98,19 @@
             </div><div class="workspace-notes"><div class="doc-section">
               <span class="kicker">SPECIFICATION &amp; FORMULA</span>
               <h3>Calculation Methodology</h3>
-              <div class="formula-block">PERT Expected Hours = (Optimistic + 4 × Most Likely + Pessimistic) / 6. Standard Deviation σ = (Pessimistic - Optimistic) / 6. 95% Confidence Buffer = Expected + 2σ.</div>
+              <div class="formula-block">PERT Expected Hours = (Optimistic + 4 × Most Likely + Pessimistic) / 6. Planning σ = (Pessimistic - Optimistic) / 6. Buffered Estimate = Expected + 2σ. This planning heuristic does not establish a measured 95% confidence interval or guarantee.</div>
               <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
                 REFERENCE BASIS: Standard Industry Financial &amp; Technical Formula &bull; ASSUMPTIONS MODEL: 2026-10-27
               </p>
               <h3>Reference Notes &amp; FAQ</h3>
-              <div class="faq-item"><h4>Why should fixed-price contracts be quoted at the 95% Confidence level?</h4><p>Quoting at Expected + 2 Standard Deviations protects your margin against unexpected API changes, scope creep, and edge-case bugs.</p></div>
+              <div class="faq-item"><h4>Is the two-sigma estimate guaranteed to cover 95% of projects?</h4><p>No. It is a planning heuristic based on your three estimates. Real project risks, dependencies and scope changes may not follow the assumed distribution.</p></div>
             </div></div><aside class="workspace-reference">
             <div class="reference-card" id="pro-offline-bundle">
       <span class="kicker">For your working files</span><h3>A little more control.<br/>Entirely offline.</h3>
-      <p>Batch reconciliation and financial models for freelancers and small teams who prefer to keep their work local.</p>
-      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three financial workbooks and CSV models</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
+      <p>Batch reconciliation and illustrative model tables for freelancers and small teams who prefer to keep their work local.</p>
+      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three sample model tables in XLSX and CSV</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
     </div><div class="reference-card" style="background:var(--surface)"><span class="kicker">Keep exploring</span>
-      <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="freelance-hourly-rate-calculator.html">Freelance Target Annual Income to Billable Hourly Rate Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cloud-llm-token-cost-calculator.html">AI LLM API Token &amp; Monthly Cost Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="password-entropy-generator.html">Cryptographic Password &amp; Entropy Bits Generator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="markdown-to-html-converter.html">Instant Markdown to Clean Semantic HTML Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="utm-campaign-link-builder.html">UTM Marketing URL Builder &amp; Campaign Tag Generator &rarr;</a></li></ul></div>
+      <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="freelance-hourly-rate-calculator.html">Freelance Target Annual Income to Billable Hourly Rate Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cloud-llm-token-cost-calculator.html">AI LLM API Token &amp; Monthly Cost Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="password-entropy-generator.html">Cryptographic Password &amp; Entropy Bits Generator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="markdown-to-html-converter.html">Basic Markdown to HTML Snippet Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="utm-campaign-link-builder.html">UTM Marketing URL Builder &amp; Campaign Tag Generator &rarr;</a></li></ul></div>
           </aside></div>
   </main>
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Regular expression tester — PayoutFolio</title>
-  <meta name="description" content="Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups." />
+  <title>Email &amp; invoice reference finder — PayoutFolio</title>
+  <meta name="description" content="Extract email-like strings and #INV-123 style invoice references from text using the documented built-in pattern." />
   <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/regex-pattern-tester.html" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <meta name="theme-color" content="#174f46" />
@@ -13,17 +13,17 @@
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PayoutFolio" />
-    <meta property="og:title" content="Regular expression tester" />
-    <meta property="og:description" content="Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups." />
+    <meta property="og:title" content="Email &amp; invoice reference finder" />
+    <meta property="og:description" content="Extract email-like strings and #INV-123 style invoice references from text using the documented built-in pattern." />
     <meta property="og:url" content="https://vahemaleryan.github.io/calcgrid/tools/regex-pattern-tester.html" />
     <meta property="og:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
     <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Regular expression tester" />
-    <meta name="twitter:description" content="Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups." />
+    <meta name="twitter:title" content="Email &amp; invoice reference finder" />
+    <meta name="twitter:description" content="Extract email-like strings and #INV-123 style invoice references from text using the documented built-in pattern." />
     <meta name="twitter:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Regular expression tester", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups.", "url": "https://vahemaleryan.github.io/calcgrid/tools/regex-pattern-tester.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I match email addresses or invoice IDs?", "acceptedAnswer": {"@type": "Answer", "text": "Our default test pattern extracts all email addresses and shows exact character positions."}}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Email & invoice reference finder", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Extract email-like strings and #INV-123 style invoice references from text using the documented built-in pattern.", "url": "https://vahemaleryan.github.io/calcgrid/tools/regex-pattern-tester.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I enter an arbitrary regex?", "acceptedAnswer": {"@type": "Answer", "text": "This focused finder uses a fixed email/invoice pattern. It does not accept custom regular expressions or claim to validate every possible email address."}}]}]}</script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -44,8 +44,8 @@
       <span>MODEL BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (2026-10-27)</span>
     </div>
     <header class="tool-header">
-      <h1>Regular expression tester</h1>
-      <p>Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups.</p>
+      <h1>Email &amp; invoice reference finder</h1>
+      <p>Extract email-like strings and #INV-123 style invoice references from text using the documented built-in pattern.</p>
       <div class="estimate-notice">Planning estimate · Rates and FX inputs are illustrative, editable assumptions. Confirm availability, fees and tax eligibility with your provider and adviser. <a href="../legal.html" style="text-decoration:underline">Methodology &amp; privacy &rarr;</a></div>
     </header>
 
@@ -55,6 +55,7 @@
             <span>FIG. 01 — SOURCE PAYLOAD</span>
             <span>LOCAL BROWSER EXECUTION</span>
           </div>
+
           <div class="field-group">
             <label for="dev-input">Input Buffer (Processed 100% Client-Side)</label>
             <textarea id="dev-input">Contact support@company.am or sales@startup.io for invoices #INV-2049 and #INV-8831.</textarea>
@@ -70,13 +71,13 @@
         </div><div class="workspace-notes"><div class="doc-section">
           <span class="kicker">SPECIFICATION</span>
           <h3>Technical Notes</h3>
-          <div class="formula-block">Executes `String.prototype.matchAll()` with global/multiline flags and lists every match index and capture group.</div>
+          <div class="formula-block">Fixed pattern: email-like strings OR #INV- followed by digits. Reports matched text and positions. This utility is not a configurable regular-expression editor and does not validate email deliverability.</div>
           <h3>Frequently Asked Questions</h3>
-          <div class="faq-item"><h4>How do I match email addresses or invoice IDs?</h4><p>Our default test pattern extracts all email addresses and shows exact character positions.</p></div>
+          <div class="faq-item"><h4>Can I enter an arbitrary regex?</h4><p>This focused finder uses a fixed email/invoice pattern. It does not accept custom regular expressions or claim to validate every possible email address.</p></div>
         </div></div><aside class="workspace-reference"><div class="reference-card" id="pro-offline-bundle">
       <span class="kicker">For your working files</span><h3>A little more control.<br/>Entirely offline.</h3>
-      <p>Batch reconciliation and financial models for freelancers and small teams who prefer to keep their work local.</p>
-      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three financial workbooks and CSV models</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
+      <p>Batch reconciliation and illustrative model tables for freelancers and small teams who prefer to keep their work local.</p>
+      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three sample model tables in XLSX and CSV</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
     </div><div class="reference-card" style="background:var(--surface)"><span class="kicker">Keep exploring</span>
       <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cron-expression-explainer.html">Cron Expression Explainer &amp; Schedule Validator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="jwt-token-decoder.html">Offline JWT Token Header &amp; Payload Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="base64-url-hash-encoder.html">UTF-8 Safe Base64 &amp; URL Encoder / Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="csv-to-json-converter.html">Instant Browser CSV to JSON &amp; SQL Converter &rarr;</a></li></ul></div></aside></div>
   </main>
