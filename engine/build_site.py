@@ -1960,6 +1960,15 @@ def build_legal_page() -> str:
 """
 
 
+def build_not_found_page() -> str:
+    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="robots" content="noindex" />
+    <title>Page not found — {BRAND_NAME}</title><link rel="stylesheet" href="{SITE_URL}/assets/styles.css" /></head>
+    <body>{render_navbar(SITE_URL + "/")}<main class="container" id="main-content" style="padding-top:80px">
+    <span class="kicker">404 / Off the map</span><h1 style="font:48px var(--font-serif);margin-bottom:20px">That page isn't here.</h1>
+    <p style="margin-bottom:25px">Find the tool you need in the calculator directory.</p><a class="btn-primary" href="{SITE_URL}/">Explore the tools &rarr;</a></main></body></html>"""
+
+
 def build_seo_artifacts():
     now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     urls = [f"{SITE_URL}/", f"{SITE_URL}/legal.html"] + [
@@ -2256,6 +2265,7 @@ def compile_all() -> dict:
 
     (DIST_DIR / "index.html").write_text(build_index_page(), encoding="utf-8")
     (DIST_DIR / "legal.html").write_text(build_legal_page(), encoding="utf-8")
+    (DIST_DIR / "404.html").write_text(build_not_found_page(), encoding="utf-8")
 
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     private_dash_path = LOGS_DIR / "private_dashboard.html"
@@ -2272,7 +2282,7 @@ def compile_all() -> dict:
 
     return {
         "tools_compiled": len(TOOLS_CATALOG),
-        "total_html_pages": len(TOOLS_CATALOG) + 2,
+        "total_html_pages": len(TOOLS_CATALOG) + 3,
         "public_dist_dir": str(DIST_DIR),
         "private_pro_zip": str(private_zip_path),
         "private_dashboard_path": str(private_dash_path),

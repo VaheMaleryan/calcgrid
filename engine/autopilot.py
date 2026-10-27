@@ -511,8 +511,8 @@ def run_qa_and_security_verification() -> dict:
     issues = []
     html_files = list(DIST_DIR.rglob("*.html"))
 
-    if len(html_files) != len(TOOLS_CATALOG) + 2:
-        issues.append(f"Expected {len(TOOLS_CATALOG) + 2} public HTML files, found {len(html_files)}")
+    if len(html_files) != len(TOOLS_CATALOG) + 3:
+        issues.append(f"Expected {len(TOOLS_CATALOG) + 3} public HTML files, found {len(html_files)}")
 
     # 1. CRITICAL SECURITY CHECK: Ensure no .zip files or private dashboard exist in public dist/
     exposed_zips = list(DIST_DIR.rglob("*.zip"))

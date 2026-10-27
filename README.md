@@ -17,7 +17,7 @@ python3 -m unittest discover -s tests -v
 
 ## Cloudflare Pages
 
-Create a **Pages project with Git integration**, repository `VaheMaleryan/calcgrid`, production branch `main`, framework **None**, build command `python3 engine/autopilot.py --ci`, build output `dist`. Cloudflare runs the same mathematical, security and regression gates before publishing. GitHub Actions provides push, PR, manual and weekly checks, with no GitHub Pages deployment job and no uploaded private artifacts. Cloudflare Git integration deploys each main-branch push automatically; no recurring owner action or per-deploy token is required.
+Create a **Pages project with Git integration**, repository `VaheMaleryan/calcgrid`, production branch `main`, framework **None**, build command `python3 engine/autopilot.py --ci`, build output `dist`. Cloudflare runs the same mathematical, security and regression gates before publishing. A custom 404 page prevents missing or private-looking paths from falling through to a successful homepage response. GitHub Actions provides push, PR, manual and weekly checks, with no GitHub Pages deployment job and no uploaded private artifacts. Cloudflare Git integration deploys each main-branch push automatically; no recurring owner action or per-deploy token is required.
 
 `launch_config.json` controls the brand, verified production `site_url`, and release switches. `SITE_URL` may explicitly override the canonical origin. Preview URLs never silently become canonicals. The initial rebrand keeps the last verified GitHub origin until a successful Cloudflare deployment is checked live. The production origin is changed in a separate migration commit after verification.
 
