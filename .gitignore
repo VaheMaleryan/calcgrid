@@ -6,3 +6,9 @@ private_products/
 logs/
 marketing_outbox/videos/*.mp4
 marketing_outbox/videos/*.sha256
+
+.env
+.env.*
+.wrangler/
+marketing_outbox/videos/
+work/

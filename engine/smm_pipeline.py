@@ -25,7 +25,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from catalog_data import COUNTRY_CORRIDORS
-from build_site import SITE_URL, LOGS_DIR, MARKETING_DIR, _load_launch_config
+from build_site import BRAND_NAME, SITE_URL, LOGS_DIR, MARKETING_DIR, _load_launch_config
 
 VIDEOS_DIR = MARKETING_DIR / "videos"
 SUBTITLES_DIR = MARKETING_DIR / "subtitles"
@@ -213,13 +213,13 @@ def render_vertical_mp4(ep: dict) -> dict:
 
         srt_path = write_srt_file(ep_id, ep["slides"], duration_sec)
 
-        hero_img = Path(__file__).resolve().parent / "images" / "editorial-hero.png"
+        hero_img = Path(__file__).resolve().parent / "brand_assets" / "og-preview.png"
         if say_bin and aiff_path.exists() and hero_img.exists():
             cmd = [
                 ffmpeg_bin, "-y",
                 "-loop", "1", "-r", "5", "-i", str(hero_img),
                 "-i", str(aiff_path),
-                "-vf", "scale=1080:1080,pad=1080:1920:0:420:color=#F7F6F2,format=yuv420p",
+                "-vf", "scale=1080:-2,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=#F6F5F0,format=yuv420p",
                 "-c:v", "libx264", "-preset", "ultrafast", "-tune", "stillimage",
                 "-c:a", "aac", "-b:a", "128k",
                 "-shortest",
@@ -403,7 +403,7 @@ def evaluate_smm_telemetry() -> dict:
     return clicks_by_campaign
 
 
-def build_smm_campaign_pack() -> dict:
+def build_smm_campaign_pack(allow_publish: bool = False) -> dict:
     MARKETING_DIR.mkdir(parents=True, exist_ok=True)
     clicks_map = evaluate_smm_telemetry()
     launch_cfg = _load_launch_config()
@@ -415,8 +415,10 @@ def build_smm_campaign_pack() -> dict:
     audit_approved = (env_audit == "true") if env_audit else bool(launch_cfg.get("smm_audit_approved", True))
     has_live_oauth = bool(yt_token or ig_token or tt_token)
 
+    publishing_enabled = allow_publish and launch_cfg.get("social_publishing_enabled", False) is True
     episodes_out = []
-    for ep in EPISODE_BLUEPRINTS:
+    for original_ep in EPISODE_BLUEPRINTS:
+        ep = json.loads(json.dumps(original_ep).replace("CalcGrid", BRAND_NAME))
         ep_id = ep["episode_id"]
         claim_audit = verify_episode_financial_claims(ep)
         media_info = render_vertical_mp4(ep)
@@ -446,12 +448,12 @@ def build_smm_campaign_pack() -> dict:
         }
 
         if claim_audit["verified"] and audit_approved:
-            if has_live_oauth:
+            if has_live_oauth and publishing_enabled:
                 pub_res = publish_verified_episode_via_api(ep_record, yt_token, ig_token, tt_token)
                 ep_record["publish_status"] = "PUBLISHED_VIA_API" if pub_res["published"] else "OAUTH_PUBLISH_ATTEMPTED"
                 ep_record["api_publish_result"] = pub_res
             else:
-                ep_record["publish_status"] = "VERIFIED_AND_APPROVED_AWAITING_OAUTH_TOKEN"
+                ep_record["publish_status"] = "VERIFIED_LOCAL_ONLY" if not publishing_enabled else "VERIFIED_AND_APPROVED_AWAITING_OAUTH_TOKEN"
 
         episodes_out.append(ep_record)
 
@@ -471,5 +473,5 @@ def build_smm_campaign_pack() -> dict:
 
 
 if __name__ == "__main__":
-    res = build_smm_campaign_pack()
+    res = build_smm_campaign_pack(allow_publish=False)
     print(json.dumps(res, indent=2))

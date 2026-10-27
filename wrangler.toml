@@ -1,5 +1,4 @@
-# Cloudflare Pages Configuration for CalcGrid
-# Automatic Git deployments build from `main` branch and serve `dist/`
-name = "calcgrid"
+# Cloudflare Pages Git integration: main → python3 engine/autopilot.py --ci → dist
+name = "payoutfolio"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-10-27"

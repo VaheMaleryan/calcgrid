@@ -1,41 +1,29 @@
 // ============================================================================
-// CalcGrid Client-Side Computation Engine, Country Corridor Router & CSV Auditor
+// PayoutFolio Client-Side Computation Engine, Country Corridor Router & CSV Auditor
 // ============================================================================
 
-const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "default_fx_placeholder": 388.0, "fx_note": "User-editable reference rate (AMD per 1 USD). Enter your bank or CBA rate; CalcGrid never fabricates live FX feeds.", "verified_date": "2026-10-27", "official_sources": "RA Tax Code (Turnover Tax & High-Tech Registry), Payoneer Pricing Schedule, Wise Country Availability Docs, Lemon Squeezy MoR Payouts", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED & WIDELY USED", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.5, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Direct withdrawals to Armenian banks (Ameriabank, Inecobank, Ardshinbank, etc.) or Payoneer card. Typical local currency withdrawal markup is ~2% (range 1.5%\u20133.0%). Annual fee $29.95 applies if annual volume < $6,000."}, "wise": {"available": false, "status_badge": "RECEIVING RESTRICTED FOR RESIDENTS", "pct_fee": 0.65, "fixed_fee": 4.14, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Wise does not currently issue local USD/EUR receiving account details to residents of Armenia. Incoming direct transfers from foreign clients must typically route via SWIFT/Payoneer unless using an eligible foreign entity."}, "swift": {"available": true, "status_badge": "SUPPORTED (HIGH FIXED & INTERMEDIARY FEES)", "pct_fee": 0.2, "fixed_fee": 25.0, "fx_spread_expected": 1.2, "fx_spread_min": 0.8, "fx_spread_max": 2.0, "intermediary_min": 10.0, "intermediary_max": 35.0, "note": "Supported by all Armenian banks; requires formal invoice/contract for compliance. Correspondent intermediary banks typically deduct $10\u2013$35 mid-route."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MERCHANT OF RECORD WIRE)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Official Merchant of Record for SaaS & digital products; handles global VAT/GST and supports international wire payouts to Armenia ($50 minimum payout)."}}, "tax_presets": [{"label": "1.0% \u2014 Qualifying High-Tech / IT Turnover Tax (Gross Base per Art. 257, Eligibility Required)", "rate": 1.0}, {"label": "0.0% \u2014 Eligible Micro-Business (<24M AMD/yr, Activity Restrictions Apply)", "rate": 0.0}, {"label": "10.0% \u2014 General Turnover Tax Reference Example (Gross Base)", "rate": 10.0}], "tax_caveat": "Per Article 257 of the Republic of Armenia Tax Code, turnover tax is assessed on full GROSS sales turnover (the gross invoice billed to the client, BEFORE deducting marketplace or payment withdrawal fees). Both the 1% high-tech rate (up to 115M AMD cap) and the 0% micro-business regime (under 24M AMD cap) apply strictly to qualifying activities and eligible taxpayers; many professional/consulting services are excluded. Confirm your eligibility with a licensed Armenian accountant."}, "GE": {"name": "Georgia", "currency": "GEL", "default_fx_placeholder": 2.72, "fx_note": "User-editable reference rate (GEL per 1 USD). Enter your NBG or bank rate.", "verified_date": "2026-10-27", "official_sources": "Revenue Service of Georgia (rs.ge Small Business Status), Wise Georgia Pricing, Payoneer Pricing Schedule", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED (TBC & BOG INTEGRATED)", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.8, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Widely integrated with TBC Bank and Bank of Georgia; local withdrawal to GEL carries ~2%\u20133% conversion markup."}, "wise": {"available": true, "status_badge": "SUPPORTED (MID-MARKET FX)", "pct_fee": 0.65, "fixed_fee": 4.14, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.3, "intermediary_min": 0.0, "intermediary_max": 5.0, "note": "Georgian residents can open multi-currency Wise accounts and convert at the mid-market rate with transparent route fees."}, "swift": {"available": true, "status_badge": "SUPPORTED (INTERMEDIARY DEDUCTIONS)", "pct_fee": 0.2, "fixed_fee": 20.0, "fx_spread_expected": 1.2, "fx_spread_min": 0.8, "fx_spread_max": 2.0, "intermediary_min": 10.0, "intermediary_max": 30.0, "note": "Direct wire to TBC or Bank of Georgia; intermediary correspondent fees ($10\u2013$30) apply unless sent OUR."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR BANK PAYOUT)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 10.0, "note": "Supports digital product and SaaS payouts to Georgian bank accounts."}}, "tax_presets": [{"label": "1.0% \u2014 IE Small Business Status (up to 500,000 GEL/yr)", "rate": 1.0}, {"label": "3.0% \u2014 IE Small Business Status (Turnover above 500,000 GEL)", "rate": 3.0}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}], "tax_caveat": "Georgia's Individual Entrepreneur Small Business Status taxes gross turnover at 1% up to 500,000 GEL/year (3% above cap). Certain consulting, legal, accounting, and medical services are excluded from the 1% regime."}, "RS": {"name": "Serbia", "currency": "RSD", "default_fx_placeholder": 108.5, "fx_note": "User-editable reference rate (RSD per 1 USD). Enter your NBS middle exchange rate.", "verified_date": "2026-10-27", "official_sources": "Tax Administration of Serbia (purs.gov.rs Pau\u0161al Rules), National Bank of Serbia, Wise & Payoneer Schedules", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.8, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Popular among Serbian marketplace freelancers; ~2%\u20133% conversion spread when withdrawing to RSD."}, "wise": {"available": true, "status_badge": "SUPPORTED (MID-MARKET FX)", "pct_fee": 0.65, "fixed_fee": 4.14, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.3, "intermediary_min": 0.0, "intermediary_max": 5.0, "note": "Operational for Serbian residents with mid-market rate conversion and transparent route fees."}, "swift": {"available": true, "status_badge": "SUPPORTED (REQUIRES LOR / INFLOW BASIS)", "pct_fee": 0.3, "fixed_fee": 20.0, "fx_spread_expected": 1.5, "fx_spread_min": 1.0, "fx_spread_max": 2.5, "intermediary_min": 10.0, "intermediary_max": 30.0, "note": "Requires foreign inflow basis declaration (\u0161ifra osnova priliva) with local Serbian banks."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR WIRE PAYOUT)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Merchant of Record payouts for software and digital products."}}, "tax_presets": [{"label": "10.0% \u2014 Illustrative Effective Pau\u0161al Reserve (up to 6M RSD cap)", "rate": 10.0}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}, {"label": "15.0% \u2014 Conservative Tax & Social Reserve Example", "rate": 15.0}], "tax_caveat": "Serbia's Preduzetnik Pau\u0161alac regime charges a fixed monthly RSD amount (determined by municipality and activity code, up to 6,000,000 RSD annual turnover) rather than a flat percentage, and requires passing the 9-criteria Independence Test (test samostalnosti)."}, "PH": {"name": "Philippines", "currency": "PHP", "default_fx_placeholder": 58.2, "fx_note": "User-editable reference rate (PHP per 1 USD). Enter your BSP or bank rate.", "verified_date": "2026-10-27", "official_sources": "Bureau of Internal Revenue (bir.gov.ph 8% Gross Receipts Option), Wise Philippines, Payoneer Philippines", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED (GCASH & LOCAL BANKS)", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.8, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Integrated with Upwork and GCash; ~2% conversion spread above mid-market rate."}, "wise": {"available": true, "status_badge": "SUPPORTED (FAST PHP / GCASH / MAYA)", "pct_fee": 0.6, "fixed_fee": 3.5, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.2, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Full Wise account support in the Philippines with mid-market PHP conversion to local banks (BPI, BDO, UnionBank) and e-wallets."}, "swift": {"available": true, "status_badge": "SUPPORTED (HIGH REMITTANCE FEES)", "pct_fee": 0.25, "fixed_fee": 25.0, "fx_spread_expected": 1.5, "fx_spread_min": 1.0, "fx_spread_max": 2.5, "intermediary_min": 10.0, "intermediary_max": 30.0, "note": "Traditional SWIFT wires incur correspondent bank deductions and wider PHP conversion spreads."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR PAYOUTS)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 10.0, "note": "Supports digital creator payouts to Philippine bank accounts."}}, "tax_presets": [{"label": "8.0% \u2014 BIR 8% Gross Receipts Tax Option (Under PHP 3M VAT threshold)", "rate": 8.0}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}], "tax_caveat": "Self-employed professionals in the Philippines earning under the PHP 3,000,000 VAT threshold can elect the 8% flat income tax rate on gross receipts in excess of PHP 250,000 under the TRAIN Law."}, "IN": {"name": "India", "currency": "INR", "default_fx_placeholder": 84.1, "fx_note": "User-editable reference rate (INR per 1 USD). Enter your RBI reference or bank card rate.", "verified_date": "2026-10-27", "official_sources": "Income Tax Act Section 44ADA, RBI FEMA Export Purpose Code P0802, Wise India eFIRC Docs, Payoneer India FIRA Schedule", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED (AUTO DIGITAL FIRA)", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.2, "fx_spread_min": 2.0, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Provides automatic digital FIRA certificates for RBI/GST export compliance; total conversion + withdrawal cost is ~2.2%\u20133.0%."}, "wise": {"available": true, "status_badge": "SUPPORTED (MID-MARKET + EFIRC FEE)", "pct_fee": 0.65, "fixed_fee": 2.5, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.3, "intermediary_min": 0.0, "intermediary_max": 2.5, "note": "Uses mid-market INR exchange rate; automated digital eFIRC / FIRA certificate available for export compliance."}, "swift": {"available": true, "status_badge": "SUPPORTED (PURPOSE CODE P0802)", "pct_fee": 0.15, "fixed_fee": 15.0, "fx_spread_expected": 1.8, "fx_spread_min": 1.0, "fx_spread_max": 2.5, "intermediary_min": 10.0, "intermediary_max": 25.0, "note": "Direct bank inward remittance (HDFC/ICICI/SBI) requires RBI Purpose Code (e.g., P0802 for software); bank FX spread varies unless negotiated."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR WIRE PAYOUT)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Merchant of Record payouts for SaaS and digital products."}}, "tax_presets": [{"label": "7.5% \u2014 Illustrative Effective Tax Provision (Sec 44ADA 50% Deemed Profit)", "rate": 7.5}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}], "tax_caveat": "Under Section 44ADA Presumptive Taxation, eligible Indian professionals with gross receipts up to INR 75 Lakh (when >=95% of receipts are digital) declare 50% of gross receipts as taxable income, taxed at applicable individual slab rates. Export of services under GST LUT is zero-rated."}};
+const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "default_fx_placeholder": 388.0, "fx_note": "User-editable reference rate (AMD per 1 USD). Enter your bank or CBA rate; This tool never fabricates live FX feeds.", "verified_date": "2026-10-27", "official_sources": "RA Tax Code (Turnover Tax & High-Tech Registry), Payoneer Pricing Schedule, Wise Country Availability Docs, Lemon Squeezy MoR Payouts", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED & WIDELY USED", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.5, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Direct withdrawals to Armenian banks (Ameriabank, Inecobank, Ardshinbank, etc.) or Payoneer card. Typical local currency withdrawal markup is ~2% (range 1.5%\u20133.0%). Annual fee $29.95 applies if annual volume < $6,000."}, "wise": {"available": false, "status_badge": "RECEIVING RESTRICTED FOR RESIDENTS", "pct_fee": 0.65, "fixed_fee": 4.14, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Wise does not currently issue local USD/EUR receiving account details to residents of Armenia. Incoming direct transfers from foreign clients must typically route via SWIFT/Payoneer unless using an eligible foreign entity."}, "swift": {"available": true, "status_badge": "SUPPORTED (HIGH FIXED & INTERMEDIARY FEES)", "pct_fee": 0.2, "fixed_fee": 25.0, "fx_spread_expected": 1.2, "fx_spread_min": 0.8, "fx_spread_max": 2.0, "intermediary_min": 10.0, "intermediary_max": 35.0, "note": "Supported by all Armenian banks; requires formal invoice/contract for compliance. Correspondent intermediary banks typically deduct $10\u2013$35 mid-route."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MERCHANT OF RECORD WIRE)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Official Merchant of Record for SaaS & digital products; handles global VAT/GST and supports international wire payouts to Armenia ($50 minimum payout)."}}, "tax_presets": [{"label": "1.0% \u2014 Qualifying High-Tech / IT Turnover Tax (Gross Base per Art. 257, Eligibility Required)", "rate": 1.0}, {"label": "0.0% \u2014 Eligible Micro-Business (<24M AMD/yr, Activity Restrictions Apply)", "rate": 0.0}, {"label": "10.0% \u2014 General Turnover Tax Reference Example (Gross Base)", "rate": 10.0}], "tax_caveat": "Per Article 257 of the Republic of Armenia Tax Code, turnover tax is assessed on full GROSS sales turnover (the gross invoice billed to the client, BEFORE deducting marketplace or payment withdrawal fees). Both the 1% high-tech rate (up to 115M AMD cap) and the 0% micro-business regime (under 24M AMD cap) apply strictly to qualifying activities and eligible taxpayers; many professional/consulting services are excluded. Confirm your eligibility with a licensed Armenian accountant."}, "GE": {"name": "Georgia", "currency": "GEL", "default_fx_placeholder": 2.72, "fx_note": "User-editable reference rate (GEL per 1 USD). Enter your NBG or bank rate.", "verified_date": "2026-10-27", "official_sources": "Revenue Service of Georgia (rs.ge Small Business Status), Wise Georgia Pricing, Payoneer Pricing Schedule", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED (TBC & BOG INTEGRATED)", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.8, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Widely integrated with TBC Bank and Bank of Georgia; local withdrawal to GEL carries ~2%\u20133% conversion markup."}, "wise": {"available": true, "status_badge": "SUPPORTED (MID-MARKET FX)", "pct_fee": 0.65, "fixed_fee": 4.14, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.3, "intermediary_min": 0.0, "intermediary_max": 5.0, "note": "Georgian residents can open multi-currency Wise accounts and convert at the mid-market rate with transparent route fees."}, "swift": {"available": true, "status_badge": "SUPPORTED (INTERMEDIARY DEDUCTIONS)", "pct_fee": 0.2, "fixed_fee": 20.0, "fx_spread_expected": 1.2, "fx_spread_min": 0.8, "fx_spread_max": 2.0, "intermediary_min": 10.0, "intermediary_max": 30.0, "note": "Direct wire to TBC or Bank of Georgia; intermediary correspondent fees ($10\u2013$30) apply unless sent OUR."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR BANK PAYOUT)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 10.0, "note": "Supports digital product and SaaS payouts to Georgian bank accounts."}}, "tax_presets": [{"label": "1.0% \u2014 IE Small Business Status (up to 500,000 GEL/yr)", "rate": 1.0}, {"label": "3.0% \u2014 IE Small Business Status (Turnover above 500,000 GEL)", "rate": 3.0}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}], "tax_caveat": "Georgia's Individual Entrepreneur Small Business Status taxes gross turnover at 1% up to 500,000 GEL/year (3% above cap). Certain consulting, legal, accounting, and medical services are excluded from the 1% regime."}, "RS": {"name": "Serbia", "currency": "RSD", "default_fx_placeholder": 108.5, "fx_note": "User-editable reference rate (RSD per 1 USD). Enter your NBS middle exchange rate.", "verified_date": "2026-10-27", "official_sources": "Tax Administration of Serbia (purs.gov.rs Pau\u0161al Rules), National Bank of Serbia, Wise & Payoneer Schedules", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.8, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Popular among Serbian marketplace freelancers; ~2%\u20133% conversion spread when withdrawing to RSD."}, "wise": {"available": true, "status_badge": "SUPPORTED (MID-MARKET FX)", "pct_fee": 0.65, "fixed_fee": 4.14, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.3, "intermediary_min": 0.0, "intermediary_max": 5.0, "note": "Operational for Serbian residents with mid-market rate conversion and transparent route fees."}, "swift": {"available": true, "status_badge": "SUPPORTED (REQUIRES LOR / INFLOW BASIS)", "pct_fee": 0.3, "fixed_fee": 20.0, "fx_spread_expected": 1.5, "fx_spread_min": 1.0, "fx_spread_max": 2.5, "intermediary_min": 10.0, "intermediary_max": 30.0, "note": "Requires foreign inflow basis declaration (\u0161ifra osnova priliva) with local Serbian banks."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR WIRE PAYOUT)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Merchant of Record payouts for software and digital products."}}, "tax_presets": [{"label": "10.0% \u2014 Illustrative Effective Pau\u0161al Reserve (up to 6M RSD cap)", "rate": 10.0}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}, {"label": "15.0% \u2014 Conservative Tax & Social Reserve Example", "rate": 15.0}], "tax_caveat": "Serbia's Preduzetnik Pau\u0161alac regime charges a fixed monthly RSD amount (determined by municipality and activity code, up to 6,000,000 RSD annual turnover) rather than a flat percentage, and requires passing the 9-criteria Independence Test (test samostalnosti)."}, "PH": {"name": "Philippines", "currency": "PHP", "default_fx_placeholder": 58.2, "fx_note": "User-editable reference rate (PHP per 1 USD). Enter your BSP or bank rate.", "verified_date": "2026-10-27", "official_sources": "Bureau of Internal Revenue (bir.gov.ph 8% Gross Receipts Option), Wise Philippines, Payoneer Philippines", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED (GCASH & LOCAL BANKS)", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.0, "fx_spread_min": 1.8, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Integrated with Upwork and GCash; ~2% conversion spread above mid-market rate."}, "wise": {"available": true, "status_badge": "SUPPORTED (FAST PHP / GCASH / MAYA)", "pct_fee": 0.6, "fixed_fee": 3.5, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.2, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Full Wise account support in the Philippines with mid-market PHP conversion to local banks (BPI, BDO, UnionBank) and e-wallets."}, "swift": {"available": true, "status_badge": "SUPPORTED (HIGH REMITTANCE FEES)", "pct_fee": 0.25, "fixed_fee": 25.0, "fx_spread_expected": 1.5, "fx_spread_min": 1.0, "fx_spread_max": 2.5, "intermediary_min": 10.0, "intermediary_max": 30.0, "note": "Traditional SWIFT wires incur correspondent bank deductions and wider PHP conversion spreads."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR PAYOUTS)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 10.0, "note": "Supports digital creator payouts to Philippine bank accounts."}}, "tax_presets": [{"label": "8.0% \u2014 BIR 8% Gross Receipts Tax Option (Under PHP 3M VAT threshold)", "rate": 8.0}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}], "tax_caveat": "Self-employed professionals in the Philippines earning under the PHP 3,000,000 VAT threshold can elect the 8% flat income tax rate on gross receipts in excess of PHP 250,000 under the TRAIN Law."}, "IN": {"name": "India", "currency": "INR", "default_fx_placeholder": 84.1, "fx_note": "User-editable reference rate (INR per 1 USD). Enter your RBI reference or bank card rate.", "verified_date": "2026-10-27", "official_sources": "Income Tax Act Section 44ADA, RBI FEMA Export Purpose Code P0802, Wise India eFIRC Docs, Payoneer India FIRA Schedule", "rails": {"payoneer": {"available": true, "status_badge": "SUPPORTED (AUTO DIGITAL FIRA)", "pct_fee": 1.0, "fixed_fee": 0.0, "fx_spread_expected": 2.2, "fx_spread_min": 2.0, "fx_spread_max": 3.0, "intermediary_min": 0.0, "intermediary_max": 0.0, "note": "Provides automatic digital FIRA certificates for RBI/GST export compliance; total conversion + withdrawal cost is ~2.2%\u20133.0%."}, "wise": {"available": true, "status_badge": "SUPPORTED (MID-MARKET + EFIRC FEE)", "pct_fee": 0.65, "fixed_fee": 2.5, "fx_spread_expected": 0.0, "fx_spread_min": 0.0, "fx_spread_max": 0.3, "intermediary_min": 0.0, "intermediary_max": 2.5, "note": "Uses mid-market INR exchange rate; automated digital eFIRC / FIRA certificate available for export compliance."}, "swift": {"available": true, "status_badge": "SUPPORTED (PURPOSE CODE P0802)", "pct_fee": 0.15, "fixed_fee": 15.0, "fx_spread_expected": 1.8, "fx_spread_min": 1.0, "fx_spread_max": 2.5, "intermediary_min": 10.0, "intermediary_max": 25.0, "note": "Direct bank inward remittance (HDFC/ICICI/SBI) requires RBI Purpose Code (e.g., P0802 for software); bank FX spread varies unless negotiated."}, "lemonsqueezy": {"available": true, "status_badge": "SUPPORTED (MOR WIRE PAYOUT)", "pct_fee": 5.0, "fixed_fee": 0.5, "fx_spread_expected": 1.5, "fx_spread_min": 1.5, "fx_spread_max": 2.5, "intermediary_min": 0.0, "intermediary_max": 15.0, "note": "Merchant of Record payouts for SaaS and digital products."}}, "tax_presets": [{"label": "7.5% \u2014 Illustrative Effective Tax Provision (Sec 44ADA 50% Deemed Profit)", "rate": 7.5}, {"label": "0.0% \u2014 Pre-Tax Payout Comparison", "rate": 0.0}], "tax_caveat": "Under Section 44ADA Presumptive Taxation, eligible Indian professionals with gross receipts up to INR 75 Lakh (when >=95% of receipts are digital) declare 50% of gross receipts as taxable income, taxed at applicable individual slab rates. Export of services under GST LUT is zero-rated."}};
 
 (function () {
-  // 0. Privacy-Safe Attribution & Telemetry Ping (tracks UTM source, pageviews, and JS errors)
-  try {
-    const uParams = new URLSearchParams(window.location.search);
-    const utmSource = uParams.get('utm_source') || '';
-    const utmMedium = uParams.get('utm_medium') || '';
-    const utmCampaign = uParams.get('utm_campaign') || '';
-    if (window.fetch && window.location.protocol.startsWith('http')) {
-      window.fetch('/api/telemetry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventType: 'pageview',
-          path: window.location.pathname,
-          utm_source: utmSource,
-          utm_medium: utmMedium,
-          utm_campaign: utmCampaign,
-          referrer: document.referrer || 'direct'
-        })
-      }).catch(function () {});
-    }
-  } catch (e) {}
+  // No analytics or network requests: all inputs remain on this device.
 
   // 1. Homepage Live Filter
   const searchInput = document.getElementById('hub-search-input');
   if (searchInput) {
     searchInput.addEventListener('input', function () {
       const q = searchInput.value.toLowerCase().trim();
-      document.querySelectorAll('.tool-card').forEach(function (card) {
-        const text = card.textContent.toLowerCase();
-        card.style.display = text.includes(q) ? 'flex' : 'none';
+      let count = 0;
+      document.querySelectorAll('.category-section').forEach(function (section) {
+        let visible = 0;
+        section.querySelectorAll('.tool-card').forEach(function (card) {
+          const matches = card.textContent.toLowerCase().includes(q);
+          card.hidden = !matches;
+          if (matches) { count++; visible++; }
+        });
+        section.hidden = visible === 0;
       });
+      const feedback = document.getElementById('search-feedback');
+      if (feedback) feedback.textContent = count ? count + ' tool' + (count === 1 ? '' : 's') + ' found.' : 'No tools found. Try a provider name or a shorter search.';
     });
   }
 
@@ -51,6 +39,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
   const params = new URLSearchParams(window.location.search);
 
   function fmtMoney(n) {
+    if (!Number.isFinite(n)) return 'Not achievable';
     return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
@@ -62,7 +51,11 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
   if (btnExportCsv) {
     btnExportCsv.addEventListener('click', function () {
       if (!currentCsvRows.length) return;
-      const csvContent = currentCsvRows.map(function (r) { return r.join(','); }).join('\n');
+      const csvContent = currentCsvRows.map(function (r) { return r.map(function (cell) {
+        let value = String(cell);
+        if (/^[\s]*[=+@\t\r]/.test(value) || (/^[\s]*-/.test(value) && !Number.isFinite(Number(value)))) value = "'" + value;
+        return '"' + value.replace(/"/g, '""') + '"';
+      }).join(','); }).join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -72,6 +65,25 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
       URL.revokeObjectURL(url);
     });
   }
+
+  function escapeText(value) {
+    return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  if (btnPermalink) btnPermalink.addEventListener('click', async function () {
+    const u = new URL(window.location.href);
+    u.search = '';
+    const keys = {country:'in-country',amount:'in-amount',origin_pct:'in-origin-pct',origin_fix:'in-origin-fix',tax:'in-tax-pct',fx_rate:'in-fx-rate',target_net:'in-target-net',pct:'in-pct',fixed:'in-fixed',fx:'in-fx',a:'in-a',b:'in-b',c:'in-c',d:'in-d'};
+    Object.keys(keys).forEach(function (key) {
+      const el = document.getElementById(keys[key]);
+      if (el) u.searchParams.set(key, el.value);
+    });
+    try {
+      if (!navigator.clipboard) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(u.toString());
+      btnPermalink.textContent = 'Link copied';
+    } catch (e) { btnPermalink.textContent = 'Clipboard unavailable'; }
+    setTimeout(function () { btnPermalink.textContent = 'Copy Permalink'; }, 2000);
+  });
 
   // ==========================================================================
   // ENGINE A: COUNTRY-AWARE END-TO-END PAYOUT & REVERSE INVOICE ENGINE
@@ -92,6 +104,8 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
     }
     if (params.get('amount')) elAmount.value = params.get('amount');
     if (params.get('origin_pct')) elOriginPct.value = params.get('origin_pct');
+    if (params.get('origin_fix')) elOriginFix.value = params.get('origin_fix');
+    if (params.get('target_net')) elTargetNet.value = params.get('target_net');
     if (params.get('tax')) elTaxPct.value = params.get('tax');
 
     document.querySelectorAll('.origin-preset-chip').forEach(function (chip) {
@@ -111,7 +125,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
       const fxHint = document.getElementById('fx-rate-hint');
       if (fxHint) fxHint.textContent = cData.fx_note;
       const caveatEl = document.getElementById('corridor-tax-caveat');
-      if (caveatEl) caveatEl.textContent = cData.tax_caveat + ' (Sources: ' + cData.official_sources + ' • Verified: ' + cData.verified_date + ')';
+      if (caveatEl) caveatEl.textContent = cData.tax_caveat + ' (Sources: ' + cData.official_sources + ' • Model dated: ' + cData.verified_date + ')';
 
       if (taxPresetsBox && cData.tax_presets) {
         taxPresetsBox.innerHTML = '';
@@ -173,7 +187,8 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
 
       // Exact algebraic gross-up when turnover tax (tRate) is assessed on Gross (G):
       // FinalNet = ((G * (1 - oRate) - originFix) * (1 - railRateExp) - rail.fixed_fee - midIntermediary) - G * tRate
-      const retentionFactor = Math.max(0.05, (1 - oRate) * (1 - railRateExp) - tRate);
+      const retentionFactor = (1 - oRate) * (1 - railRateExp) - tRate;
+      if (retentionFactor <= 0) return NaN;
       const fixedDeductions = originFix * (1 - railRateExp) + rail.fixed_fee + midIntermediary;
       const requiredGross = (targetNet + fixedDeductions) / retentionFactor;
       return requiredGross;
@@ -187,7 +202,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
       const originFix = Math.max(0, parseFloat(elOriginFix.value) || 0);
       const taxPct = Math.max(0, parseFloat(elTaxPct.value) || 0);
       const fxRate = Math.max(0.0001, parseFloat(elFxRate.value) || cData.default_fx_placeholder);
-      const targetNet = Math.max(0, parseFloat(elTargetNet ? elTargetNet.value : gross) || gross);
+      const targetNet = Math.max(0, parseFloat(elTargetNet ? elTargetNet.value : gross) || 0);
 
       const railNames = [
         ['payoneer', 'Payoneer Local Withdrawal'],
@@ -198,7 +213,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
 
       let bestAvailableRoute = null;
       let bestAvailableResult = null;
-      let bestAvailableReverse = 0;
+      let bestAvailableReverse = Infinity;
 
       currentCsvRows = [
         ['Country', 'Currency', 'Payout_Rail', 'Availability', 'Gross_USD', 'Expected_Net_After_Tax_USD', 'Uncertainty_Range_USD', 'Local_Currency_Net', 'Effective_Total_Deduction_Pct', 'Reverse_Invoice_For_Target_USD']
@@ -219,6 +234,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
         if (rail.available && (!bestAvailableResult || res.finalNetExp > bestAvailableResult.finalNetExp)) {
           bestAvailableRoute = rLabel;
           bestAvailableResult = res;
+        } if (rail.available && Number.isFinite(revGross) && revGross < bestAvailableReverse) {
           bestAvailableReverse = revGross;
         }
 
@@ -227,8 +243,8 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
 
         currentCsvRows.push([
           cData.name, cData.currency, rLabel, rail.status_badge,
-          gross.toFixed(2), res.finalNetExp.toFixed(2), '"' + rangeStr + '"',
-          '"' + localStr + '"', res.effectivePct.toFixed(2) + '%', revGross.toFixed(2)
+          gross.toFixed(2), res.finalNetExp.toFixed(2), rangeStr,
+          localStr, res.effectivePct.toFixed(2) + '%', revGross.toFixed(2)
         ]);
 
         if (compareBody) {
@@ -265,6 +281,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
     });
 
     syncCountryPresets();
+    if (params.get('fx_rate')) elFxRate.value = params.get('fx_rate');
     recalcCorridor();
   }
 
@@ -288,10 +305,46 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
       fiverr:       { pct: 20.0, fix: 1.00, fx: 0.0 }
     };
 
+    function parseCsv(text) {
+      const rows = []; let row = [], cell = '', quoted = false;
+      text = text.replace(/^\uFEFF/, '');
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (c === '"') {
+          if (quoted && text[i + 1] === '"') { cell += '"'; i++; }
+          else quoted = !quoted;
+        } else if (c === ',' && !quoted) { row.push(cell); cell = ''; }
+        else if ((c === '\n' || c === '\r') && !quoted) {
+          if (c === '\r' && text[i + 1] === '\n') i++;
+          row.push(cell); if (row.some(v => v.trim())) rows.push(row); row = []; cell = '';
+        } else cell += c;
+      }
+      if (quoted) throw new Error('Unclosed quoted field. Check your CSV.');
+      row.push(cell); if (row.some(v => v.trim())) rows.push(row);
+      return rows;
+    }
     function runBrowserCsvAudit() {
       const raw = (csvInput ? csvInput.value : '').trim();
-      const lines = raw.split(/\r?\n/).filter(Boolean);
-      if (lines.length < 2) return;
+      const message = document.getElementById('csv-audit-status');
+      if (auditBody) auditBody.innerHTML = '';
+      currentCsvRows = [];
+      ['out-audit-gross','out-audit-net','out-audit-leakage'].forEach(function (id) { document.getElementById(id).textContent = '$0.00'; });
+      document.getElementById('out-audit-alerts').textContent = '0 flagged';
+      let records;
+      try {
+        if (raw.length > 1000000) throw new Error('Use a CSV smaller than 1 MB.');
+        records = parseCsv(raw);
+        if (records.length < 2) throw new Error('Add the header and at least one transaction.');
+        if (records[0].map(v => v.trim().toLowerCase()).join(',') !== 'tx_id,provider,gross_usd,actual_net_usd') throw new Error('Expected header: tx_id,provider,gross_usd,actual_net_usd');
+        if (records.length > 51) throw new Error('This browser auditor accepts up to 50 transactions per audit.');
+        records.slice(1).forEach(function (cols, i) {
+          if (cols.length !== 4) throw new Error('Row ' + (i + 2) + ': expected four fields.');
+          const provider = cols[1].trim().toLowerCase();
+          if (!Object.prototype.hasOwnProperty.call(PUBLISHED_RATES, provider)) throw new Error('Row ' + (i + 2) + ': unsupported provider code.');
+          if (!cols[2].trim() || !cols[3].trim() || !Number.isFinite(Number(cols[2])) || !Number.isFinite(Number(cols[3])) || Number(cols[2]) < 0 || Number(cols[3]) < 0) throw new Error('Row ' + (i + 2) + ': amounts must be finite, non-negative numbers.');
+        });
+      } catch (e) { if (message) message.textContent = e.message; return; }
+      if (message) message.textContent = (records.length - 1) + ' transactions checked locally against illustrative fee baselines.';
 
       let totalGross = 0;
       let totalActualNet = 0;
@@ -304,15 +357,12 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
       ];
       if (auditBody) auditBody.innerHTML = '';
 
-      lines.slice(1).forEach(function (line) {
-        const cols = line.split(',').map(function (c) { return c.trim(); });
-        if (cols.length < 4) return;
+      records.slice(1).forEach(function (cols) {
         const txId = cols[0];
-        const provider = (cols[1] || 'lemonsqueezy').toLowerCase();
-        const gross = Math.max(0, parseFloat(cols[2]) || 0);
-        const actualNet = Math.max(0, parseFloat(cols[3]) || 0);
-
-        const rate = PUBLISHED_RATES[provider] || { pct: 5.0, fix: 0.50, fx: 0.0 };
+        const provider = cols[1].trim().toLowerCase();
+        const gross = Number(cols[2]);
+        const actualNet = Number(cols[3]);
+        const rate = PUBLISHED_RATES[provider];
         const expectedFee = gross * ((rate.pct + rate.fx) / 100) + rate.fix;
         const expectedNet = Math.max(0, gross - expectedFee);
         const variance = actualNet - expectedNet;
@@ -336,8 +386,8 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
             : '<span class="badge-ok">OK</span>';
           const tr = document.createElement('tr');
           tr.innerHTML =
-            '<td>' + txId + '</td>' +
-            '<td>' + provider + '</td>' +
+            '<td>' + escapeText(txId) + '</td>' +
+            '<td>' + escapeText(provider) + '</td>' +
             '<td>' + fmtMoney(gross) + '</td>' +
             '<td>' + fmtMoney(expectedNet) + '</td>' +
             '<td><strong>' + fmtMoney(actualNet) + '</strong></td>' +
@@ -358,6 +408,11 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
       fileInput.addEventListener('change', function (e) {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
+        if (file.size > 1000000) {
+          const status = document.getElementById('csv-audit-status');
+          if (status) status.textContent = 'Use a CSV smaller than 1 MB.';
+          return;
+        }
         const reader = new FileReader();
         reader.onload = function (ev) {
           if (csvInput) csvInput.value = String(ev.target.result || '');
@@ -398,11 +453,11 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
     });
 
     function calcSingleTier(gross, pct, fix, fx) {
-      const totalPctRate = Math.min(0.99, Math.max(0, (pct + fx) / 100));
+      const totalPctRate = Math.min(1, Math.max(0, (pct + fx) / 100));
       const totalFee = gross * totalPctRate + fix;
       const net = Math.max(0, gross - totalFee);
       const effectiveRate = gross > 0 ? (totalFee / gross) * 100 : 0;
-      const reverseGross = (gross + fix) / (1 - totalPctRate);
+      const reverseGross = totalPctRate >= 1 ? NaN : (gross + fix) / (1 - totalPctRate);
       return { gross: gross, fee: totalFee, net: net, rate: effectiveRate, reverse: reverseGross };
     }
 
@@ -445,18 +500,6 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
       }
     }
 
-    if (btnPermalink) {
-      btnPermalink.addEventListener('click', function () {
-        const u = new URL(window.location.href);
-        u.searchParams.set('amount', elAmt.value);
-        u.searchParams.set('pct', elPct.value);
-        u.searchParams.set('fixed', elFix.value);
-        u.searchParams.set('fx', elFx.value);
-        if (navigator.clipboard) navigator.clipboard.writeText(u.toString());
-        btnPermalink.textContent = 'Permalink Copied';
-        setTimeout(function () { btnPermalink.textContent = 'Copy Permalink'; }, 1600);
-      });
-    }
 
     [elAmt, elPct, elFix, elFx].forEach(function (el) {
       if (el) el.addEventListener('input', recalcFee);
@@ -593,22 +636,10 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
 
       currentCsvRows = [
         ['Parameter_A', 'Parameter_B', 'Parameter_C', 'Parameter_D', r1Label, r2Label, r3Label],
-        [a, b, c, d, '"' + r1Val + '"', '"' + r2Val + '"', '"' + r3Val + '"']
+        [a, b, c, d, r1Val, r2Val, r3Val]
       ];
     }
 
-    if (btnPermalink) {
-      btnPermalink.addEventListener('click', function () {
-        const u = new URL(window.location.href);
-        u.searchParams.set('a', elA.value);
-        u.searchParams.set('b', elB.value);
-        u.searchParams.set('c', elC.value);
-        u.searchParams.set('d', elD.value);
-        if (navigator.clipboard) navigator.clipboard.writeText(u.toString());
-        btnPermalink.textContent = 'Permalink Copied';
-        setTimeout(function () { btnPermalink.textContent = 'Copy Permalink'; }, 1600);
-      });
-    }
 
     [elA, elB, elC, elD].forEach(function (el) {
       if (el) el.addEventListener('input', recalcSaas);

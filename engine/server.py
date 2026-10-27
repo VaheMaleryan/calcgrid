@@ -65,6 +65,6 @@ class CalcGridServerHandler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8098))
-    server = HTTPServer(("0.0.0.0", port), CalcGridServerHandler)
+    server = HTTPServer(("127.0.0.1", port), CalcGridServerHandler)
     print(f"🚀 CalcGrid Live Server + Telemetry Monitor running at http://localhost:{port}")
     server.serve_forever()

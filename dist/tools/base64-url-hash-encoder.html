@@ -3,46 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UTF-8 Safe Base64 &amp; URL Encoder / Decoder — CalcGrid Technical &amp; Financial Ledger</title>
+  <title>Base64 &amp; URL encoder — PayoutFolio</title>
   <meta name="description" content="Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly." />
-  <link rel="canonical" href="https://calcgrid.pages.dev/tools/base64-url-hash-encoder.html" />
+  <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/base64-url-hash-encoder.html" />
   <link rel="stylesheet" href="../assets/styles.css" />
+  <meta name="theme-color" content="#174f46" />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../assets/favicon.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PayoutFolio" />
+    <meta property="og:title" content="Base64 &amp; URL encoder" />
+    <meta property="og:description" content="Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly." />
+    <meta property="og:url" content="https://vahemaleryan.github.io/calcgrid/tools/base64-url-hash-encoder.html" />
+    <meta property="og:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
+    <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Base64 &amp; URL encoder" />
+    <meta name="twitter:description" content="Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly." />
+    <meta name="twitter:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "UTF-8 Safe Base64 & URL Encoder / Decoder", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.", "url": "https://calcgrid.pages.dev/tools/base64-url-hash-encoder.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does standard JavaScript btoa() fail on Armenian or emoji characters?", "acceptedAnswer": {"@type": "Answer", "text": "Standard `btoa()` only accepts 8-bit Latin1 characters. Converting through `TextEncoder` UTF-8 bytes ensures multi-byte Unicode strings encode accurately."}}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Base64 & URL encoder", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.", "url": "https://vahemaleryan.github.io/calcgrid/tools/base64-url-hash-encoder.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does standard JavaScript btoa() fail on Armenian or emoji characters?", "acceptedAnswer": {"@type": "Answer", "text": "Standard `btoa()` only accepts 8-bit Latin1 characters. Converting through `TextEncoder` UTF-8 bytes ensures multi-byte Unicode strings encode accurately."}}]}]}</script>
 </head>
 <body>
-  
-  <header class="navbar">
-    <div class="nav-inner">
-      <a href="../index.html" class="brand">
-        <span class="brand-name">CalcGrid</span>
-        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
-      </a>
-      <nav class="nav-links">
-        <a href="../tools/cross-border-payout-comparison-engine.html">Country Payout Engine</a>
-        <a href="../tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
-        <a href="../index.html#payment-calculators">Fee Ledgers</a>
-        <a href="../index.html#saas-calculators">Unit Economics</a>
-        <a href="../legal.html">Methodology &amp; Terms</a>
-        
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="navbar"><div class="nav-inner">
+      <a href="../index.html" class="brand" aria-label="PayoutFolio home"><svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 5h15a9 9 0 0 1 0 18H14v8H6V5Z" fill="currentColor"/><path d="M14 12h7a2 2 0 0 1 0 4h-7v-4Z" fill="#f6f5f0"/><path d="M25 24v7h6v-9" stroke="currentColor" stroke-width="3"/></svg><span class="brand-name">PayoutFolio</span></a>
+      <nav class="nav-links" aria-label="Main navigation"><a href="../tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
+        <a href="../tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
+        <a href="../index.html#directory">All calculators</a>
+        <a href="../legal.html">Methodology</a></nav>
+      <details class="mobile-menu"><summary>Menu &nbsp; +</summary><nav aria-label="Mobile navigation"><a href="../tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
+        <a href="../tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
+        <a href="../index.html#directory">All calculators</a>
+        <a href="../legal.html">Methodology</a></nav></details>
+    </div></header>
+  <main class="container" id="main-content">
     <div class="breadcrumb-bar">
-      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Developer Utilities</span>
-      <span>BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (2026-10-27)</span>
+      <span><a href="../index.html">All calculators</a> &nbsp;/&nbsp; Developer Utilities</span>
+      <span>MODEL BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (2026-10-27)</span>
     </div>
     <header class="tool-header">
-      <h1>UTF-8 Safe Base64 &amp; URL Encoder / Decoder</h1>
+      <h1>Base64 &amp; URL encoder</h1>
       <p>Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.</p>
+      <div class="estimate-notice">Planning estimate · Rates and FX inputs are illustrative, editable assumptions. Confirm availability, fees and tax eligibility with your provider and adviser. <a href="../legal.html" style="text-decoration:underline">Methodology &amp; privacy &rarr;</a></div>
     </header>
 
     
-    <div class="workspace-grid" id="interactive-tool-root" data-tool-type="dev_tool" data-tool-config="{&quot;dev_mode&quot;: &quot;base64&quot;, &quot;sample_input&quot;: &quot;https://calcgrid.dev/api?merchant=armenia&amp;currency=AMD&amp;amount=45000&quot;}">
-      <div>
-        <div class="parameters-sheet">
+    <div class="workspace-grid" id="interactive-tool-root" data-tool-type="dev_tool" data-tool-config="{&quot;dev_mode&quot;: &quot;base64&quot;, &quot;sample_input&quot;: &quot;https://calcgrid.dev/api?merchant=armenia&amp;currency=AMD&amp;amount=45000&quot;}"><div class="parameters-sheet">
           <div class="sheet-heading">
             <span>FIG. 01 — SOURCE PAYLOAD</span>
             <span>LOCAL BROWSER EXECUTION</span>
@@ -59,49 +67,23 @@
             <label>Formatted Output</label>
             <pre id="dev-output" class="code-output"></pre>
           </div>
-        </div>
-
-        
-
-        <div class="doc-section">
+        </div><div class="workspace-notes"><div class="doc-section">
           <span class="kicker">SPECIFICATION</span>
           <h3>Technical Notes</h3>
           <div class="formula-block">Uses TextEncoder UTF-8 byte arrays to safely Base64-encode Unicode characters without `btoa` Latin1 exceptions.</div>
           <h3>Frequently Asked Questions</h3>
           <div class="faq-item"><h4>Why does standard JavaScript btoa() fail on Armenian or emoji characters?</h4><p>Standard `btoa()` only accepts 8-bit Latin1 characters. Converting through `TextEncoder` UTF-8 bytes ensures multi-byte Unicode strings encode accurately.</p></div>
-        </div>
-      </div>
-
-      <aside>
-        
-      <div class="reference-card" id="pro-offline-bundle">
-        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
-        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
-        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
-        <p>While single-transaction calculators and our 50-row Browser CSV Auditor are 100% free, the Pro Pack equips agencies and accountants with unlimited CLI batch automation and multi-sheet workbooks.</p>
-        <ul class="reference-list">
-          <li>01 / Unlimited CLI Batch CSV Fee &amp; FX Reconciler (calcgrid_batch_reconciler.py)</li>
-          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
-          <li>03 / Air-Gapped Offline HTML Instrument Suite (32 Tools)</li>
-        </ul>
-        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
-      </div>
-
-      <div class="reference-card" style="background:var(--surface)">
-        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
-        <ul style="list-style:none;border-top:1px solid var(--rule)">
-          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cron-expression-explainer.html">Cron Expression Explainer &amp; Schedule Validator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="jwt-token-decoder.html">Offline JWT Token Header &amp; Payload Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="csv-to-json-converter.html">Instant Browser CSV to JSON &amp; SQL Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="regex-pattern-tester.html">Live Regular Expression Matcher &amp; Group Extractor &rarr;</a></li>
-        </ul>
-      </div>
-    
-      </aside>
-    </div>
-    
+        </div></div><aside class="workspace-reference"><div class="reference-card" id="pro-offline-bundle">
+      <span class="kicker">For your working files</span><h3>A little more control.<br/>Entirely offline.</h3>
+      <p>Batch reconciliation and financial models for freelancers and small teams who prefer to keep their work local.</p>
+      <ul class="reference-list"><li>Batch CSV fee &amp; FX reconciler</li><li>Three financial workbooks and CSV models</li><li>All 32 tools in an offline HTML suite</li></ul><p class="btn-disabled">Offline suite · Coming soon</p>
+    </div><div class="reference-card" style="background:var(--surface)"><span class="kicker">Keep exploring</span>
+      <ul style="list-style:none"><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cron-expression-explainer.html">Cron Expression Explainer &amp; Schedule Validator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="jwt-token-decoder.html">Offline JWT Token Header &amp; Payload Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="csv-to-json-converter.html">Instant Browser CSV to JSON &amp; SQL Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="regex-pattern-tester.html">Live Regular Expression Matcher &amp; Group Extractor &rarr;</a></li></ul></div></aside></div>
   </main>
 
   <footer>
     <div class="footer-inner">
-      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span>&copy; 2026 PayoutFolio Publication. Client-side computation engine.</span>
       <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
     </div>
   </footer>

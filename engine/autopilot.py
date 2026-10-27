@@ -12,7 +12,7 @@ Performs:
      - Flagship #2: `private-csv-payout-fee-auditor` (client-side CSV variance & hidden FX leakage detection)
      - Core 30 Tools: 10 `fee_calc`, 9 `saas_calc`, and 11 `dev_tool` instruments
   5. Fee & Tax Schedule Freshness Audit (flags any source older than 90 days)
-  6. Safe Rollback Protection: Automatically rolls back working tree to last clean commit if `--auto-rollback` is set and tests fail
+  6. Fail-closed deployment protection: tests stop publication without discarding working-tree edits
 """
 
 import argparse
@@ -22,12 +22,14 @@ import math
 import os
 import re
 import subprocess
+import sys
 import tempfile
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from build_site import (
     compile_all,
+    BRAND_NAME,
     build_dashboard_page,
     DIST_DIR,
     PRIVATE_PRODUCTS_DIR,
@@ -38,7 +40,7 @@ from build_site import (
     OFFICIAL_SOURCES,
 )
 from catalog_data import TOOLS_CATALOG, COUNTRY_CORRIDORS
-from smm_pipeline import build_smm_campaign_pack
+from smm_pipeline import build_smm_campaign_pack, EPISODE_BLUEPRINTS, verify_episode_financial_claims
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 LOGS_DIR = ROOT_DIR / "logs"
@@ -542,6 +544,13 @@ def run_qa_and_security_verification() -> dict:
         if git_history_zips:
             issues.append(f"SECURITY VIOLATION: .zip file found in Git commit history: {git_history_zips}")
 
+    tracked = subprocess.run(["git", "-C", str(ROOT_DIR), "ls-files"], capture_output=True, text=True, check=True).stdout.splitlines()
+    for name in tracked:
+        if name.startswith(("private_products/", "logs/", "marketing_outbox/videos/", ".env")):
+            issues.append("Private path tracked in Git: " + name)
+    for item in DIST_DIR.rglob("*"):
+        if item.is_file() and (item.suffix.lower() in {".zip", ".mp4", ".log", ".jsonl", ".env"} or any(part in {"logs", "private_products", "marketing_outbox"} for part in item.relative_to(DIST_DIR).parts)):
+            issues.append("Private file exposed in dist: " + str(item.relative_to(DIST_DIR)))
     json_ld_verified = 0
     internal_links_checked = 0
 
@@ -576,7 +585,7 @@ def run_qa_and_security_verification() -> dict:
         for ref in hrefs:
             if ref.startswith(("http://", "https://", "mailto:", "javascript:", "data:")):
                 continue
-            target_path = (html_file.parent / ref).resolve()
+            target_path = (html_file.parent / ref.split("#")[0].split("?")[0]).resolve()
             internal_links_checked += 1
             if not target_path.exists():
                 issues.append(f"Broken relative reference '{ref}' in {html_file.name}")
@@ -690,14 +699,20 @@ def analyze_telemetry() -> dict:
     }
 
 
-def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
+def run_autopilot_cycle(auto_rollback: bool = False, ci: bool = False) -> dict:
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
-    smm_info = build_smm_campaign_pack()
+    if ci:
+        smm_info = {"episodes": [{"episode_id": ep["episode_id"], "math_claims_verified": verify_episode_financial_claims(ep)["verified"], "publish_status": "CI_VERIFIED_NO_PUBLISH"} for ep in EPISODE_BLUEPRINTS]}
+    else:
+        smm_info = build_smm_campaign_pack(allow_publish=False)
     build_info = compile_all()
     freshness_info = run_freshness_audit()
     math_info = run_math_and_runtime_tests()
     qa_info = run_qa_and_security_verification()
     telemetry_info = analyze_telemetry()
+    regression = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"], cwd=ROOT_DIR, capture_output=True, text=True)
+    regression_info = {"passed": regression.returncode == 0, "details": (regression.stdout + regression.stderr).strip()}
+
 
     smm_episodes = smm_info.get("episodes", [])
     smm_claims_verified = len(smm_episodes) > 0 and all(ep.get("math_claims_verified") for ep in smm_episodes)
@@ -707,18 +722,12 @@ def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
         and qa_info["passed"]
         and freshness_info["passed"]
         and smm_claims_verified
+        and regression_info["passed"]
     )
 
     rollback_triggered = False
-    if not all_passed and auto_rollback and (ROOT_DIR / ".git").exists():
-        git_env = {**os.environ, "GIT_CONFIG_GLOBAL": "/dev/null", "GIT_CONFIG_SYSTEM": "/dev/null"}
-        subprocess.run(
-            ["git", "-C", str(ROOT_DIR), "checkout", "--", "dist/", "engine/"],
-            capture_output=True,
-            text=True,
-            env=git_env,
-        )
-        rollback_triggered = True
+    # A failed build must never discard the owner's source edits. Deployment stops on failure.
+    # --auto-rollback remains a compatibility flag; Git/Cloudflare retains the last good deployment.
 
     report = {
         "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -727,9 +736,11 @@ def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
         "build": build_info,
         "freshness_audit": freshness_info,
         "math_verification": math_info,
+        "regression_tests": regression_info,
         "qa_and_security": qa_info,
         "smm_pipeline": {
-            "episodes_rendered": len(smm_episodes),
+            "episodes_rendered": 0 if ci else len(smm_episodes),
+            "episodes_checked": len(smm_episodes),
             "all_financial_claims_verified": smm_claims_verified,
             "episode_statuses": {ep["episode_id"]: ep["publish_status"] for ep in smm_episodes},
             "oauth_configured": smm_info.get("oauth_integrations_configured", {})
@@ -742,7 +753,8 @@ def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="CalcGrid Autonomous Operations & Verification Suite")
-    parser.add_argument("--auto-rollback", action="store_true", help="Automatically roll back git working tree on test failure")
+    parser.add_argument("--ci", action="store_true", help="Verify without media rendering or external publishing")
+    parser.add_argument("--auto-rollback", action="store_true", help="Compatibility flag; failed checks stop deployment without discarding source edits")
     parser.add_argument("--commit", type=str, default="", help="Commit verified changes to git with the given commit message if all checks pass")
     parser.add_argument("--lemon-squeezy-url", type=str, default="", help="Set live Lemon Squeezy checkout URL in launch_config.json before building")
     parser.add_argument("--site-url", type=str, default="", help="Set live public SITE_URL in launch_config.json before building")
@@ -764,18 +776,26 @@ if __name__ == "__main__":
             os.environ["SITE_URL"] = args.site_url.strip().rstrip("/")
         cfg_path.write_text(json.dumps(cfg_data, indent=2) + "\n", encoding="utf-8")
 
-    rep = run_autopilot_cycle(auto_rollback=args.auto_rollback)
+    if args.site_url or args.lemon_squeezy_url:
+        import build_site as site_module
+        import smm_pipeline as smm_module
+        if args.site_url:
+            SITE_URL = site_module.SITE_URL = smm_module.SITE_URL = args.site_url.strip().rstrip("/")
+        if args.lemon_squeezy_url and site_module.MONETIZATION_APPROVED:
+            site_module.LEMON_SQUEEZY_CHECKOUT_URL = args.lemon_squeezy_url.strip()
+
+    rep = run_autopilot_cycle(auto_rollback=args.auto_rollback, ci=args.ci)
     if args.commit and rep["all_checks_passed"] and (ROOT_DIR / ".git").exists():
         git_env = {
             **os.environ,
             "GIT_CONFIG_GLOBAL": "/dev/null",
             "GIT_CONFIG_SYSTEM": "/dev/null",
-            "GIT_AUTHOR_NAME": "CalcGrid Autopilot",
-            "GIT_AUTHOR_EMAIL": "autopilot@calcgrid.io",
-            "GIT_COMMITTER_NAME": "CalcGrid Autopilot",
-            "GIT_COMMITTER_EMAIL": "autopilot@calcgrid.io",
+            "GIT_AUTHOR_NAME": BRAND_NAME + " Autopilot",
+            "GIT_AUTHOR_EMAIL": "autopilot@users.noreply.github.com",
+            "GIT_COMMITTER_NAME": BRAND_NAME + " Autopilot",
+            "GIT_COMMITTER_EMAIL": "autopilot@users.noreply.github.com",
         }
-        subprocess.run(["git", "-C", str(ROOT_DIR), "add", "-A"], check=True, env=git_env)
+        subprocess.run(["git", "-C", str(ROOT_DIR), "add", "--", "engine", "dist", "launch_config.json", "wrangler.toml", ".github", ".gitignore", "tests", "README.md"], check=True, env=git_env)
         # Ensure logs/ and private_products/ are untracked if previously tracked
         subprocess.run(["git", "-C", str(ROOT_DIR), "rm", "-r", "--cached", "--ignore-unmatch", "logs", "private_products"], check=False, capture_output=True, env=git_env)
         status_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "status", "--porcelain"], capture_output=True, text=True, env=git_env)
@@ -783,8 +803,6 @@ if __name__ == "__main__":
             subprocess.run(["git", "-C", str(ROOT_DIR), "commit", "-m", args.commit], check=True, capture_output=True, env=git_env)
         head_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "rev-parse", "--short", "HEAD"], capture_output=True, text=True, env=git_env)
         rep["git_commit"] = head_proc.stdout.strip()
-        # Remove local gh-pages ref if present so repo is strictly used for Cloudflare Pages Git deployments
-        subprocess.run(["git", "-C", str(ROOT_DIR), "branch", "-D", "gh-pages"], check=False, capture_output=True, env=git_env)
         REPORT_FILE.write_text(json.dumps(rep, indent=2), encoding="utf-8")
 
     print(json.dumps(rep, indent=2))

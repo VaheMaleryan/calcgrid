@@ -1,14 +1,14 @@
 1
-00:00:00,000 --> 00:00:10,433
+00:00:00,000 --> 00:00:10,543
 HIDDEN FX SPREADS IN PAYOUT CSVS: 2% to 3% FX Markups Are Rarely Itemized
 Embedded inside proprietary exchange rates
 
 2
-00:00:10,433 --> 00:00:20,866
+00:00:10,543 --> 00:00:21,086
 100% CLIENT-SIDE BROWSER CSV AUDITOR: Paste or Drop CSV -> 0 Server Uploads
 Audits Payoneer, Wise, Stripe, Upwork & Lemon Squeezy
 
 3
-00:00:20,866 --> 00:00:31,300
+00:00:21,086 --> 00:00:31,629
 AUTOMATIC VARIANCE DETECTION: Flags Rows Exceeding >0.25% Fee Variance
-Free Browser Tool at CalcGrid
+Free Browser Tool at PayoutFolio

@@ -76,7 +76,7 @@ COUNTRY_CORRIDORS = {
         "name": "Armenia",
         "currency": "AMD",
         "default_fx_placeholder": 388.0,
-        "fx_note": "User-editable reference rate (AMD per 1 USD). Enter your bank or CBA rate; CalcGrid never fabricates live FX feeds.",
+        "fx_note": "User-editable reference rate (AMD per 1 USD). Enter your bank or CBA rate; This tool never fabricates live FX feeds.",
         "verified_date": "2026-10-27",
         "official_sources": "RA Tax Code (Turnover Tax & High-Tech Registry), Payoneer Pricing Schedule, Wise Country Availability Docs, Lemon Squeezy MoR Payouts",
         "rails": {

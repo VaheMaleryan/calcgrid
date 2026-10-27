@@ -1,19 +1,19 @@
 1
-00:00:00,000 --> 00:00:13,082
+00:00:00,000 --> 00:00:13,134
 STAGE 1 // UPWORK 10% EXAMPLE FEE: $1,000.00 Gross -> $899.01 After Platform
 Upwork 10% ($100.00) + $0.99 Withdrawal
 
 2
-00:00:13,082 --> 00:00:26,164
+00:00:13,134 --> 00:00:26,269
 STAGE 2 // PAYONEER RAIL & FX SPREAD: $899.01 -> $872.04 Net USD Received
 1% Rail + ~2% Local FX Markup ($26.97)
 
 3
-00:00:26,164 --> 00:00:39,247
+00:00:26,269 --> 00:00:39,405
 STAGE 3 // 1% TAX ON GROSS TURNOVER (ART. 257): Final Net Take-Home: $862.04 ($10.00 Tax)
 Qualifying High-Tech Only (5% Standard Turnover)
 
 4
-00:00:39,247 --> 00:00:52,329
+00:00:39,405 --> 00:00:52,539
 REVERSE INVOICE GROSS-UP SOLVER: Need $1,000.00 Net? Invoice $1,159.86
 Educational Estimate Only — Verify Tax Eligibility

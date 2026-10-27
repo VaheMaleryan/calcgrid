@@ -1,42 +1,32 @@
-name: Autonomous Build, QA Verification, Deploy & IndexNow
-
+name: Verify PayoutFolio
 on:
   push:
-    branches: ["main"]
+    branches: [main]
+  pull_request:
   schedule:
-    # Runs weekly autonomous rebuild, QA health check, and freshness audit
-    - cron: "0 6 * * 1"
+    - cron: '0 6 * * 1'
   workflow_dispatch:
-
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  build_verify_deploy:
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
-      - name: Run Autonomous Compiler, Mathematical Suite & Security Verifier
-        env:
-          SITE_URL: ${{ vars.SITE_URL || 'https://calcgrid-tools.pages.dev' }}
-          LEMON_SQUEEZY_URL: ${{ vars.LEMON_SQUEEZY_URL || '' }}
-          ADSENSE_CLIENT_ID: ${{ vars.ADSENSE_CLIENT_ID || '' }}
-        run: python3 engine/autopilot.py --auto-rollback
-
-      - name: Upload Static Site Artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
         with:
-          path: ./dist
-
-      - name: Deploy to GitHub Pages ($0 Hosting)
-        id: deployment
-        uses: actions/deploy-pages@v4
+          node-version: '22'
+      - name: Build and verify all 32 tools, private boundaries, and marketing math
+        run: python3 engine/autopilot.py --ci
+      - name: Run regression tests
+        run: python3 -m unittest discover -s tests -v
+# Cloudflare Pages owns production deployment through its Git integration.
+# Build command: python3 engine/autopilot.py --ci
+# Output: dist    Production branch: main    Framework: None
+# No Pages artifacts or private media are uploaded to GitHub Actions.

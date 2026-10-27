@@ -1,568 +1,169 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalcGrid — Cross-Border Freelancer Payout Engine, CSV Auditor &amp; Financial Ledgers</title>
-  <meta name="description" content="Country-aware freelancer payout comparison engine (Armenia, Georgia, Serbia, Philippines, India), reverse invoice solver, browser CSV fee auditor, and 30 client-side calculators." />
-  <link rel="canonical" href="https://calcgrid.pages.dev/" />
-  <link rel="stylesheet" href="assets/styles.css" />
-</head>
-<body>
-  
-  <header class="navbar">
-    <div class="nav-inner">
-      <a href="index.html" class="brand">
-        <span class="brand-name">CalcGrid</span>
-        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
-      </a>
-      <nav class="nav-links">
-        <a href="tools/cross-border-payout-comparison-engine.html">Country Payout Engine</a>
-        <a href="tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
-        <a href="index.html#payment-calculators">Fee Ledgers</a>
-        <a href="index.html#saas-calculators">Unit Economics</a>
-        <a href="legal.html">Methodology &amp; Terms</a>
-        
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="editorial-hero">
-      <div>
-        <span class="kicker">PUBLICATION &amp; INSTRUMENT DIRECTORY // VOL. II</span>
-        <h1>Country-aware payout routing, reverse invoice math &amp; local CSV fee auditing.</h1>
-        <p>Unlike single-step gateway calculators, CalcGrid models the full cross-border deduction chain—platform commission, payout rail availability (Wise, Payoneer, SWIFT, Lemon Squeezy), FX spread uncertainty, and local simplified tax regimes—100% in your browser.</p>
-        <div class="search-bar">
-          <label for="hub-search-input">Filter 32 Verified Instruments by Keyword</label>
-          <input type="search" id="hub-search-input" placeholder="Type 'Armenia', 'Georgia', 'CSV Auditor', 'Payoneer', 'Wise', 'Upwork', 'Reverse Invoice'..." />
-        </div>
-      </div>
-      <div class="hero-figure">
-        <img src="assets/images/editorial-hero.png" alt="CalcGrid Architectural Computation Ledger Illustration" />
-        <div class="figure-caption">
-          <span>FIG. 01 — ARCHITECTURAL LEDGER</span>
-          <span>32 VERIFIED MODELS</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="flagship-banner" aria-label="Flagship Instruments">
-      <div class="flagship-col">
-        <span class="kicker">FLAGSHIP ENGINE 01</span>
-        <h3>Country-Aware Freelancer Payout &amp; Tax Router</h3>
-        <p>Compare Wise vs. Payoneer vs. SWIFT vs. Lemon Squeezy across Armenia (AMD), Georgia (GEL), Serbia (RSD), Philippines (PHP), and India (INR) with availability alerts and uncertainty ranges.</p>
-        <a href="tools/cross-border-payout-comparison-engine.html" class="btn-primary">Launch Corridor Engine &rarr;</a>
-      </div>
-      <div class="flagship-col">
-        <span class="kicker">FLAGSHIP ENGINE 02</span>
-        <h3>Multi-Stage Reverse Invoice Gross-Up Solver</h3>
-        <p>Calculate the exact gross USD invoice required to net your target take-home amount after marketplace fees (Upwork 0%–15%, Fiverr 20%), rail fees, FX spreads, and local turnover tax.</p>
-        <a href="tools/cross-border-payout-comparison-engine.html#in-target-net" class="btn-secondary">Solve Target Net Invoice &rarr;</a>
-      </div>
-      <div class="flagship-col">
-        <span class="kicker">FLAGSHIP ENGINE 03</span>
-        <h3>Private Browser CSV Statement Auditor</h3>
-        <p>Drop or paste your Stripe, Payoneer, Wise, Upwork, or Lemon Squeezy CSV rows locally in your browser to flag hidden FX markups and fee variances (&gt;0.25%) without uploading data.</p>
-        <a href="tools/private-csv-payout-fee-auditor.html" class="btn-secondary">Open Browser CSV Auditor &rarr;</a>
-      </div>
-    </section>
-
-    
-        <section class="category-section" id="payment-calculators">
-          <div class="category-header">
-            <h2 class="category-title">Payment &amp; Fee Calculators</h2>
-            <span class="category-index">SECTION 01 // CROSS-BORDER PAYOUT ENGINES & FEE LEDGERS (12 INSTRUMENTS)</span>
-          </div>
-          <div class="tools-grid">
-            
-            <a href="tools/cross-border-payout-comparison-engine.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 01 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Cross-Border Freelancer Payout, Reverse Invoice &amp; Tax Comparison Engine</h3>
-                <p>Compare end-to-end net take-home pay and required reverse invoice amounts across Upwork, Direct Contracts, Fiverr, Payoneer, Wise, and SWIFT for Armenia, Georgia, Serbia, Philippines, and India.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/private-csv-payout-fee-auditor.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 02 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Private Browser CSV Transaction &amp; Hidden FX Fee Auditor</h3>
-                <p>Audit Stripe, Payoneer, Wise, Upwork, and Lemon Squeezy CSV payout statements 100% locally in your browser to detect hidden FX markups and fee variances.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/payoneer-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 03 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Payoneer Fee &amp; Net Payout Calculator</h3>
-                <p>Calculate exact Payoneer receiving fees, local bank withdrawal deductions, and FX conversion markup.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/wise-transfer-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 04 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Wise International Transfer &amp; FX Calculator</h3>
-                <p>Estimate Wise (TransferWise) variable transfer percentage, fixed wire cost, and net recipient amount.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/lemonsqueezy-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 05 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Lemon Squeezy Merchant of Record Fee Calculator</h3>
-                <p>Calculate Lemon Squeezy 5% + $0.50 base MoR fees, international card surcharges, and payout transfer costs.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/gumroad-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 06 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Gumroad 10% + Processing Fee Calculator</h3>
-                <p>Calculate Gumroad&#x27;s 10% flat commission plus credit card processing fees and your net creator take-home pay.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/paddle-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 07 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Paddle SaaS Checkout &amp; MoR Fee Calculator</h3>
-                <p>Calculate Paddle&#x27;s 5% + $0.50 Merchant of Record fees and net recurring revenue for software products.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/upwork-freelancer-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 08 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Upwork Variable Freelancer Fee Calculator (0%–15%)</h3>
-                <p>Calculate Upwork&#x27;s variable 0% to 15% freelancer service fee, withdrawal costs, and exact gross bid required to reach your target net pay.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/fiverr-seller-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 09 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Fiverr 20% Seller Commission &amp; Payout Calculator</h3>
-                <p>Calculate Fiverr&#x27;s 20% seller commission and required order price to reach your target freelance earnings.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/stripe-international-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 10 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Stripe Card, International &amp; FX Fee Calculator</h3>
-                <p>Calculate Stripe 2.9% + $0.30 domestic card fees plus +1.5% international card and +1% currency conversion fees.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/paypal-goods-services-fee-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 11 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>PayPal Commercial &amp; International Fee Calculator</h3>
-                <p>Calculate PayPal Goods &amp; Services fees (3.49% + $0.49), cross-border surcharges (+1.5%), and FX spread.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/armenia-it-tax-turnover-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 12 &mdash; PAYMENT &amp; FEE CALCULATORS</span>
-                <h3>Armenia Freelancer, Sole Proprietor &amp; Gross Turnover Tax Calculator (Art. 257)</h3>
-                <p>Estimate net take-home income in Armenia with turnover tax assessed on full gross sales revenue (RA Tax Code Art. 257), fixed social/stamp contributions, and banking fees.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-          </div>
-        </section>
-        
-        <section class="category-section" id="saas-calculators">
-          <div class="category-header">
-            <h2 class="category-title">SaaS &amp; Marketing Calculators</h2>
-            <span class="category-index">SECTION 02 // SAAS & UNIT ECONOMICS MODELS (6 INSTRUMENTS)</span>
-          </div>
-          <div class="tools-grid">
-            
-            <a href="tools/saas-mrr-churn-ltv-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 13 &mdash; SAAS &amp; MARKETING CALCULATORS</span>
-                <h3>SaaS Customer Lifetime Value (LTV) &amp; Churn Calculator</h3>
-                <p>Calculate SaaS Customer Lifetime Value (LTV), LTV:CAC ratio, and annual revenue lost to monthly churn.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/roas-break-even-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 14 &mdash; SAAS &amp; MARKETING CALCULATORS</span>
-                <h3>Break-Even ROAS &amp; Target CPA Ad Calculator</h3>
-                <p>Calculate your exact Break-Even Return on Ad Spend (ROAS) and maximum profitable Cost Per Acquisition (CPA).</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/cpm-cpc-ctr-ad-revenue-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 15 &mdash; SAAS &amp; MARKETING CALCULATORS</span>
-                <h3>Website Display Ad &amp; Game eCPM Revenue Calculator</h3>
-                <p>Estimate monthly website or HTML5 game ad earnings from daily sessions, ad impressions per visit, eCPM, and platform revenue split.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/shopify-profit-margin-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 16 &mdash; SAAS &amp; MARKETING CALCULATORS</span>
-                <h3>E-Commerce &amp; Dropshipping Net Margin Calculator</h3>
-                <p>Calculate net profit per order and profit margin percentage after product cost, shipping, ad CPA, and gateway fees.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/email-marketing-roi-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 17 &mdash; SAAS &amp; MARKETING CALCULATORS</span>
-                <h3>Email Marketing &amp; Newsletter ROI Calculator</h3>
-                <p>Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/ab-test-sample-size-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 18 &mdash; SAAS &amp; MARKETING CALCULATORS</span>
-                <h3>Conversion Rate Lift &amp; Monthly Revenue Impact Calculator</h3>
-                <p>Calculate how much additional monthly and annual revenue a small conversion rate improvement generates.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-          </div>
-        </section>
-        
-        <section class="category-section" id="dev-utilities">
-          <div class="category-header">
-            <h2 class="category-title">Developer Utilities</h2>
-            <span class="category-index">SECTION 03 // CLIENT-SIDE DEVELOPER INSTRUMENTS (8 INSTRUMENTS)</span>
-          </div>
-          <div class="tools-grid">
-            
-            <a href="tools/json-to-typescript-schema-converter.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 19 &mdash; DEVELOPER UTILITIES</span>
-                <h3>JSON to TypeScript Interface &amp; Zod Schema Converter</h3>
-                <p>Convert any raw JSON object or API payload into strict TypeScript interfaces and runtime Zod validation schemas instantly in your browser.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/cron-expression-explainer.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 20 &mdash; DEVELOPER UTILITIES</span>
-                <h3>Cron Expression Explainer &amp; Schedule Validator</h3>
-                <p>Translate 5-field Linux/GitHub Actions cron expressions into plain English and verify execution schedules.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/jwt-token-decoder.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 21 &mdash; DEVELOPER UTILITIES</span>
-                <h3>Offline JWT Token Header &amp; Payload Decoder</h3>
-                <p>Inspect JSON Web Token (JWT) headers, claims, and expiration timestamps 100% client-side without exposing secrets over the network.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/sql-query-formatter.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 22 &mdash; DEVELOPER UTILITIES</span>
-                <h3>SQL Query Pretty Printer &amp; Clause Formatter</h3>
-                <p>Format minified or messy SQL queries with clean uppercase keywords and structured clause indentation.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/base64-url-hash-encoder.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 23 &mdash; DEVELOPER UTILITIES</span>
-                <h3>UTF-8 Safe Base64 &amp; URL Encoder / Decoder</h3>
-                <p>Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/csv-to-json-converter.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 24 &mdash; DEVELOPER UTILITIES</span>
-                <h3>Instant Browser CSV to JSON &amp; SQL Converter</h3>
-                <p>Convert CSV spreadsheet rows with headers into formatted JSON arrays locally in your browser.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/regex-pattern-tester.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 25 &mdash; DEVELOPER UTILITIES</span>
-                <h3>Live Regular Expression Matcher &amp; Group Extractor</h3>
-                <p>Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/svg-to-data-uri-optimizer.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 26 &mdash; DEVELOPER UTILITIES</span>
-                <h3>SVG to CSS Data URI &amp; React JSX Component Converter</h3>
-                <p>Convert raw SVG markup into URL-encoded CSS `background-image` Data URIs and clean React JSX components.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-          </div>
-        </section>
-        
-        <section class="category-section" id="ops-tools">
-          <div class="category-header">
-            <h2 class="category-title">Business &amp; Operations Tools</h2>
-            <span class="category-index">SECTION 04 // OPERATIONS & ESTIMATION LEDGERS (6 INSTRUMENTS)</span>
-          </div>
-          <div class="tools-grid">
-            
-            <a href="tools/freelance-hourly-rate-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 27 &mdash; BUSINESS &amp; OPERATIONS TOOLS</span>
-                <h3>Freelance Target Annual Income to Billable Hourly Rate Calculator</h3>
-                <p>Calculate your minimum billable hourly and daily rate after accounting for vacation days, non-billable admin time, overhead, and taxes.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/software-project-estimation-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 28 &mdash; BUSINESS &amp; OPERATIONS TOOLS</span>
-                <h3>PERT 3-Point Software Project Time &amp; Quote Calculator</h3>
-                <p>Use the engineering PERT formula (Optimistic, Most Likely, Pessimistic hours) to calculate realistic project timelines and fixed-price quotes.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/cloud-llm-token-cost-calculator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 29 &mdash; BUSINESS &amp; OPERATIONS TOOLS</span>
-                <h3>AI LLM API Token &amp; Monthly Cost Calculator</h3>
-                <p>Estimate monthly LLM API costs from daily requests, prompt input tokens, completion output tokens, and model pricing per 1M tokens.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/password-entropy-generator.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 30 &mdash; BUSINESS &amp; OPERATIONS TOOLS</span>
-                <h3>Cryptographic Password &amp; Entropy Bits Generator</h3>
-                <p>Generate high-entropy random API keys and passwords using `window.crypto.getRandomValues()` and calculate brute-force entropy bits.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/markdown-to-html-converter.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 31 &mdash; BUSINESS &amp; OPERATIONS TOOLS</span>
-                <h3>Instant Markdown to Clean Semantic HTML Converter</h3>
-                <p>Convert Markdown headings, lists, code blocks, and links into clean semantic HTML snippets ready to paste into any CMS.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-            <a href="tools/utm-campaign-link-builder.html" class="tool-card">
-              <div>
-                <span class="tool-num">NO. 32 &mdash; BUSINESS &amp; OPERATIONS TOOLS</span>
-                <h3>UTM Marketing URL Builder &amp; Campaign Tag Generator</h3>
-                <p>Generate properly URL-encoded UTM tracking links (`utm_source`, `utm_medium`, `utm_campaign`) for analytics attribution.</p>
-              </div>
-              <div class="tool-card-footer">
-                <span>Interactive Instrument</span>
-                <span>Open Ledger &rarr;</span>
-              </div>
-            </a>
-            
-          </div>
-        </section>
-        
-
-    <section class="doc-section" style="margin-top:48px">
-      <span class="kicker">COMPETITIVE BENCHMARK &amp; METHODOLOGY AUDIT</span>
-      <h3>How CalcGrid Compares to 10 Existing Fee Calculator Websites</h3>
-      <p style="font-size:0.86rem;color:var(--ink-secondary);margin-bottom:14px">
-        We audited the 10 leading payment and freelancer calculator sites to identify why international contractors still lose 2%–6% to unmodeled deductions:
-      </p>
-      <div style="overflow-x:auto">
-        <table class="matrix-table">
-          <thead>
-            <tr>
-              <th>Competing Platform</th>
-              <th>What They Solve Well</th>
-              <th>Underserved Need Solved by CalcGrid</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-          <td><strong>01. FeeProbe (feeprobe.com)</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Clean UI, side-by-side Stripe/PayPal/Wise comparison for US/UK, basic reverse fee calculation.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Ignores multi-stage freelance chains (e.g., Upwork -&gt; Payoneer -&gt; Local Bank), no emerging-market corridor restrictions (e.g., Wise receiving limits in Armenia), no local turnover tax, no CSV batch auditing.</td>
-        </tr><tr>
-          <td><strong>02. Teamz Lab Payment Processor Fee Calculator</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Covers PayPal, Stripe, Wise Business, Payoneer, Bank Wire, and Revolut with currency options.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Models single-hop transfers only; does not combine marketplace commission + payout rail FX spread + local tax into a reverse invoice solver; no browser CSV statement auditor.</td>
-        </tr><tr>
-          <td><strong>03. Baznek Platform &amp; Fee Comparison Center</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Pairwise comparisons (Wise vs Payoneer, Upwork vs Fiverr, Stripe vs PayPal).</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Lacks country-specific rail availability warnings, SWIFT intermediary bank uncertainty ranges ($10-$30 mid-route deductions), and multi-stage target-net invoice math.</td>
-        </tr><tr>
-          <td><strong>04. HelloFees (hellofees.com)</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Compares Stripe, PayPal, Square, and Shopify Payments across 60+ countries for e-commerce.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Built for e-commerce checkout only; omits Upwork/Fiverr/Lemon Squeezy MoR payouts and emerging-market IE tax regimes (Armenia 1% IT, Georgia 1% SBS).</td>
-        </tr><tr>
-          <td><strong>05. Calcimator Payment Gateway Calculator</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Highlights forex conversion markups on Stripe, PayPal, Adyen, and Braintree.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Single-transaction only; no sensitivity matrix across volume tiers and no CSV reconciliation.</td>
-        </tr><tr>
-          <td><strong>06. GetInvoicePDF Payment Fee Calculator</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Simple invoice gross-up calculator for Stripe and PayPal.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">No cross-border payout rails (Payoneer/Wise/SWIFT), no uncertainty bands, and no multi-hop deduction modeling.</td>
-        </tr><tr>
-          <td><strong>07. QuadraPay Payment Gateway Cost Calculator</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Calculates effective monthly merchant rate across card volume and per-transaction fees.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Targets traditional retail card processing; lacks freelancer marketplace and Merchant-of-Record fee structures.</td>
-        </tr><tr>
-          <td><strong>08. DepositFix Payment Gateways Calculator</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Useful for B2B HubSpot/Stripe checkout cost estimation.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">No international contractor payout routing or FX spread auditing.</td>
-        </tr><tr>
-          <td><strong>09. Payoneer Native Fee &amp; Checkout Calculator</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">First-party Payoneer volume calculator.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Marketing tool that omits side-by-side comparison against Wise mid-market rates or Upwork Direct Contracts.</td>
-        </tr><tr>
-          <td><strong>10. Wise Native Pricing &amp; Corridor Estimator</strong></td>
-          <td style="text-align:left;font-family:var(--font-sans)">Accurate single-transfer Wise route fees.</td>
-          <td style="text-align:left;font-family:var(--font-sans)">Does not integrate upstream marketplace commissions (Upwork 0%-15%, Fiverr 20%, Lemon Squeezy 5%+$0.50) or downstream local entrepreneur taxes.</td>
-        </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <span>&copy; 2026 CalcGrid Publication. All calculations execute client-side.</span>
-      <span><a href="legal.html">Privacy, Consent &amp; Disclaimers</a> &nbsp;&bull;&nbsp; <a href="sitemap.xml">XML Sitemap</a> &nbsp;&bull;&nbsp; <a href="rss.xml">RSS Feed</a></span>
-    </div>
-  </footer>
-  <script src="assets/tools-runtime.js"></script>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head>
+      <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>PayoutFolio — Know what you actually keep</title><meta name="description" content="Compare payout routes, work backwards from your target income, and audit CSV fees privately. 32 free browser tools for freelancers and small teams." />
+      <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/" /><link rel="stylesheet" href="assets/styles.css" />
+      <meta name="theme-color" content="#174f46" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PayoutFolio" />
+    <meta property="og:title" content="PayoutFolio — Know what you actually keep" />
+    <meta property="og:description" content="Compare payout routes, work backwards from your target income, and audit CSV fees privately. 32 free browser tools for freelancers and small teams." />
+    <meta property="og:url" content="https://vahemaleryan.github.io/calcgrid/" />
+    <meta property="og:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
+    <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PayoutFolio — Know what you actually keep" />
+    <meta name="twitter:description" content="Compare payout routes, work backwards from your target income, and audit CSV fees privately. 32 free browser tools for freelancers and small teams." />
+    <meta name="twitter:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
+      <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "PayoutFolio", "url": "https://vahemaleryan.github.io/calcgrid/"}</script>
+    </head><body><a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="navbar"><div class="nav-inner">
+      <a href="index.html" class="brand" aria-label="PayoutFolio home"><svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 5h15a9 9 0 0 1 0 18H14v8H6V5Z" fill="currentColor"/><path d="M14 12h7a2 2 0 0 1 0 4h-7v-4Z" fill="#f6f5f0"/><path d="M25 24v7h6v-9" stroke="currentColor" stroke-width="3"/></svg><span class="brand-name">PayoutFolio</span></a>
+      <nav class="nav-links" aria-label="Main navigation"><a href="tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
+        <a href="tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
+        <a href="index.html#directory">All calculators</a>
+        <a href="legal.html">Methodology</a></nav>
+      <details class="mobile-menu"><summary>Menu &nbsp; +</summary><nav aria-label="Mobile navigation"><a href="tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
+        <a href="tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
+        <a href="index.html#directory">All calculators</a>
+        <a href="legal.html">Methodology</a></nav></details>
+    </div></header>
+    <main class="container" id="main-content">
+      <section class="editorial-hero"><div>
+        <span class="kicker">Independent tools for money that crosses borders</span>
+        <h1>Know what you<br/>actually <em>keep.</em></h1>
+        <p>Your invoice is only the beginning. See what reaches you after platform fees, currency conversion, and tax assumptions.</p>
+        <div class="hero-actions"><a class="btn-primary" href="tools/cross-border-payout-comparison-engine.html">Compare my payout &nbsp;&rarr;</a>
+          <a class="btn-secondary" href="#directory">Explore all 32 tools</a></div>
+        <div class="hero-note">Free to use <span>/</span> No account <span>/</span> Calculated on your device</div>
+      </div><div class="sample-ledger" aria-label="Illustrative payout breakdown, not a live quote">
+        <div class="sample-top"><span>YOUR INVOICE, UNPACKED</span><span><span class="sample-dot"></span>Illustrative scenario</span></div>
+        <div class="sample-amount"><span>Client invoice · USD</span><strong>$1,000.00</strong></div>
+        <div class="sample-row"><span>Platform · 10% + $0.99</span><strong>−$100.99</strong></div>
+        <div class="sample-row"><span>Payout &amp; FX · 3% of remainder</span><strong>−$26.97</strong></div>
+        <div class="sample-row"><span>Tax provision · 1% of gross</span><strong>−$10.00</strong></div>
+        <div class="sample-bar" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <div class="sample-total"><span>What you keep</span><strong>$862.04</strong></div>
+        <p class="sample-caption">Example inputs, not a provider quote or tax determination. Change every assumption in the payout comparison.</p>
+      </div></section>
+      <div class="trust-strip"><span><strong>32</strong> browser tools</span><span><strong>5</strong> country scenarios</span><span><strong>Zero</strong> statement uploads to a server</span><span><strong>Transparent</strong> formulas &amp; assumptions</span></div>
+      <section class="feature-section"><div class="section-intro"><div><span class="kicker">Start with the question that matters</span><h2>From invoice to actual income.</h2></div><p>Three ways to get a clearer picture of your money.</p></div>
+      <div class="flagship-banner" aria-label="Featured tools">
+        <article class="flagship-col"><svg class="feature-icon" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M7 26V9h18M19 3l7 6-7 6M12 26h17" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="28" r="4" stroke="currentColor" stroke-width="1.5"/></svg><span class="kicker">01 / Compare your options</span><h3>Follow the whole<br/>payout journey.</h3><p>Model platform fees, payout routes, FX spreads, and tax provisions across five country scenarios.</p><a class="text-link" href="tools/cross-border-payout-comparison-engine.html">Compare payout routes &rarr;</a></article>
+        <article class="flagship-col"><svg class="feature-icon" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M10 8h14a8 8 0 0 1 0 16H7M13 18l-6 6 6 6M10 3v10" stroke="currentColor" stroke-width="1.5"/></svg><span class="kicker">02 / Work backwards</span><h3>Price for what<br/>you want to keep.</h3><p>Start with your target take-home. Find the invoice amount your assumptions require.</p><a class="text-link" href="tools/cross-border-payout-comparison-engine.html#in-target-net">Calculate my invoice &rarr;</a></article>
+        <article class="flagship-col"><svg class="feature-icon" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M8 4h15l6 6v22H8V4ZM22 4v8h7M13 19h11M13 24h7" stroke="currentColor" stroke-width="1.5"/></svg><span class="kicker">03 / Check the statement</span><h3>Make the hidden<br/>differences visible.</h3><p>Compare transaction CSVs with example fee baselines. Your statement stays in your browser.</p><a class="text-link" href="tools/private-csv-payout-fee-auditor.html">Audit a CSV privately &rarr;</a></article>
+      </div></section>
+      <section id="directory" aria-label="Calculator directory"><div class="directory-head"><div><span class="kicker">The working collection</span><h2>A sharper set of tools.</h2></div>
+        <div class="search-bar"><label for="hub-search-input">Find a calculator or utility</label><input type="search" id="hub-search-input" placeholder="Search fees, Upwork, CSV, hourly rate…" aria-controls="calculator-sections" /></div></div>
+        <nav class="directory-nav" aria-label="Calculator categories"><a href="#payment-calculators">Payouts & payment fees</a><a href="#saas-calculators">Growth & unit economics</a><a href="#dev-utilities">Developer utilities</a><a href="#ops-tools">Business & operations</a></nav>
+        <p id="search-feedback" class="search-feedback" role="status" aria-live="polite">32 tools. No account needed.</p><div id="calculator-sections"><section class="category-section" id="payment-calculators"><div class="category-header">
+          <h2 class="category-title">Payouts & payment fees</h2><span class="category-index">12 TOOLS</span></div>
+          <div class="tools-grid"><a href="tools/cross-border-payout-comparison-engine.html" class="tool-card">
+              <div><span class="tool-num">01 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Your payout, from invoice to income</h3><p>Compare end-to-end net take-home pay and required reverse invoice amounts across Upwork, Direct Contracts, Fiverr, Payoneer, Wise, and SWIFT for Armenia, Georgia, Serbia, Philippines, and India.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/private-csv-payout-fee-auditor.html" class="tool-card">
+              <div><span class="tool-num">02 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>A private check on your payout fees</h3><p>Audit Stripe, Payoneer, Wise, Upwork, and Lemon Squeezy CSV payout statements 100% locally in your browser to detect hidden FX markups and fee variances.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/payoneer-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">03 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Payoneer fee calculator</h3><p>Calculate exact Payoneer receiving fees, local bank withdrawal deductions, and FX conversion markup.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/wise-transfer-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">04 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Wise transfer calculator</h3><p>Estimate Wise (TransferWise) variable transfer percentage, fixed wire cost, and net recipient amount.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/lemonsqueezy-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">05 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Lemon Squeezy fee calculator</h3><p>Calculate Lemon Squeezy 5% + $0.50 base MoR fees, international card surcharges, and payout transfer costs.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/gumroad-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">06 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Gumroad fee calculator</h3><p>Calculate Gumroad&#x27;s 10% flat commission plus credit card processing fees and your net creator take-home pay.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/paddle-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">07 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Paddle fee calculator</h3><p>Calculate Paddle&#x27;s 5% + $0.50 Merchant of Record fees and net recurring revenue for software products.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/upwork-freelancer-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">08 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Upwork fee calculator</h3><p>Calculate Upwork&#x27;s variable 0% to 15% freelancer service fee, withdrawal costs, and exact gross bid required to reach your target net pay.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/fiverr-seller-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">09 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Fiverr payout calculator</h3><p>Calculate Fiverr&#x27;s 20% seller commission and required order price to reach your target freelance earnings.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/stripe-international-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">10 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Stripe international fees</h3><p>Calculate Stripe 2.9% + $0.30 domestic card fees plus +1.5% international card and +1% currency conversion fees.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/paypal-goods-services-fee-calculator.html" class="tool-card">
+              <div><span class="tool-num">11 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>PayPal commercial fees</h3><p>Calculate PayPal Goods &amp; Services fees (3.49% + $0.49), cross-border surcharges (+1.5%), and FX spread.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/armenia-it-tax-turnover-calculator.html" class="tool-card">
+              <div><span class="tool-num">12 &nbsp;/&nbsp; PAYOUTS &amp; PAYMENT FEES</span>
+              <h3>Armenia turnover tax scenario</h3><p>Estimate net take-home income in Armenia with turnover tax assessed on full gross sales revenue (RA Tax Code Art. 257), fixed social/stamp contributions, and banking fees.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a></div></section><section class="category-section" id="saas-calculators"><div class="category-header">
+          <h2 class="category-title">Growth & unit economics</h2><span class="category-index">06 TOOLS</span></div>
+          <div class="tools-grid"><a href="tools/saas-mrr-churn-ltv-calculator.html" class="tool-card">
+              <div><span class="tool-num">13 &nbsp;/&nbsp; GROWTH &amp; UNIT ECONOMICS</span>
+              <h3>Customer lifetime value</h3><p>Calculate SaaS Customer Lifetime Value (LTV), LTV:CAC ratio, and annual revenue lost to monthly churn.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/roas-break-even-calculator.html" class="tool-card">
+              <div><span class="tool-num">14 &nbsp;/&nbsp; GROWTH &amp; UNIT ECONOMICS</span>
+              <h3>Break-even return on ad spend</h3><p>Calculate your exact Break-Even Return on Ad Spend (ROAS) and maximum profitable Cost Per Acquisition (CPA).</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/cpm-cpc-ctr-ad-revenue-calculator.html" class="tool-card">
+              <div><span class="tool-num">15 &nbsp;/&nbsp; GROWTH &amp; UNIT ECONOMICS</span>
+              <h3>Display ad revenue</h3><p>Estimate monthly website or HTML5 game ad earnings from daily sessions, ad impressions per visit, eCPM, and platform revenue split.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/shopify-profit-margin-calculator.html" class="tool-card">
+              <div><span class="tool-num">16 &nbsp;/&nbsp; GROWTH &amp; UNIT ECONOMICS</span>
+              <h3>E-commerce profit margin</h3><p>Calculate net profit per order and profit margin percentage after product cost, shipping, ad CPA, and gateway fees.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/email-marketing-roi-calculator.html" class="tool-card">
+              <div><span class="tool-num">17 &nbsp;/&nbsp; GROWTH &amp; UNIT ECONOMICS</span>
+              <h3>Email campaign returns</h3><p>Calculate open-to-click conversions, total sales generated, and net ROI percentage from email campaigns.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/ab-test-sample-size-calculator.html" class="tool-card">
+              <div><span class="tool-num">18 &nbsp;/&nbsp; GROWTH &amp; UNIT ECONOMICS</span>
+              <h3>Conversion lift &amp; revenue</h3><p>Calculate how much additional monthly and annual revenue a small conversion rate improvement generates.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a></div></section><section class="category-section" id="dev-utilities"><div class="category-header">
+          <h2 class="category-title">Developer utilities</h2><span class="category-index">08 TOOLS</span></div>
+          <div class="tools-grid"><a href="tools/json-to-typescript-schema-converter.html" class="tool-card">
+              <div><span class="tool-num">19 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>JSON to TypeScript &amp; Zod</h3><p>Convert any raw JSON object or API payload into strict TypeScript interfaces and runtime Zod validation schemas instantly in your browser.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/cron-expression-explainer.html" class="tool-card">
+              <div><span class="tool-num">20 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>Cron schedule explainer</h3><p>Translate 5-field Linux/GitHub Actions cron expressions into plain English and verify execution schedules.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/jwt-token-decoder.html" class="tool-card">
+              <div><span class="tool-num">21 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>Private JWT decoder</h3><p>Inspect JSON Web Token (JWT) headers, claims, and expiration timestamps 100% client-side without exposing secrets over the network.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/sql-query-formatter.html" class="tool-card">
+              <div><span class="tool-num">22 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>SQL query formatter</h3><p>Format minified or messy SQL queries with clean uppercase keywords and structured clause indentation.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/base64-url-hash-encoder.html" class="tool-card">
+              <div><span class="tool-num">23 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>Base64 &amp; URL encoder</h3><p>Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/csv-to-json-converter.html" class="tool-card">
+              <div><span class="tool-num">24 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>CSV to JSON converter</h3><p>Convert CSV spreadsheet rows with headers into formatted JSON arrays locally in your browser.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/regex-pattern-tester.html" class="tool-card">
+              <div><span class="tool-num">25 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>Regular expression tester</h3><p>Test JavaScript RegExp patterns against multi-line sample text and inspect all matched substrings and capture groups.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/svg-to-data-uri-optimizer.html" class="tool-card">
+              <div><span class="tool-num">26 &nbsp;/&nbsp; DEVELOPER UTILITIES</span>
+              <h3>SVG to CSS &amp; React</h3><p>Convert raw SVG markup into URL-encoded CSS `background-image` Data URIs and clean React JSX components.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a></div></section><section class="category-section" id="ops-tools"><div class="category-header">
+          <h2 class="category-title">Business & operations</h2><span class="category-index">06 TOOLS</span></div>
+          <div class="tools-grid"><a href="tools/freelance-hourly-rate-calculator.html" class="tool-card">
+              <div><span class="tool-num">27 &nbsp;/&nbsp; BUSINESS &amp; OPERATIONS</span>
+              <h3>Your freelance hourly rate</h3><p>Calculate your minimum billable hourly and daily rate after accounting for vacation days, non-billable admin time, overhead, and taxes.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/software-project-estimation-calculator.html" class="tool-card">
+              <div><span class="tool-num">28 &nbsp;/&nbsp; BUSINESS &amp; OPERATIONS</span>
+              <h3>Project time &amp; quote estimator</h3><p>Use the engineering PERT formula (Optimistic, Most Likely, Pessimistic hours) to calculate realistic project timelines and fixed-price quotes.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/cloud-llm-token-cost-calculator.html" class="tool-card">
+              <div><span class="tool-num">29 &nbsp;/&nbsp; BUSINESS &amp; OPERATIONS</span>
+              <h3>LLM token cost planner</h3><p>Estimate monthly LLM API costs from daily requests, prompt input tokens, completion output tokens, and model pricing per 1M tokens.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/password-entropy-generator.html" class="tool-card">
+              <div><span class="tool-num">30 &nbsp;/&nbsp; BUSINESS &amp; OPERATIONS</span>
+              <h3>Password &amp; entropy generator</h3><p>Generate high-entropy random API keys and passwords using `window.crypto.getRandomValues()` and calculate brute-force entropy bits.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/markdown-to-html-converter.html" class="tool-card">
+              <div><span class="tool-num">31 &nbsp;/&nbsp; BUSINESS &amp; OPERATIONS</span>
+              <h3>Markdown to HTML</h3><p>Convert Markdown headings, lists, code blocks, and links into clean semantic HTML snippets ready to paste into any CMS.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a><a href="tools/utm-campaign-link-builder.html" class="tool-card">
+              <div><span class="tool-num">32 &nbsp;/&nbsp; BUSINESS &amp; OPERATIONS</span>
+              <h3>Campaign link builder</h3><p>Generate properly URL-encoded UTM tracking links (`utm_source`, `utm_medium`, `utm_campaign`) for analytics attribution.</p></div>
+              <div class="tool-card-footer"><span>Free · In your browser</span><span>Open tool &rarr;</span></div></a></div></section></div>
+      </section>
+      <section class="principles"><div><span class="kicker">Clarity is a working principle</span><h2>Your numbers stay yours.<br/>The assumptions stay visible.</h2></div><div><p>Calculations run on your device. CSV contents never leave your browser. No sign-in, no live bank connection, and no promises dressed up as projections.</p><p style="margin-top:17px">These are planning models. Confirm current provider fees, route eligibility, and your tax treatment before acting. <a href="legal.html">Read our methodology &amp; privacy notes &rarr;</a></p></div></section>
+    </main><footer><div class="footer-inner"><span>&copy; 2026 PayoutFolio. Independent planning tools.</span><span><a href="legal.html">Privacy &amp; methodology</a> &nbsp;·&nbsp; <a href="sitemap.xml">Sitemap</a> &nbsp;·&nbsp; <a href="rss.xml">Updates</a></span></div></footer>
+    <script src="assets/tools-runtime.js"></script></body></html>

@@ -1,6 +1,9 @@
 {
-  "site_url": "https://calcgrid.pages.dev",
+  "site_url": "https://vahemaleryan.github.io/calcgrid",
   "lemon_squeezy_checkout_url": "",
   "adsense_client_id": "",
-  "smm_audit_approved": true
+  "smm_audit_approved": true,
+  "brand_name": "PayoutFolio",
+  "monetization_approved": false,
+  "social_publishing_enabled": false
 }
