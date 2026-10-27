@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freelance Target Annual Income to Billable Hourly Rate Calculator — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Calculate your minimum billable hourly and daily rate after accounting for vacation days, non-billable admin time, overhead, and taxes." />
+  <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/freelance-hourly-rate-calculator.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Freelance Target Annual Income to Billable Hourly Rate Calculator", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Calculate your minimum billable hourly and daily rate after accounting for vacation days, non-billable admin time, overhead, and taxes.", "url": "https://vahemaleryan.github.io/calcgrid/tools/freelance-hourly-rate-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why can't freelancers divide annual salary by 2,080 hours?", "acceptedAnswer": {"@type": "Answer", "text": "Full-time freelancers typically spend 30%\u201340% of their week on unbilled tasks (proposals, invoicing, revisions) and take holidays, leaving ~1,100\u20131,250 true billable hours per year."}}]}]}</script>
+</head>
+<body>
+  
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../tools/cross-border-payout-comparison-engine.html">Country Payout Engine</a>
+        <a href="../tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
+        <a href="../index.html#payment-calculators">Fee Ledgers</a>
+        <a href="../index.html#saas-calculators">Unit Economics</a>
+        <a href="../legal.html">Methodology &amp; Terms</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Business &amp; Operations Tools</span>
+      <span>BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (2026-10-27)</span>
+    </div>
+    <header class="tool-header">
+      <h1>Freelance Target Annual Income to Billable Hourly Rate Calculator</h1>
+      <p>Calculate your minimum billable hourly and daily rate after accounting for vacation days, non-billable admin time, overhead, and taxes.</p>
+    </header>
+
+    
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="saas_calc" data-tool-config="{&quot;label_a&quot;: &quot;Target Annual Net Income ($ USD)&quot;, &quot;default_a&quot;: 48000, &quot;label_b&quot;: &quot;Annual Business Overhead &amp; Software ($)&quot;, &quot;default_b&quot;: 2400, &quot;label_c&quot;: &quot;Billable Hours Per Week (After Admin/Sales)&quot;, &quot;default_c&quot;: 25, &quot;label_d&quot;: &quot;Effective Tax &amp; Platform Fee Rate (%)&quot;, &quot;default_d&quot;: 15, &quot;mode&quot;: &quot;hourly_rate&quot;}">
+          <div>
+            <div class="parameters-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 01 — MODEL ASSUMPTIONS</span>
+                <span>VERIFIED: 2026-10-27</span>
+              </div>
+              <div class="field-group">
+                <label for="in-a">Target Annual Net Income ($ USD)</label>
+                <input type="number" id="in-a" value="48000" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-b">Annual Business Overhead &amp; Software ($)</label>
+                <input type="number" id="in-b" value="2400" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-c">Billable Hours Per Week (After Admin/Sales)</label>
+                <input type="number" id="in-c" value="25" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-d">Effective Tax &amp; Platform Fee Rate (%)</label>
+                <input type="number" id="in-d" value="15" step="any" />
+              </div>
+            </div>
+
+            
+
+            <div class="doc-section">
+              <span class="kicker">SPECIFICATION &amp; FORMULA</span>
+              <h3>Calculation Methodology</h3>
+              <div class="formula-block">Gross Required = (Target Net + Overhead) / (1 - Tax%). Billable Hours/Year = Billable Hours/Week × 48 Working Weeks. Minimum Hourly Rate = Gross Required / Billable Hours/Year.</div>
+              <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
+                REFERENCE BASIS: Standard Industry Financial &amp; Technical Formula &bull; ASSUMPTIONS VERIFIED: 2026-10-27
+              </p>
+              <h3>Reference Notes &amp; FAQ</h3>
+              <div class="faq-item"><h4>Why can&#x27;t freelancers divide annual salary by 2,080 hours?</h4><p>Full-time freelancers typically spend 30%–40% of their week on unbilled tasks (proposals, invoicing, revisions) and take holidays, leaving ~1,100–1,250 true billable hours per year.</p></div>
+            </div>
+          </div>
+
+          <aside>
+            <div class="ledger-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 02 — OUTPUT LEDGER</span>
+                <span>LIVE PROJECTION</span>
+              </div>
+              <div class="ledger-primary">
+                <span class="ledger-primary-label" id="lbl-r1">Primary Output</span>
+                <div class="ledger-primary-value" id="val-r1">$0.00</div>
+              </div>
+              <div class="ledger-rows">
+                <div class="ledger-row">
+                  <span id="lbl-r2">Secondary Metric</span>
+                  <strong id="val-r2">0</strong>
+                </div>
+                <div class="ledger-row">
+                  <span id="lbl-r3">Efficiency Benchmark</span>
+                  <strong id="val-r3">0</strong>
+                </div>
+              </div>
+              <div class="ledger-actions">
+                <button type="button" id="btn-export-csv" class="btn-secondary">Export CSV Statement</button>
+                <button type="button" id="btn-copy-permalink" class="btn-secondary">Copy Permalink</button>
+              </div>
+            </div>
+            
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>While single-transaction calculators and our 50-row Browser CSV Auditor are 100% free, the Pro Pack equips agencies and accountants with unlimited CLI batch automation and multi-sheet workbooks.</p>
+        <ul class="reference-list">
+          <li>01 / Unlimited CLI Batch CSV Fee &amp; FX Reconciler (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (32 Tools)</li>
+        </ul>
+        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="software-project-estimation-calculator.html">PERT 3-Point Software Project Time &amp; Quote Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cloud-llm-token-cost-calculator.html">AI LLM API Token &amp; Monthly Cost Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="password-entropy-generator.html">Cryptographic Password &amp; Entropy Bits Generator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="markdown-to-html-converter.html">Instant Markdown to Clean Semantic HTML Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="utm-campaign-link-builder.html">UTM Marketing URL Builder &amp; Campaign Tag Generator &rarr;</a></li>
+        </ul>
+      </div>
+    
+          </aside>
+        </div>
+        
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>

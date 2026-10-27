@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UTF-8 Safe Base64 &amp; URL Encoder / Decoder — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly." />
+  <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/base64-url-hash-encoder.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "UTF-8 Safe Base64 & URL Encoder / Decoder", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.", "url": "https://vahemaleryan.github.io/calcgrid/tools/base64-url-hash-encoder.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does standard JavaScript btoa() fail on Armenian or emoji characters?", "acceptedAnswer": {"@type": "Answer", "text": "Standard `btoa()` only accepts 8-bit Latin1 characters. Converting through `TextEncoder` UTF-8 bytes ensures multi-byte Unicode strings encode accurately."}}]}]}</script>
+</head>
+<body>
+  
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../tools/cross-border-payout-comparison-engine.html">Country Payout Engine</a>
+        <a href="../tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
+        <a href="../index.html#payment-calculators">Fee Ledgers</a>
+        <a href="../index.html#saas-calculators">Unit Economics</a>
+        <a href="../legal.html">Methodology &amp; Terms</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Developer Utilities</span>
+      <span>BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (2026-10-27)</span>
+    </div>
+    <header class="tool-header">
+      <h1>UTF-8 Safe Base64 &amp; URL Encoder / Decoder</h1>
+      <p>Encode and decode UTF-8 strings to Base64, Base64Url, and URL-encoded query parameters instantly.</p>
+    </header>
+
+    
+    <div class="workspace-grid" id="interactive-tool-root" data-tool-type="dev_tool" data-tool-config="{&quot;dev_mode&quot;: &quot;base64&quot;, &quot;sample_input&quot;: &quot;https://calcgrid.dev/api?merchant=armenia&amp;currency=AMD&amp;amount=45000&quot;}">
+      <div>
+        <div class="parameters-sheet">
+          <div class="sheet-heading">
+            <span>FIG. 01 — SOURCE PAYLOAD</span>
+            <span>LOCAL BROWSER EXECUTION</span>
+          </div>
+          <div class="field-group">
+            <label for="dev-input">Input Buffer (Processed 100% Client-Side)</label>
+            <textarea id="dev-input">https://calcgrid.dev/api?merchant=armenia&amp;currency=AMD&amp;amount=45000</textarea>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="btn-run-dev" class="btn-primary">Execute Transformation</button>
+            <button type="button" id="btn-copy-dev" class="btn-secondary">Copy Output</button>
+          </div>
+          <div class="field-group" style="margin-top:20px">
+            <label>Formatted Output</label>
+            <pre id="dev-output" class="code-output"></pre>
+          </div>
+        </div>
+
+        
+
+        <div class="doc-section">
+          <span class="kicker">SPECIFICATION</span>
+          <h3>Technical Notes</h3>
+          <div class="formula-block">Uses TextEncoder UTF-8 byte arrays to safely Base64-encode Unicode characters without `btoa` Latin1 exceptions.</div>
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item"><h4>Why does standard JavaScript btoa() fail on Armenian or emoji characters?</h4><p>Standard `btoa()` only accepts 8-bit Latin1 characters. Converting through `TextEncoder` UTF-8 bytes ensures multi-byte Unicode strings encode accurately.</p></div>
+        </div>
+      </div>
+
+      <aside>
+        
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>While single-transaction calculators and our 50-row Browser CSV Auditor are 100% free, the Pro Pack equips agencies and accountants with unlimited CLI batch automation and multi-sheet workbooks.</p>
+        <ul class="reference-list">
+          <li>01 / Unlimited CLI Batch CSV Fee &amp; FX Reconciler (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (32 Tools)</li>
+        </ul>
+        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cron-expression-explainer.html">Cron Expression Explainer &amp; Schedule Validator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="jwt-token-decoder.html">Offline JWT Token Header &amp; Payload Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="csv-to-json-converter.html">Instant Browser CSV to JSON &amp; SQL Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="regex-pattern-tester.html">Live Regular Expression Matcher &amp; Group Extractor &rarr;</a></li>
+        </ul>
+      </div>
+    
+      </aside>
+    </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>

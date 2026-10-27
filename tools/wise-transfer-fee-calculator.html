@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wise International Transfer &amp; FX Calculator — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Estimate Wise (TransferWise) variable transfer percentage, fixed wire cost, and net recipient amount." />
+  <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/wise-transfer-fee-calculator.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Wise International Transfer & FX Calculator", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Estimate Wise (TransferWise) variable transfer percentage, fixed wire cost, and net recipient amount.", "url": "https://vahemaleryan.github.io/calcgrid/tools/wise-transfer-fee-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Wise add a markup to the exchange rate?", "acceptedAnswer": {"@type": "Answer", "text": "No. Wise uses the real mid-market exchange rate and charges an upfront transparent fixed + variable percentage fee depending on the currency corridor."}}, {"@type": "Question", "name": "Why is there a fixed fee on USD SWIFT wires?", "acceptedAnswer": {"@type": "Answer", "text": "International SWIFT transfers involve correspondent banks, which adds a small fixed rail fee compared to local ACH transfers."}}]}]}</script>
+</head>
+<body>
+  
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../tools/cross-border-payout-comparison-engine.html">Country Payout Engine</a>
+        <a href="../tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
+        <a href="../index.html#payment-calculators">Fee Ledgers</a>
+        <a href="../index.html#saas-calculators">Unit Economics</a>
+        <a href="../legal.html">Methodology &amp; Terms</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Payment &amp; Fee Calculators</span>
+      <span>BASIS: WISE MID-MARKET &amp; CORRIDOR PRICING SCHEDULE (2026-10-27)</span>
+    </div>
+    <header class="tool-header">
+      <h1>Wise International Transfer &amp; FX Calculator</h1>
+      <p>Estimate Wise (TransferWise) variable transfer percentage, fixed wire cost, and net recipient amount.</p>
+    </header>
+
+    
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="fee_calc" data-tool-config="{&quot;label_amount&quot;: &quot;Transfer Send Amount ($ USD)&quot;, &quot;default_amount&quot;: 1500, &quot;percent_fee&quot;: 0.65, &quot;fixed_fee&quot;: 4.14, &quot;fx_markup_percent&quot;: 0.0, &quot;label_pct&quot;: &quot;Wise Variable Route Fee (%)&quot;, &quot;label_fixed&quot;: &quot;Fixed Wire / ACH Fee ($)&quot;, &quot;label_fx&quot;: &quot;Exchange Rate Spread (%) \u2014 Wise uses 0% mid-market&quot;}">
+          <div>
+            <div class="parameters-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 01 — INPUT PARAMETERS</span>
+                <span>VERIFIED: 2026-10-27</span>
+              </div>
+              
+              <div class="field-group">
+                <label for="in-amount">Transfer Send Amount ($ USD)</label>
+                <input type="number" id="in-amount" value="1500" min="0" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-pct">Wise Variable Route Fee (%)</label>
+                <input type="number" id="in-pct" value="0.65" min="0" max="99" step="0.01" />
+              </div>
+              <div class="field-group">
+                <label for="in-fixed">Fixed Wire / ACH Fee ($)</label>
+                <input type="number" id="in-fixed" value="4.14" min="0" step="0.01" />
+              </div>
+              <div class="field-group">
+                <label for="in-fx">Exchange Rate Spread (%) — Wise uses 0% mid-market</label>
+                <input type="number" id="in-fx" value="0.0" min="0" max="99" step="0.01" />
+              </div>
+            </div>
+
+            <div class="doc-section">
+              <span class="kicker">FIG. 03 — MULTI-VOLUME SENSITIVITY MATRIX</span>
+              <h3>Tiered Settlement &amp; Reverse Gross-Up Schedule</h3>
+              <p style="font-size:0.83rem;color:var(--ink-secondary);margin-bottom:8px">Live comparison across transaction volumes using your active fee parameters above:</p>
+              <div style="overflow-x:auto">
+                <table class="matrix-table">
+                  <thead>
+                    <tr>
+                      <th>Gross Volume</th>
+                      <th>Total Fee</th>
+                      <th>Net Payout</th>
+                      <th>Effective %</th>
+                      <th>Invoice to Net</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sensitivity-matrix-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            
+
+            <div class="doc-section">
+              <span class="kicker">SPECIFICATION &amp; SOURCE ATTRIBUTION</span>
+              <h3>Calculation Methodology</h3>
+              <div class="formula-block">Net Converted Amount = Send Amount - Fixed Route Fee - (Send Amount × Variable Route Fee %).</div>
+              <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
+                REFERENCE BASIS: Wise Mid-Market &amp; Corridor Pricing Schedule &bull; ASSUMPTIONS VERIFIED: 2026-10-27
+              </p>
+              <h3>Reference Notes &amp; FAQ</h3>
+              <div class="faq-item"><h4>Does Wise add a markup to the exchange rate?</h4><p>No. Wise uses the real mid-market exchange rate and charges an upfront transparent fixed + variable percentage fee depending on the currency corridor.</p></div><div class="faq-item"><h4>Why is there a fixed fee on USD SWIFT wires?</h4><p>International SWIFT transfers involve correspondent banks, which adds a small fixed rail fee compared to local ACH transfers.</p></div>
+            </div>
+          </div>
+
+          <aside>
+            <div class="ledger-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 02 — SETTLEMENT LEDGER</span>
+                <span>LIVE CALCULATION</span>
+              </div>
+              <div class="ledger-primary">
+                <span class="ledger-primary-label">Net Settlement Received</span>
+                <div class="ledger-primary-value" id="out-net">$0.00</div>
+              </div>
+              <div class="ledger-rows">
+                <div class="ledger-row">
+                  <span>Total Platform &amp; FX Deductions</span>
+                  <strong id="out-fee">$0.00</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Effective Fee Burden</span>
+                  <strong id="out-rate">0.00%</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Gross Invoice Required to Net Target</span>
+                  <strong id="out-reverse">$0.00</strong>
+                </div>
+              </div>
+              <div class="ledger-actions">
+                <button type="button" id="btn-export-csv" class="btn-secondary">Export CSV Statement</button>
+                <button type="button" id="btn-copy-permalink" class="btn-secondary">Copy Permalink</button>
+              </div>
+            </div>
+            
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>While single-transaction calculators and our 50-row Browser CSV Auditor are 100% free, the Pro Pack equips agencies and accountants with unlimited CLI batch automation and multi-sheet workbooks.</p>
+        <ul class="reference-list">
+          <li>01 / Unlimited CLI Batch CSV Fee &amp; FX Reconciler (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (32 Tools)</li>
+        </ul>
+        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cross-border-payout-comparison-engine.html">Cross-Border Freelancer Payout, Reverse Invoice &amp; Tax Comparison Engine &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="private-csv-payout-fee-auditor.html">Private Browser CSV Transaction &amp; Hidden FX Fee Auditor &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="payoneer-fee-calculator.html">Payoneer Fee &amp; Net Payout Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="lemonsqueezy-fee-calculator.html">Lemon Squeezy Merchant of Record Fee Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="gumroad-fee-calculator.html">Gumroad 10% + Processing Fee Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="paddle-fee-calculator.html">Paddle SaaS Checkout &amp; MoR Fee Calculator &rarr;</a></li>
+        </ul>
+      </div>
+    
+          </aside>
+        </div>
+        
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>

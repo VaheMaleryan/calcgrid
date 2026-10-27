@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cron Expression Explainer &amp; Schedule Validator — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Translate 5-field Linux/GitHub Actions cron expressions into plain English and verify execution schedules." />
+  <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/cron-expression-explainer.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Cron Expression Explainer & Schedule Validator", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Translate 5-field Linux/GitHub Actions cron expressions into plain English and verify execution schedules.", "url": "https://vahemaleryan.github.io/calcgrid/tools/cron-expression-explainer.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What does */15 mean in a cron expression?", "acceptedAnswer": {"@type": "Answer", "text": "The slash (/) specifies step values\u2014*/15 in the minute field runs the job every 15 minutes (at :00, :15, :30, and :45)."}}, {"@type": "Question", "name": "How do I run a cron job only on weekdays?", "acceptedAnswer": {"@type": "Answer", "text": "Set the 5th field (Day of Week) to 1-5 (Monday through Friday)."}}]}]}</script>
+</head>
+<body>
+  
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../tools/cross-border-payout-comparison-engine.html">Country Payout Engine</a>
+        <a href="../tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
+        <a href="../index.html#payment-calculators">Fee Ledgers</a>
+        <a href="../index.html#saas-calculators">Unit Economics</a>
+        <a href="../legal.html">Methodology &amp; Terms</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Developer Utilities</span>
+      <span>BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (2026-10-27)</span>
+    </div>
+    <header class="tool-header">
+      <h1>Cron Expression Explainer &amp; Schedule Validator</h1>
+      <p>Translate 5-field Linux/GitHub Actions cron expressions into plain English and verify execution schedules.</p>
+    </header>
+
+    
+    <div class="workspace-grid" id="interactive-tool-root" data-tool-type="dev_tool" data-tool-config="{&quot;dev_mode&quot;: &quot;cron&quot;, &quot;sample_input&quot;: &quot;*/15 9-17 * * 1-5&quot;}">
+      <div>
+        <div class="parameters-sheet">
+          <div class="sheet-heading">
+            <span>FIG. 01 — SOURCE PAYLOAD</span>
+            <span>LOCAL BROWSER EXECUTION</span>
+          </div>
+          <div class="field-group">
+            <label for="dev-input">Input Buffer (Processed 100% Client-Side)</label>
+            <textarea id="dev-input">*/15 9-17 * * 1-5</textarea>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="btn-run-dev" class="btn-primary">Execute Transformation</button>
+            <button type="button" id="btn-copy-dev" class="btn-secondary">Copy Output</button>
+          </div>
+          <div class="field-group" style="margin-top:20px">
+            <label>Formatted Output</label>
+            <pre id="dev-output" class="code-output"></pre>
+          </div>
+        </div>
+
+        
+
+        <div class="doc-section">
+          <span class="kicker">SPECIFICATION</span>
+          <h3>Technical Notes</h3>
+          <div class="formula-block">Standard 5-field Cron syntax: [Minute 0-59] [Hour 0-23] [Day of Month 1-31] [Month 1-12] [Day of Week 0-6 (Sun-Sat)].</div>
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item"><h4>What does */15 mean in a cron expression?</h4><p>The slash (/) specifies step values—*/15 in the minute field runs the job every 15 minutes (at :00, :15, :30, and :45).</p></div><div class="faq-item"><h4>How do I run a cron job only on weekdays?</h4><p>Set the 5th field (Day of Week) to 1-5 (Monday through Friday).</p></div>
+        </div>
+      </div>
+
+      <aside>
+        
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>While single-transaction calculators and our 50-row Browser CSV Auditor are 100% free, the Pro Pack equips agencies and accountants with unlimited CLI batch automation and multi-sheet workbooks.</p>
+        <ul class="reference-list">
+          <li>01 / Unlimited CLI Batch CSV Fee &amp; FX Reconciler (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (32 Tools)</li>
+        </ul>
+        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="jwt-token-decoder.html">Offline JWT Token Header &amp; Payload Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="base64-url-hash-encoder.html">UTF-8 Safe Base64 &amp; URL Encoder / Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="csv-to-json-converter.html">Instant Browser CSV to JSON &amp; SQL Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="regex-pattern-tester.html">Live Regular Expression Matcher &amp; Group Extractor &rarr;</a></li>
+        </ul>
+      </div>
+    
+      </aside>
+    </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>
