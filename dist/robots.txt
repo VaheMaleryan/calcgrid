@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://calcgrid-tools.pages.dev/sitemap.xml

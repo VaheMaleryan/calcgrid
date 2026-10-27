@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-10-27T13:14:13Z",
+  "build": {
+    "tools_compiled": 30,
+    "total_html_pages": 32,
+    "public_dist_dir": "/Users/vahemaleryan/.gemini/antigravity/scratch/autonomous-utility-engine/dist",
+    "private_pro_zip": "/Users/vahemaleryan/.gemini/antigravity/scratch/autonomous-utility-engine/private_products/calcgrid-pro-offline-suite.zip",
+    "public_zip_exposed": false,
+    "ads_enabled": false,
+    "checkout_enabled": false
+  },
+  "math_verification": {
+    "passed": true,
+    "tools_math_and_runtime_tested": 30,
+    "fee_calculators_verified": 10,
+    "saas_calculators_verified": 9,
+    "dev_tools_verified": 11,
+    "failures": []
+  },
+  "qa_and_security": {
+    "passed": true,
+    "public_zip_exposed": false,
+    "git_history_zip_exposed": false,
+    "xlsx_worksheets_verified": 3,
+    "html_pages_verified": 32,
+    "json_ld_schemas_verified": 30,
+    "internal_links_verified": 463,
+    "issues": []
+  },
+  "telemetry": {
+    "total_events": 1,
+    "js_errors": 0,
+    "top_paths": {
+      "/tools/software-project-estimation-calculator.html": 1
+    }
+  }
+}

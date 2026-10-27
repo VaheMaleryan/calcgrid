@@ -1,0 +1,43 @@
+name: Autonomous Build, QA Verification, Deploy & IndexNow
+
+on:
+  push:
+    branches: ["main"]
+  schedule:
+    # Runs weekly autonomous rebuild, QA health check, and IndexNow refresh
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build_verify_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Autonomous Compiler, QA Verifier & IndexNow Ping
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://calcgrid-tools.pages.dev' }}
+          LEMON_SQUEEZY_URL: ${{ vars.LEMON_SQUEEZY_URL || 'downloads/calcgrid-pro-offline-suite.zip' }}
+          ADSENSE_CLIENT_ID: ${{ vars.ADSENSE_CLIENT_ID || '' }}
+          ENABLE_LIVE_INDEXNOW: ${{ vars.ENABLE_LIVE_INDEXNOW || '0' }}
+        run: python3 engine/autopilot.py
+
+      - name: Upload Static Site Artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages ($0 Hosting)
+        id: deployment
+        uses: actions/deploy-pages@v4

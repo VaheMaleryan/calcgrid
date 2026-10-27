@@ -1,0 +1,1901 @@
+#!/usr/bin/env python3
+"""
+CalcGrid Autonomous Static Site Compiler & Private Product Packager.
+Implements all pre-launch audit fixes:
+  1. Paid Pro ZIP is stored strictly in `private_products/calcgrid-pro-offline-suite.zip` (NEVER inside public `dist/`).
+  2. Includes a genuine multi-tab `.xlsx` workbook (`calcgrid_financial_models.xlsx`) AND 3 separate `.csv` models,
+     with accurate product descriptions.
+  3. Upwork calculator presets are accurately labeled (`0% Direct Contract — Freelancer Plus`,
+     `5% Direct Contract Standard / Example`, `10% Example Marketplace Rate`, `15% Example Marketplace Rate`).
+  4. Removes homemade cookie banner in favor of Google's IAB TCF certified CMP (AdSense Privacy & messaging).
+  5. Keeps advertisement slots and paid checkout buttons disabled/hidden until `ADSENSE_CLIENT_ID` and
+     `LEMON_SQUEEZY_URL` are configured.
+"""
+
+import html
+import io
+import json
+import os
+import shutil
+import zipfile
+from datetime import datetime, timezone
+from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
+from catalog_data import TOOLS_CATALOG
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DIST_DIR = ROOT_DIR / "dist"
+TOOLS_DIR = DIST_DIR / "tools"
+ASSETS_DIR = DIST_DIR / "assets"
+IMAGES_DIR = ASSETS_DIR / "images"
+PRIVATE_PRODUCTS_DIR = ROOT_DIR / "private_products"
+
+SITE_URL = os.environ.get("SITE_URL", "https://calcgrid-tools.pages.dev")
+INDEXNOW_KEY = "8f92a1c4e7b34d109a8e2c5f6b7d8e91"
+LEMON_SQUEEZY_CHECKOUT_URL = os.environ.get("LEMON_SQUEEZY_URL", "").strip()
+ADSENSE_CLIENT_ID = os.environ.get("ADSENSE_CLIENT_ID", "").strip()
+
+OFFICIAL_SOURCES = {
+    "payoneer-fee-calculator": ("Payoneer Pricing & Withdrawal Schedule", "October 2026"),
+    "wise-transfer-fee-calculator": ("Wise Mid-Market & Corridor Pricing Schedule", "October 2026"),
+    "lemonsqueezy-fee-calculator": ("Lemon Squeezy Merchant of Record Pricing (5% + $0.50)", "October 2026"),
+    "gumroad-fee-calculator": ("Gumroad Creator Fee Schedule (10% + $0.50 + Processing)", "October 2026"),
+    "paddle-fee-calculator": ("Paddle Checkout Pricing Schedule (5% + $0.50)", "October 2026"),
+    "upwork-freelancer-fee-calculator": ("Upwork Variable Freelancer Service Fee (0%–15%)", "October 2026"),
+    "fiverr-seller-fee-calculator": ("Fiverr Seller Terms of Service (20% Commission)", "October 2026"),
+    "stripe-international-fee-calculator": ("Stripe Standard & Cross-Border Pricing (2.9% + $0.30)", "October 2026"),
+    "paypal-goods-services-fee-calculator": ("PayPal Merchant Commercial Transaction Rates", "October 2026"),
+    "armenia-it-tax-turnover-calculator": ("RA Tax Code — Turnover Tax & Individual Entrepreneur Schedule", "October 2026"),
+}
+
+
+def build_css() -> str:
+    return """
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --paper: #F7F6F2;
+  --surface: #FFFFFF;
+  --stone-panel: #EFECE6;
+  --ink: #141413;
+  --ink-secondary: #57534E;
+  --ink-muted: #78716C;
+  --rule: #D6D3CD;
+  --rule-dark: #141413;
+  --accent: #0F766E;
+  --accent-light: #F0FDFA;
+  --amber-ink: #B45309;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--ink); text-decoration: none; }
+
+.navbar {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule-dark);
+  padding: 16px 28px;
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.brand { display: flex; align-items: baseline; gap: 12px; }
+.brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.brand-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 0.84rem;
+}
+.nav-links a { color: var(--ink-secondary); font-weight: 500; }
+.nav-links a:hover { color: var(--ink); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--ink);
+  color: var(--paper) !important;
+  padding: 8px 14px;
+  border: 1px solid var(--ink);
+  cursor: pointer;
+}
+.nav-cta:hover { background: var(--accent); border-color: var(--accent); }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 28px 72px;
+}
+
+.editorial-hero {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 40px;
+  padding: 48px 0;
+  border-bottom: 1px solid var(--rule-dark);
+  align-items: center;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.editorial-hero h1 {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+
+.editorial-hero p {
+  font-size: 1.02rem;
+  color: var(--ink-secondary);
+  max-width: 560px;
+  margin-bottom: 28px;
+}
+
+.search-bar { max-width: 520px; }
+.search-bar label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.search-bar input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--rule-dark);
+  color: var(--ink);
+  padding: 13px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  outline: none;
+}
+.search-bar input:focus {
+  border-color: var(--accent);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.hero-figure {
+  background: var(--surface);
+  border: 1px solid var(--rule-dark);
+  padding: 14px;
+}
+.hero-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--rule);
+}
+.figure-caption {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-muted);
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.category-section { padding-top: 44px; }
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--rule-dark);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.category-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+.category-index {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+.tool-card {
+  background: var(--surface);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.12s ease;
+}
+.tool-card:hover { background: var(--stone-panel); }
+.tool-num {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+  display: block;
+}
+.tool-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+.tool-card p {
+  font-size: 0.83rem;
+  color: var(--ink-secondary);
+  margin-bottom: 18px;
+}
+.tool-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  border-top: 1px solid var(--rule);
+  padding-top: 10px;
+}
+
+.breadcrumb-bar {
+  padding: 20px 0 14px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.breadcrumb-bar a { color: var(--ink-secondary); }
+
+.tool-header {
+  padding: 28px 0 24px;
+  border-bottom: 1px solid var(--rule-dark);
+}
+.tool-header h1 {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.tool-header p {
+  font-size: 0.98rem;
+  color: var(--ink-secondary);
+  max-width: 720px;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 36px;
+  padding-top: 32px;
+  align-items: start;
+}
+
+.parameters-sheet, .ledger-sheet, .doc-section {
+  background: var(--surface);
+  border: 1px solid var(--rule-dark);
+  padding: 28px;
+}
+
+.sheet-heading {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.presets-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.preset-chip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--paper);
+  border: 1px solid var(--rule-dark);
+  color: var(--ink);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.preset-chip:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.field-group {
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.field-group:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.field-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.field-group input, .field-group textarea {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--rule-dark);
+  color: var(--ink);
+  padding: 11px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.96rem;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+.field-group input:focus, .field-group textarea:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.field-group textarea { min-height: 170px; font-size: 0.83rem; line-height: 1.5; }
+
+.ledger-primary {
+  padding: 16px 0 22px;
+  border-bottom: 1px solid var(--rule-dark);
+}
+.ledger-primary-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  display: block;
+  margin-bottom: 6px;
+}
+.ledger-primary-value {
+  font-family: var(--font-serif);
+  font-size: 3.1rem;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.ledger-rows { padding-top: 16px; }
+.ledger-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.85rem;
+}
+.ledger-row:last-child { border-bottom: none; }
+.ledger-row span { color: var(--ink-secondary); }
+.ledger-row strong {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.ledger-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+/* SENSITIVITY MATRIX TABLE */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  margin-top: 12px;
+}
+.matrix-table th, .matrix-table td {
+  border: 1px solid var(--rule);
+  padding: 8px 10px;
+  text-align: right;
+}
+.matrix-table th:first-child, .matrix-table td:first-child { text-align: left; }
+.matrix-table th {
+  background: var(--stone-panel);
+  color: var(--ink);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.code-output {
+  background: var(--paper);
+  border: 1px solid var(--rule-dark);
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.btn-row { display: flex; gap: 10px; margin-top: 14px; }
+.btn-primary {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 11px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+.btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+
+.btn-secondary {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule-dark);
+  padding: 9px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+.btn-secondary:hover { background: var(--stone-panel); }
+
+.btn-disabled {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--paper);
+  color: var(--ink-muted);
+  border: 1px dashed var(--rule-dark);
+  padding: 11px 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.reference-card {
+  margin-top: 24px;
+  background: var(--stone-panel);
+  border: 1px solid var(--rule-dark);
+  padding: 22px;
+}
+.reference-card img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  margin-bottom: 14px;
+  display: block;
+}
+.reference-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.reference-card p {
+  font-size: 0.82rem;
+  color: var(--ink-secondary);
+  margin-bottom: 12px;
+}
+.reference-list {
+  list-style: none;
+  color: var(--ink);
+  margin-bottom: 16px;
+  border-top: 1px solid var(--rule);
+}
+.reference-list li {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+}
+
+.ad-slot {
+  background: var(--stone-panel);
+  border: 1px solid var(--rule);
+  padding: 18px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin: 28px 0;
+}
+
+.doc-section { margin-top: 28px; }
+.doc-section h3 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.formula-block {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background: var(--paper);
+  border-left: 3px solid var(--ink);
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+.faq-item { border-top: 1px solid var(--rule); padding: 16px 0; }
+.faq-item h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+.faq-item p { font-size: 0.86rem; color: var(--ink-secondary); }
+
+footer {
+  border-top: 1px solid var(--rule-dark);
+  padding: 36px 28px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-muted);
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+@media (max-width: 960px) {
+  .editorial-hero, .workspace-grid { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+}
+""".strip()
+
+
+def build_runtime_js() -> str:
+    return """
+// ============================================================================
+// CalcGrid Client-Side Computation Engine, Sensitivity Matrix & CSV Exporter
+// ============================================================================
+
+(function () {
+  // 1. Homepage Live Filter
+  const searchInput = document.getElementById('hub-search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      const q = searchInput.value.toLowerCase().trim();
+      document.querySelectorAll('.tool-card').forEach(function (card) {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    });
+  }
+
+  // 2. Interactive Tool Engine
+  const toolContainer = document.getElementById('interactive-tool-root');
+  if (!toolContainer) return;
+
+  const toolType = toolContainer.getAttribute('data-tool-type');
+  const rawConfig = toolContainer.getAttribute('data-tool-config');
+  let cfg = {};
+  try { cfg = JSON.parse(rawConfig); } catch (e) {}
+
+  // Hydrate inputs from URL query string (?amount=... or ?a=...)
+  const params = new URLSearchParams(window.location.search);
+
+  function fmtMoney(n) {
+    return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  let currentCsvRows = [];
+
+  // Bind Copy Permalink & CSV Export buttons
+  const btnPermalink = document.getElementById('btn-copy-permalink');
+  const btnExportCsv = document.getElementById('btn-export-csv');
+
+  if (btnExportCsv) {
+    btnExportCsv.addEventListener('click', function () {
+      if (!currentCsvRows.length) return;
+      const csvContent = currentCsvRows.map(function (r) { return r.join(','); }).join('\\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (window.location.pathname.split('/').pop().replace('.html', '') || 'calculation') + '-ledger.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  if (toolType === 'fee_calc') {
+    const elAmt = document.getElementById('in-amount');
+    const elPct = document.getElementById('in-pct');
+    const elFix = document.getElementById('in-fixed');
+    const elFx  = document.getElementById('in-fx');
+    const matrixBody = document.getElementById('sensitivity-matrix-body');
+
+    if (params.get('amount')) elAmt.value = params.get('amount');
+    if (params.get('pct')) elPct.value = params.get('pct');
+    if (params.get('fixed')) elFix.value = params.get('fixed');
+    if (params.get('fx')) elFx.value = params.get('fx');
+
+    // Preset chips (e.g., Upwork 0%, 5%, 10%, 15% documented & example rates)
+    document.querySelectorAll('.preset-chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        const pctVal = chip.getAttribute('data-pct');
+        if (pctVal !== null && elPct) {
+          elPct.value = pctVal;
+          recalcFee();
+        }
+      });
+    });
+
+    function calcSingleTier(gross, pct, fix, fx) {
+      const totalPctRate = Math.min(0.99, Math.max(0, (pct + fx) / 100));
+      const totalFee = gross * totalPctRate + fix;
+      const net = Math.max(0, gross - totalFee);
+      const effectiveRate = gross > 0 ? (totalFee / gross) * 100 : 0;
+      const reverseGross = (gross + fix) / (1 - totalPctRate);
+      return { gross: gross, fee: totalFee, net: net, rate: effectiveRate, reverse: reverseGross };
+    }
+
+    function recalcFee() {
+      const gross = Math.max(0, parseFloat(elAmt.value) || 0);
+      const pct   = Math.max(0, parseFloat(elPct.value) || 0);
+      const fix   = Math.max(0, parseFloat(elFix.value) || 0);
+      const fx    = Math.max(0, parseFloat(elFx.value) || 0);
+
+      const res = calcSingleTier(gross, pct, fix, fx);
+
+      document.getElementById('out-net').textContent = fmtMoney(res.net);
+      document.getElementById('out-fee').textContent = fmtMoney(res.fee);
+      document.getElementById('out-rate').textContent = res.rate.toFixed(2) + '%';
+      document.getElementById('out-reverse').textContent = fmtMoney(res.reverse);
+
+      // Build 6-tier sensitivity matrix + CSV export rows
+      const tiers = [100, 500, 1000, 2500, 5000, 10000];
+      currentCsvRows = [
+        ['Gross_Amount_USD', 'Platform_Fee_Pct', 'Fixed_Fee_USD', 'FX_Spread_Pct', 'Total_Fee_USD', 'Net_Settlement_USD', 'Effective_Rate_Pct', 'Reverse_Invoice_Required_USD'],
+        [gross.toFixed(2), pct.toFixed(2), fix.toFixed(2), fx.toFixed(2), res.fee.toFixed(2), res.net.toFixed(2), res.rate.toFixed(2), res.reverse.toFixed(2)]
+      ];
+
+      if (matrixBody) {
+        matrixBody.innerHTML = '';
+        tiers.forEach(function (tAmt) {
+          const rowRes = calcSingleTier(tAmt, pct, fix, fx);
+          currentCsvRows.push([
+            tAmt.toFixed(2), pct.toFixed(2), fix.toFixed(2), fx.toFixed(2),
+            rowRes.fee.toFixed(2), rowRes.net.toFixed(2), rowRes.rate.toFixed(2), rowRes.reverse.toFixed(2)
+          ]);
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + fmtMoney(tAmt) + '</td>' +
+            '<td>' + fmtMoney(rowRes.fee) + '</td>' +
+            '<td><strong>' + fmtMoney(rowRes.net) + '</strong></td>' +
+            '<td>' + rowRes.rate.toFixed(2) + '%</td>' +
+            '<td>' + fmtMoney(rowRes.reverse) + '</td>';
+          matrixBody.appendChild(tr);
+        });
+      }
+    }
+
+    if (btnPermalink) {
+      btnPermalink.addEventListener('click', function () {
+        const u = new URL(window.location.href);
+        u.searchParams.set('amount', elAmt.value);
+        u.searchParams.set('pct', elPct.value);
+        u.searchParams.set('fixed', elFix.value);
+        u.searchParams.set('fx', elFx.value);
+        if (navigator.clipboard) navigator.clipboard.writeText(u.toString());
+        btnPermalink.textContent = 'Permalink Copied';
+        setTimeout(function () { btnPermalink.textContent = 'Copy Permalink'; }, 1600);
+      });
+    }
+
+    [elAmt, elPct, elFix, elFx].forEach(function (el) {
+      if (el) el.addEventListener('input', recalcFee);
+    });
+    recalcFee();
+  }
+
+  if (toolType === 'saas_calc') {
+    const elA = document.getElementById('in-a');
+    const elB = document.getElementById('in-b');
+    const elC = document.getElementById('in-c');
+    const elD = document.getElementById('in-d');
+
+    if (params.get('a')) elA.value = params.get('a');
+    if (params.get('b')) elB.value = params.get('b');
+    if (params.get('c')) elC.value = params.get('c');
+    if (params.get('d')) elD.value = params.get('d');
+
+    function recalcSaas() {
+      const a = Math.max(0, parseFloat(elA.value) || 0);
+      const b = Math.max(0, parseFloat(elB.value) || 0);
+      const c = Math.max(0, parseFloat(elC.value) || 0);
+      const d = Math.max(0, parseFloat(elD.value) || 0);
+      const mode = cfg.mode || 'ltv';
+
+      let r1Label = 'Primary Metric', r1Val = '$0.00';
+      let r2Label = 'Secondary Metric', r2Val = '0';
+      let r3Label = 'Efficiency Benchmark', r3Val = '0';
+
+      if (mode === 'ltv') {
+        const churnRate = Math.max(0.001, c / 100);
+        const ltv = (a * (b / 100)) / churnRate;
+        const ratio = d > 0 ? ltv / d : 0;
+        const payback = (a * (b / 100)) > 0 ? d / (a * (b / 100)) : 0;
+        r1Label = 'Customer Lifetime Value (LTV)';
+        r1Val = fmtMoney(ltv);
+        r2Label = 'LTV : CAC Ratio';
+        r2Val = ratio.toFixed(2) + 'x';
+        r3Label = 'CAC Payback Period';
+        r3Val = payback.toFixed(1) + ' months';
+      } else if (mode === 'roas') {
+        const margin = Math.max(0.01, a - b);
+        const marginPct = a > 0 ? margin / a : 0.01;
+        const beRoas = 1 / marginPct;
+        const grossRev = c * d;
+        const orders = a > 0 ? grossRev / a : 0;
+        const netProfit = orders * margin - c;
+        r1Label = 'Break-Even ROAS Required';
+        r1Val = beRoas.toFixed(2) + 'x';
+        r2Label = 'Max Profitable CPA';
+        r2Val = fmtMoney(margin);
+        r3Label = 'Estimated Monthly Net Profit';
+        r3Val = fmtMoney(netProfit);
+      } else if (mode === 'ad_rev') {
+        const monthlyImps = a * 30 * b;
+        const grossRev = (monthlyImps / 1000) * c;
+        const netRev = grossRev * (d / 100);
+        r1Label = 'Estimated Monthly Net Ad Revenue';
+        r1Val = fmtMoney(netRev);
+        r2Label = 'Monthly Paid Ad Impressions';
+        r2Val = Math.round(monthlyImps).toLocaleString('en-US');
+        r3Label = 'Annual Run-Rate';
+        r3Val = fmtMoney(netRev * 12);
+      } else if (mode === 'ecom') {
+        const fee = a * (d / 100);
+        const net = a - b - c - fee;
+        const marginPct = a > 0 ? (net / a) * 100 : 0;
+        r1Label = 'Net Profit Per Order';
+        r1Val = fmtMoney(net);
+        r2Label = 'Net Profit Margin (%)';
+        r2Val = marginPct.toFixed(1) + '%';
+        r3Label = 'Profit on 100 Orders';
+        r3Val = fmtMoney(net * 100);
+      } else if (mode === 'email_roi') {
+        const clicks = a * (b / 100);
+        const sales = clicks * (c / 100);
+        const profit = sales * d;
+        r1Label = 'Projected Campaign Net Profit';
+        r1Val = fmtMoney(profit);
+        r2Label = 'Estimated Conversions';
+        r2Val = sales.toFixed(1) + ' sales';
+        r3Label = 'Revenue Per Subscriber';
+        r3Val = fmtMoney(a > 0 ? profit / a : 0);
+      } else if (mode === 'cro') {
+        const extraSales = a * ((c - b) / 100);
+        const monthlyLift = extraSales * d;
+        r1Label = 'Monthly Revenue Lift';
+        r1Val = fmtMoney(monthlyLift);
+        r2Label = 'Annual Revenue Impact';
+        r2Val = fmtMoney(monthlyLift * 12);
+        r3Label = 'Extra Monthly Customers';
+        r3Val = '+' + extraSales.toFixed(1);
+      } else if (mode === 'hourly_rate') {
+        const grossNeeded = (a + b) / Math.max(0.1, 1 - d / 100);
+        const annualBillableHours = Math.max(1, c * 48);
+        const hourly = grossNeeded / annualBillableHours;
+        r1Label = 'Minimum Billable Hourly Rate';
+        r1Val = fmtMoney(hourly) + '/hr';
+        r2Label = 'Recommended Day Rate (8h)';
+        r2Val = fmtMoney(hourly * 8) + '/day';
+        r3Label = 'Required Gross Annual Billings';
+        r3Val = fmtMoney(grossNeeded);
+      } else if (mode === 'pert') {
+        const expected = (a + 4 * b + c) / 6;
+        const sd = (c - a) / 6;
+        const safeHours = expected + 2 * sd;
+        r1Label = '95% Safe Quote (Hours & Price)';
+        r1Val = safeHours.toFixed(1) + 'h (' + fmtMoney(safeHours * d) + ')';
+        r2Label = 'PERT Expected Average';
+        r2Val = expected.toFixed(1) + ' hours';
+        r3Label = 'Risk Buffer (±2σ)';
+        r3Val = '+' + (2 * sd).toFixed(1) + ' hours';
+      } else if (mode === 'llm_cost') {
+        const monthlyTokens = a * 30 * b;
+        const rawCost = (monthlyTokens / 1000000) * c;
+        const netCost = rawCost * (1 - d / 100);
+        r1Label = 'Estimated Monthly API Cost';
+        r1Val = fmtMoney(netCost);
+        r2Label = 'Total Monthly Tokens';
+        r2Val = (monthlyTokens / 1000000).toFixed(2) + 'M tokens';
+        r3Label = 'Cost Per 1,000 User Requests';
+        r3Val = fmtMoney((b / 1000) * c * (1 - d / 100));
+      }
+
+      document.getElementById('lbl-r1').textContent = r1Label;
+      document.getElementById('val-r1').textContent = r1Val;
+      document.getElementById('lbl-r2').textContent = r2Label;
+      document.getElementById('val-r2').textContent = r2Val;
+      document.getElementById('lbl-r3').textContent = r3Label;
+      document.getElementById('val-r3').textContent = r3Val;
+
+      currentCsvRows = [
+        ['Parameter_A', 'Parameter_B', 'Parameter_C', 'Parameter_D', r1Label, r2Label, r3Label],
+        [a, b, c, d, '"' + r1Val + '"', '"' + r2Val + '"', '"' + r3Val + '"']
+      ];
+    }
+
+    if (btnPermalink) {
+      btnPermalink.addEventListener('click', function () {
+        const u = new URL(window.location.href);
+        u.searchParams.set('a', elA.value);
+        u.searchParams.set('b', elB.value);
+        u.searchParams.set('c', elC.value);
+        u.searchParams.set('d', elD.value);
+        if (navigator.clipboard) navigator.clipboard.writeText(u.toString());
+        btnPermalink.textContent = 'Permalink Copied';
+        setTimeout(function () { btnPermalink.textContent = 'Copy Permalink'; }, 1600);
+      });
+    }
+
+    [elA, elB, elC, elD].forEach(function (el) {
+      if (el) el.addEventListener('input', recalcSaas);
+    });
+    recalcSaas();
+  }
+
+  if (toolType === 'dev_tool') {
+    const inputEl = document.getElementById('dev-input');
+    const outputEl = document.getElementById('dev-output');
+    const runBtn = document.getElementById('btn-run-dev');
+    const copyBtn = document.getElementById('btn-copy-dev');
+
+    function runDevTransform() {
+      const val = inputEl.value;
+      const mode = cfg.dev_mode;
+      try {
+        if (mode === 'json_to_ts') {
+          const obj = JSON.parse(val);
+          let ts = 'export interface GeneratedPayload {\\n';
+          let zod = 'import { z } from "zod";\\n\\nexport const GeneratedSchema = z.object({\\n';
+          Object.keys(obj).forEach(function (k) {
+            const v = obj[k];
+            const t = Array.isArray(v) ? 'any[]' : typeof v;
+            ts += '  ' + k + ': ' + t + ';\\n';
+            const zt = Array.isArray(v) ? 'z.array(z.any())' : 'z.' + (typeof v === 'number' ? 'number()' : typeof v === 'boolean' ? 'boolean()' : 'string()');
+            zod += '  ' + k + ': ' + zt + ',\\n';
+          });
+          ts += '}\\n\\n';
+          zod += '});';
+          outputEl.textContent = ts + zod;
+        } else if (mode === 'cron') {
+          const parts = val.trim().split(/\\s+/);
+          if (parts.length !== 5) {
+            outputEl.textContent = 'Invalid Cron: Expected 5 space-separated fields (Minute Hour DayOfMonth Month DayOfWeek)';
+          } else {
+            outputEl.textContent =
+              'Valid 5-Field Cron Schedule:\\n' +
+              '• Minute:       ' + parts[0] + '\\n' +
+              '• Hour:         ' + parts[1] + '\\n' +
+              '• Day of Month: ' + parts[2] + '\\n' +
+              '• Month:        ' + parts[3] + '\\n' +
+              '• Day of Week:  ' + parts[4];
+          }
+        } else if (mode === 'jwt') {
+          const segs = val.trim().split('.');
+          if (segs.length < 2) {
+            outputEl.textContent = 'Expected JWT format: header.payload.signature';
+          } else {
+            const decodeB64 = function (s) {
+              return JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/')));
+            };
+            const header = decodeB64(segs[0]);
+            const payload = decodeB64(segs[1]);
+            outputEl.textContent =
+              '// JWT HEADER:\\n' + JSON.stringify(header, null, 2) +
+              '\\n\\n// JWT PAYLOAD CLAIMS:\\n' + JSON.stringify(payload, null, 2);
+          }
+        } else if (mode === 'sql') {
+          const kw = /\\b(SELECT|FROM|INNER JOIN|LEFT JOIN|RIGHT JOIN|WHERE|GROUP BY|HAVING|ORDER BY|LIMIT|INSERT INTO|VALUES|UPDATE|SET|DELETE FROM)\\b/gi;
+          const formatted = val
+            .replace(/\\s+/g, ' ')
+            .replace(kw, function (m) { return '\\n' + m.toUpperCase(); })
+            .trim();
+          outputEl.textContent = formatted;
+        } else if (mode === 'base64') {
+          const bytes = new TextEncoder().encode(val);
+          let bin = '';
+          bytes.forEach(function (b) { bin += String.fromCharCode(b); });
+          const b64 = btoa(bin);
+          outputEl.textContent =
+            'Base64 Encoded:\\n' + b64 +
+            '\\n\\nURL-Encoded:\\n' + encodeURIComponent(val);
+        } else if (mode === 'csv_to_json') {
+          const lines = val.trim().split(/\\r?\\n/).filter(Boolean);
+          if (lines.length < 2) {
+            outputEl.textContent = '[]';
+          } else {
+            const headers = lines[0].split(',').map(function (h) { return h.trim(); });
+            const arr = lines.slice(1).map(function (line) {
+              const cells = line.split(',').map(function (c) { return c.trim(); });
+              const row = {};
+              headers.forEach(function (h, i) {
+                const raw = cells[i] || '';
+                if (raw === 'true' || raw === 'false') row[h] = (raw === 'true');
+                else if (raw !== '' && !isNaN(Number(raw))) row[h] = Number(raw);
+                else row[h] = raw;
+              });
+              return row;
+            });
+            outputEl.textContent = JSON.stringify(arr, null, 2);
+          }
+        } else if (mode === 'regex') {
+          const re = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}|#INV-\\d+/g;
+          const matches = Array.from(val.matchAll(re)).map(function (m) {
+            return 'Match: "' + m[0] + '" at index ' + m.index;
+          });
+          outputEl.textContent = matches.length ? matches.join('\\n') : 'No matches found.';
+        } else if (mode === 'svg') {
+          const clean = val.trim().replace(/\\s+/g, ' ');
+          const dataUri = 'data:image/svg+xml;utf8,' + encodeURIComponent(clean);
+          const jsx = clean.replace(/stroke-width=/g, 'strokeWidth=').replace(/class=/g, 'className=');
+          outputEl.textContent =
+            '/* CSS Background Data URI */\\nbackground-image: url("' + dataUri + '");\\n\\n/* React JSX */\\n' + jsx;
+        } else if (mode === 'password') {
+          const len = Math.min(64, Math.max(8, parseInt(val, 10) || 24));
+          const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+';
+          const rnd = new Uint32Array(len);
+          window.crypto.getRandomValues(rnd);
+          let out = '';
+          for (let i = 0; i < len; i++) out += chars[rnd[i] % chars.length];
+          const entropy = (len * Math.log2(chars.length)).toFixed(1);
+          outputEl.textContent = 'Generated Key: ' + out + '\\nEntropy:       ' + entropy + ' bits (Cryptographically Secure)';
+        } else if (mode === 'markdown') {
+          const htmlOut = val
+            .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+            .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+            .replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>')
+            .replace(/^- (.*$)/gm, '<li>$1</li>');
+          outputEl.textContent = htmlOut;
+        } else if (mode === 'utm') {
+          const p = val.split('|').map(function (s) { return s.trim(); });
+          const base = p[0] || 'https://example.com';
+          const src = encodeURIComponent((p[1] || 'newsletter').toLowerCase());
+          const med = encodeURIComponent((p[2] || 'email').toLowerCase());
+          const cmp = encodeURIComponent((p[3] || 'launch').toLowerCase());
+          outputEl.textContent = base + (base.includes('?') ? '&' : '?') +
+            'utm_source=' + src + '&utm_medium=' + med + '&utm_campaign=' + cmp;
+        }
+      } catch (err) {
+        outputEl.textContent = 'Error: ' + err.message;
+      }
+    }
+
+    if (runBtn) runBtn.addEventListener('click', runDevTransform);
+    if (inputEl) inputEl.addEventListener('input', runDevTransform);
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(outputEl.textContent);
+        copyBtn.textContent = 'Copied';
+        setTimeout(function () { copyBtn.textContent = 'Copy Output'; }, 1500);
+      });
+    }
+    runDevTransform();
+  }
+})();
+""".strip()
+
+
+def render_navbar(prefix: str = "") -> str:
+    checkout_nav_item = ""
+    if LEMON_SQUEEZY_CHECKOUT_URL:
+        checkout_nav_item = (
+            f'<a href="{html.escape(LEMON_SQUEEZY_CHECKOUT_URL)}" class="nav-cta">'
+            f'Pro Batch Suite ($19)</a>'
+        )
+    return f"""
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="{prefix}index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="{prefix}index.html#payment-calculators">Fee Ledgers</a>
+        <a href="{prefix}index.html#saas-calculators">Unit Economics</a>
+        <a href="{prefix}index.html#dev-utilities">Developer Instruments</a>
+        <a href="{prefix}legal.html">Methodology &amp; Terms</a>
+        {checkout_nav_item}
+      </nav>
+    </div>
+  </header>
+"""
+
+
+def render_ad_slot() -> str:
+    """Only renders an advertisement container when ADSENSE_CLIENT_ID is configured."""
+    if not ADSENSE_CLIENT_ID:
+        return ""
+    return f"""
+    <div class="ad-slot" data-ad-slot="in-article">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="{html.escape(ADSENSE_CLIENT_ID)}"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+    </div>
+    """
+
+
+def render_tool_workspace(tool: dict, prefix: str = "../") -> str:
+    t_type = tool["tool_type"]
+    cfg = tool["config"]
+    cfg_json = html.escape(json.dumps(cfg))
+    slug = tool["slug"]
+
+    src_name, ver_date = OFFICIAL_SOURCES.get(
+        slug,
+        (cfg.get("source_name", "Standard Industry Financial & Technical Formula"), cfg.get("verified_date", "October 2026"))
+    )
+
+    related = [t for t in TOOLS_CATALOG if t["category"] == tool["category"] and t["slug"] != slug][:5]
+    related_links = "".join(
+        f'<li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="{t["slug"]}.html">{html.escape(t["title"])} &rarr;</a></li>'
+        for t in related
+    )
+
+    faq_html = "".join(
+        f'<div class="faq-item"><h4>{html.escape(q)}</h4><p>{html.escape(a)}</p></div>'
+        for q, a in tool["faqs"]
+    )
+
+    if LEMON_SQUEEZY_CHECKOUT_URL:
+        pro_cta_html = (
+            f'<a href="{html.escape(LEMON_SQUEEZY_CHECKOUT_URL)}" class="btn-primary" style="display:block">'
+            f'Purchase via Lemon Squeezy ($19)</a>'
+        )
+    else:
+        pro_cta_html = (
+            '<div class="btn-disabled" aria-disabled="true">'
+            'Checkout Disabled — Merchant Verification Pending</div>'
+        )
+
+    pro_box_html = f"""
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="{prefix}assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>Built for accountants, agencies, and high-volume freelancers who need bulk CSV reconciliation and multi-sheet workbooks beyond single-transaction web calculators.</p>
+        <ul class="reference-list">
+          <li>01 / Bulk CSV Fee &amp; FX Reconciler CLI (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (30 Tools)</li>
+        </ul>
+        {pro_cta_html}
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          {related_links}
+        </ul>
+      </div>
+    """
+
+    presets_html = ""
+    if "presets" in cfg:
+        chips = "".join(
+            f'<button type="button" class="preset-chip" data-pct="{p["pct"]}">{html.escape(p["label"])}</button>'
+            for p in cfg["presets"]
+        )
+        presets_html = f'<div class="presets-bar"><span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--ink-muted);align-self:center;margin-right:4px">FEE PRESETS:</span>{chips}</div>'
+
+    ad_html = render_ad_slot()
+
+    if t_type == "fee_calc":
+        return f"""
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="fee_calc" data-tool-config="{cfg_json}">
+          <div>
+            <div class="parameters-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 01 — INPUT PARAMETERS</span>
+                <span>VERIFIED: {html.escape(ver_date.upper())}</span>
+              </div>
+              {presets_html}
+              <div class="field-group">
+                <label for="in-amount">{html.escape(cfg['label_amount'])}</label>
+                <input type="number" id="in-amount" value="{cfg['default_amount']}" min="0" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-pct">{html.escape(cfg['label_pct'])}</label>
+                <input type="number" id="in-pct" value="{cfg['percent_fee']}" min="0" max="99" step="0.01" />
+              </div>
+              <div class="field-group">
+                <label for="in-fixed">{html.escape(cfg['label_fixed'])}</label>
+                <input type="number" id="in-fixed" value="{cfg['fixed_fee']}" min="0" step="0.01" />
+              </div>
+              <div class="field-group">
+                <label for="in-fx">{html.escape(cfg['label_fx'])}</label>
+                <input type="number" id="in-fx" value="{cfg['fx_markup_percent']}" min="0" max="99" step="0.01" />
+              </div>
+            </div>
+
+            <div class="doc-section">
+              <span class="kicker">FIG. 03 — MULTI-VOLUME SENSITIVITY MATRIX</span>
+              <h3>Tiered Settlement &amp; Reverse Gross-Up Schedule</h3>
+              <p style="font-size:0.83rem;color:var(--ink-secondary);margin-bottom:8px">Live comparison across transaction volumes using your active fee parameters above:</p>
+              <div style="overflow-x:auto">
+                <table class="matrix-table">
+                  <thead>
+                    <tr>
+                      <th>Gross Volume</th>
+                      <th>Total Fee</th>
+                      <th>Net Payout</th>
+                      <th>Effective %</th>
+                      <th>Invoice to Net</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sensitivity-matrix-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            {ad_html}
+
+            <div class="doc-section">
+              <span class="kicker">SPECIFICATION &amp; SOURCE ATTRIBUTION</span>
+              <h3>Calculation Methodology</h3>
+              <div class="formula-block">{html.escape(tool['formula_explanation'])}</div>
+              <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
+                REFERENCE BASIS: {html.escape(src_name)} &bull; ASSUMPTIONS VERIFIED: {html.escape(ver_date)}
+              </p>
+              <h3>Reference Notes &amp; FAQ</h3>
+              {faq_html}
+            </div>
+          </div>
+
+          <aside>
+            <div class="ledger-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 02 — SETTLEMENT LEDGER</span>
+                <span>LIVE CALCULATION</span>
+              </div>
+              <div class="ledger-primary">
+                <span class="ledger-primary-label">Net Settlement Received</span>
+                <div class="ledger-primary-value" id="out-net">$0.00</div>
+              </div>
+              <div class="ledger-rows">
+                <div class="ledger-row">
+                  <span>Total Platform &amp; FX Deductions</span>
+                  <strong id="out-fee">$0.00</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Effective Fee Burden</span>
+                  <strong id="out-rate">0.00%</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Gross Invoice Required to Net Target</span>
+                  <strong id="out-reverse">$0.00</strong>
+                </div>
+              </div>
+              <div class="ledger-actions">
+                <button type="button" id="btn-export-csv" class="btn-secondary">Export CSV Statement</button>
+                <button type="button" id="btn-copy-permalink" class="btn-secondary">Copy Permalink</button>
+              </div>
+            </div>
+            {pro_box_html}
+          </aside>
+        </div>
+        """
+
+    if t_type == "saas_calc":
+        return f"""
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="saas_calc" data-tool-config="{cfg_json}">
+          <div>
+            <div class="parameters-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 01 — MODEL ASSUMPTIONS</span>
+                <span>VERIFIED: {html.escape(ver_date.upper())}</span>
+              </div>
+              <div class="field-group">
+                <label for="in-a">{html.escape(cfg['label_a'])}</label>
+                <input type="number" id="in-a" value="{cfg['default_a']}" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-b">{html.escape(cfg['label_b'])}</label>
+                <input type="number" id="in-b" value="{cfg['default_b']}" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-c">{html.escape(cfg['label_c'])}</label>
+                <input type="number" id="in-c" value="{cfg['default_c']}" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-d">{html.escape(cfg['label_d'])}</label>
+                <input type="number" id="in-d" value="{cfg['default_d']}" step="any" />
+              </div>
+            </div>
+
+            {ad_html}
+
+            <div class="doc-section">
+              <span class="kicker">SPECIFICATION &amp; FORMULA</span>
+              <h3>Calculation Methodology</h3>
+              <div class="formula-block">{html.escape(tool['formula_explanation'])}</div>
+              <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
+                REFERENCE BASIS: {html.escape(src_name)} &bull; ASSUMPTIONS VERIFIED: {html.escape(ver_date)}
+              </p>
+              <h3>Reference Notes &amp; FAQ</h3>
+              {faq_html}
+            </div>
+          </div>
+
+          <aside>
+            <div class="ledger-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 02 — OUTPUT LEDGER</span>
+                <span>LIVE PROJECTION</span>
+              </div>
+              <div class="ledger-primary">
+                <span class="ledger-primary-label" id="lbl-r1">Primary Output</span>
+                <div class="ledger-primary-value" id="val-r1">$0.00</div>
+              </div>
+              <div class="ledger-rows">
+                <div class="ledger-row">
+                  <span id="lbl-r2">Secondary Metric</span>
+                  <strong id="val-r2">0</strong>
+                </div>
+                <div class="ledger-row">
+                  <span id="lbl-r3">Efficiency Benchmark</span>
+                  <strong id="val-r3">0</strong>
+                </div>
+              </div>
+              <div class="ledger-actions">
+                <button type="button" id="btn-export-csv" class="btn-secondary">Export CSV Statement</button>
+                <button type="button" id="btn-copy-permalink" class="btn-secondary">Copy Permalink</button>
+              </div>
+            </div>
+            {pro_box_html}
+          </aside>
+        </div>
+        """
+
+    return f"""
+    <div class="workspace-grid" id="interactive-tool-root" data-tool-type="dev_tool" data-tool-config="{cfg_json}">
+      <div>
+        <div class="parameters-sheet">
+          <div class="sheet-heading">
+            <span>FIG. 01 — SOURCE PAYLOAD</span>
+            <span>LOCAL BROWSER EXECUTION</span>
+          </div>
+          <div class="field-group">
+            <label for="dev-input">Input Buffer (Processed 100% Client-Side)</label>
+            <textarea id="dev-input">{html.escape(cfg['sample_input'])}</textarea>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="btn-run-dev" class="btn-primary">Execute Transformation</button>
+            <button type="button" id="btn-copy-dev" class="btn-secondary">Copy Output</button>
+          </div>
+          <div class="field-group" style="margin-top:20px">
+            <label>Formatted Output</label>
+            <pre id="dev-output" class="code-output"></pre>
+          </div>
+        </div>
+
+        {ad_html}
+
+        <div class="doc-section">
+          <span class="kicker">SPECIFICATION</span>
+          <h3>Technical Notes</h3>
+          <div class="formula-block">{html.escape(tool['formula_explanation'])}</div>
+          <h3>Frequently Asked Questions</h3>
+          {faq_html}
+        </div>
+      </div>
+
+      <aside>
+        {pro_box_html}
+      </aside>
+    </div>
+    """
+
+
+def build_tool_page(tool: dict) -> str:
+    slug = tool["slug"]
+    title = tool["title"]
+    desc = tool["short_desc"]
+    category = tool["category"]
+    src_name, ver_date = OFFICIAL_SOURCES.get(
+        slug,
+        ("Standard Financial & Technical Specification", "October 2026")
+    )
+
+    faq_schema_items = [
+        {
+            "@type": "Question",
+            "name": q,
+            "acceptedAnswer": {"@type": "Answer", "text": a}
+        }
+        for q, a in tool["faqs"]
+    ]
+    schema_ld = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "SoftwareApplication",
+                "name": title,
+                "applicationCategory": "BusinessApplication",
+                "operatingSystem": "Web Browser",
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+                "description": desc,
+                "url": f"{SITE_URL}/tools/{slug}.html"
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": faq_schema_items
+            }
+        ]
+    }
+
+    adsense_tag = ""
+    if ADSENSE_CLIENT_ID:
+        adsense_tag = f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={html.escape(ADSENSE_CLIENT_ID)}" crossorigin="anonymous"></script>'
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{html.escape(title)} — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="{html.escape(desc)}" />
+  <link rel="canonical" href="{SITE_URL}/tools/{slug}.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  {adsense_tag}
+  <script type="application/ld+json">{json.dumps(schema_ld)}</script>
+</head>
+<body>
+  {render_navbar(prefix="../")}
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; {html.escape(category)}</span>
+      <span>BASIS: {html.escape(src_name.upper())} ({html.escape(ver_date.upper())})</span>
+    </div>
+    <header class="tool-header">
+      <h1>{html.escape(title)}</h1>
+      <p>{html.escape(desc)}</p>
+    </header>
+
+    {render_tool_workspace(tool, prefix="../")}
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; {datetime.now().year} CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy, Consent &amp; Disclaimers</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>
+"""
+
+
+def build_index_page() -> str:
+    categories = {}
+    for t in TOOLS_CATALOG:
+        categories.setdefault(t["category"], []).append(t)
+
+    cat_anchors = {
+        "Payment & Fee Calculators": ("payment-calculators", "SECTION 01 // CROSS-BORDER & FREELANCE FEE LEDGERS"),
+        "SaaS & Marketing Calculators": ("saas-calculators", "SECTION 02 // SAAS & UNIT ECONOMICS MODELS"),
+        "Developer Utilities": ("dev-utilities", "SECTION 03 // CLIENT-SIDE DEVELOPER INSTRUMENTS"),
+        "Business & Operations Tools": ("ops-tools", "SECTION 04 // OPERATIONS & ESTIMATION LEDGERS")
+    }
+
+    sections_html = ""
+    global_idx = 1
+    for cat_name, tools in categories.items():
+        anchor, sec_code = cat_anchors.get(cat_name, ("section", "SECTION"))
+        cards_html = ""
+        for t in tools:
+            num_str = f"NO. {global_idx:02d}"
+            global_idx += 1
+            cards_html += f"""
+            <a href="tools/{t['slug']}.html" class="tool-card">
+              <div>
+                <span class="tool-num">{num_str} &mdash; {html.escape(cat_name.upper())}</span>
+                <h3>{html.escape(t['title'])}</h3>
+                <p>{html.escape(t['short_desc'])}</p>
+              </div>
+              <div class="tool-card-footer">
+                <span>Interactive Instrument</span>
+                <span>Open Ledger &rarr;</span>
+              </div>
+            </a>
+            """
+        sections_html += f"""
+        <section class="category-section" id="{anchor}">
+          <div class="category-header">
+            <h2 class="category-title">{html.escape(cat_name)}</h2>
+            <span class="category-index">{sec_code} ({len(tools)} INSTRUMENTS)</span>
+          </div>
+          <div class="tools-grid">
+            {cards_html}
+          </div>
+        </section>
+        """
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalcGrid — Cross-Border Fee Ledgers, Unit Economics &amp; Developer Instruments</title>
+  <meta name="description" content="Precision client-side calculators for Payoneer, Wise, Lemon Squeezy, Upwork (0%-15%), Stripe, SaaS LTV, Break-Even ROAS, and offline-safe developer tools." />
+  <link rel="canonical" href="{SITE_URL}/" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  {render_navbar(prefix="")}
+  <main class="container">
+    <section class="editorial-hero">
+      <div>
+        <span class="kicker">PUBLICATION &amp; INSTRUMENT DIRECTORY // VOL. I</span>
+        <h1>Precision fee ledgers, unit economics &amp; technical instruments.</h1>
+        <p>Thirty self-contained financial calculators and code inspection utilities with multi-volume sensitivity tables, CSV statement exports, and dated provider fee schedules.</p>
+        <div class="search-bar">
+          <label for="hub-search-input">Filter 30 Instruments by Keyword</label>
+          <input type="search" id="hub-search-input" placeholder="Type 'Payoneer', 'Wise', 'Upwork', 'Lemon Squeezy', 'ROAS', 'JSON', 'Armenia'..." />
+        </div>
+      </div>
+      <div class="hero-figure">
+        <img src="assets/images/editorial-hero.png" alt="CalcGrid Architectural Computation Ledger Illustration" />
+        <div class="figure-caption">
+          <span>FIG. 01 — ARCHITECTURAL LEDGER</span>
+          <span>30 VERIFIED MODELS</span>
+        </div>
+      </div>
+    </section>
+
+    {sections_html}
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; {datetime.now().year} CalcGrid Publication. All calculations execute client-side.</span>
+      <span><a href="legal.html">Privacy Policy, Consent &amp; Disclaimers</a> &nbsp;&bull;&nbsp; <a href="sitemap.xml">XML Sitemap</a> &nbsp;&bull;&nbsp; <a href="rss.xml">RSS Feed</a></span>
+    </div>
+  </footer>
+  <script src="assets/tools-runtime.js"></script>
+</body>
+</html>
+"""
+
+
+def build_legal_page() -> str:
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy, EEA Consent &amp; Financial Disclaimers — CalcGrid</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  {render_navbar(prefix="")}
+  <main class="container" style="max-width:820px;padding-top:36px">
+    <span class="kicker">LEGAL &amp; COMPLIANCE DOCUMENTATION</span>
+    <h1 style="font-family:var(--font-serif);font-size:2.2rem;font-weight:500;margin-bottom:20px">Privacy Policy, EEA/UK/CH Consent &amp; Financial Disclaimer</h1>
+    <div class="doc-section" style="margin-top:0">
+      <h3>1. Client-Side Data Privacy</h3>
+      <p style="color:var(--ink-secondary);margin:8px 0 22px;font-size:0.9rem">
+        All calculators and developer utilities (including JSON, JWT, SQL, and CSV converters) execute locally in your browser using client-side JavaScript. We do not store, transmit, or log the financial figures, tokens, or source code you enter into our instruments.
+      </p>
+
+      <h3>2. EEA, UK &amp; Switzerland Advertising Consent (IAB TCF v2.2 Certified CMP)</h3>
+      <p style="color:var(--ink-secondary);margin:8px 0 22px;font-size:0.9rem">
+        Advertising slots remain disabled until Google AdSense is active. When Google AdSense is enabled, consent for visitors in the European Economic Area (EEA), the United Kingdom, and Switzerland is managed exclusively through Google's certified Consent Management Platform (Google AdSense <em>Privacy &amp; messaging</em> integrated with the IAB Transparency and Consent Framework v2.2) rather than a custom banner.
+      </p>
+
+      <h3>3. No Financial, Tax, or Legal Advice</h3>
+      <p style="color:var(--ink-secondary);margin:8px 0 10px;font-size:0.9rem">
+        All fee, tax, and unit-economics models on CalcGrid are provided strictly for informational and estimation purposes. Payment processor fees (such as Payoneer, Wise, Lemon Squeezy, Stripe, PayPal, Upwork) and regional tax rates change periodically and vary by account tier, contract type, and jurisdiction. Always verify exact figures with your payment provider or a certified accountant.
+      </p>
+    </div>
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; {datetime.now().year} CalcGrid Publication.</span>
+      <span><a href="index.html">Return to Directory Index</a></span>
+    </div>
+  </footer>
+  <script src="assets/tools-runtime.js"></script>
+</body>
+</html>
+"""
+
+
+def build_seo_artifacts():
+    now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    urls = [f"{SITE_URL}/", f"{SITE_URL}/legal.html"] + [
+        f"{SITE_URL}/tools/{t['slug']}.html" for t in TOOLS_CATALOG
+    ]
+
+    sitemap_entries = "".join(
+        f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{now_iso}</lastmod>\n  </url>\n"
+        for u in urls
+    )
+    sitemap_xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{sitemap_entries}</urlset>\n'
+    (DIST_DIR / "sitemap.xml").write_text(sitemap_xml, encoding="utf-8")
+
+    robots_txt = f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n"
+    (DIST_DIR / "robots.txt").write_text(robots_txt, encoding="utf-8")
+
+    (DIST_DIR / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")
+
+    rss_items = "".join(
+        f"""    <item>
+      <title>{html.escape(t['title'])}</title>
+      <link>{SITE_URL}/tools/{t['slug']}.html</link>
+      <description>{html.escape(t['short_desc'])}</description>
+      <guid>{SITE_URL}/tools/{t['slug']}.html</guid>
+    </item>\n"""
+        for t in TOOLS_CATALOG
+    )
+    rss_xml = f"""<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>CalcGrid — Financial &amp; Technical Ledger</title>
+    <link>{SITE_URL}/</link>
+    <description>30 Client-Side Payment Calculators, SaaS Metrics &amp; Dev Utilities</description>
+{rss_items}  </channel>
+</rss>
+"""
+    (DIST_DIR / "rss.xml").write_text(rss_xml, encoding="utf-8")
+
+
+def create_multi_tab_xlsx_bytes(sheets: list[tuple[str, list[list[str]]]]) -> bytes:
+    """
+    Creates a standards-compliant OpenXML `.xlsx` workbook with multiple worksheet tabs
+    using only the Python standard library (`zipfile` + XML).
+    """
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as xzf:
+        sheet_overrides = "".join(
+            f'<Override PartName="/xl/worksheets/sheet{i}.xml" '
+            f'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+            for i in range(1, len(sheets) + 1)
+        )
+        content_types = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+            '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+            '<Default Extension="xml" ContentType="application/xml"/>'
+            '<Override PartName="/xl/workbook.xml" '
+            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+            f'{sheet_overrides}'
+            '</Types>'
+        )
+        xzf.writestr("[Content_Types].xml", content_types)
+
+        root_rels = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            '<Relationship Id="rId1" '
+            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" '
+            'Target="xl/workbook.xml"/>'
+            '</Relationships>'
+        )
+        xzf.writestr("_rels/.rels", root_rels)
+
+        sheet_nodes = "".join(
+            f'<sheet name="{xml_escape(name)}" sheetId="{i}" r:id="rId{i}"/>'
+            for i, (name, _) in enumerate(sheets, start=1)
+        )
+        workbook_xml = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
+            'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+            f'<sheets>{sheet_nodes}</sheets>'
+            '</workbook>'
+        )
+        xzf.writestr("xl/workbook.xml", workbook_xml)
+
+        wb_rel_nodes = "".join(
+            f'<Relationship Id="rId{i}" '
+            f'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" '
+            f'Target="worksheets/sheet{i}.xml"/>'
+            for i in range(1, len(sheets) + 1)
+        )
+        wb_rels = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            f'{wb_rel_nodes}'
+            '</Relationships>'
+        )
+        xzf.writestr("xl/_rels/workbook.xml.rels", wb_rels)
+
+        for idx, (_, rows) in enumerate(sheets, start=1):
+            row_xml_list = []
+            for r_idx, row in enumerate(rows, start=1):
+                cell_xml_list = []
+                for c_idx, val in enumerate(row):
+                    col_letter = chr(ord("A") + c_idx)
+                    cell_ref = f"{col_letter}{r_idx}"
+                    s_val = str(val)
+                    try:
+                        if r_idx > 1:
+                            float(s_val)
+                            cell_xml_list.append(f'<c r="{cell_ref}"><v>{xml_escape(s_val)}</v></c>')
+                        else:
+                            raise ValueError()
+                    except ValueError:
+                        cell_xml_list.append(
+                            f'<c r="{cell_ref}" t="inlineStr"><is><t>{xml_escape(s_val)}</t></is></c>'
+                        )
+                row_xml_list.append(f'<row r="{r_idx}">{"".join(cell_xml_list)}</row>')
+
+            sheet_xml = (
+                '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+                f'<sheetData>{"".join(row_xml_list)}</sheetData>'
+                '</worksheet>'
+            )
+            xzf.writestr(f"xl/worksheets/sheet{idx}.xml", sheet_xml)
+
+    return buf.getvalue()
+
+
+def build_private_pro_digital_product_zip() -> Path:
+    """
+    Packages the paid Pro product strictly outside `dist/` in `private_products/`
+    so it is NEVER publicly exposed on Cloudflare Pages or GitHub Pages.
+    Includes BOTH a genuine multi-tab `.xlsx` workbook AND 3 separate `.csv` files.
+    """
+    public_downloads = DIST_DIR / "downloads"
+    if public_downloads.exists():
+        shutil.rmtree(public_downloads)
+
+    PRIVATE_PRODUCTS_DIR.mkdir(parents=True, exist_ok=True)
+    zip_path = PRIVATE_PRODUCTS_DIR / "calcgrid-pro-offline-suite.zip"
+
+    batch_reconciler_py = """#!/usr/bin/env python3
+\"\"\"
+CalcGrid Pro Batch Payout & Fee Reconciler CLI (calcgrid_batch_reconciler.py)
+Exclusive to the CalcGrid Pro Suite ($19).
+Ingests a bulk CSV of transactions (e.g. from Stripe, Payoneer, Wise, Upwork, Lemon Squeezy),
+audits expected vs actual fees, flags variances > 0.25%, and outputs a reconciled accounting ledger.
+\"\"\"
+import argparse
+import csv
+from pathlib import Path
+
+PROVIDER_RATES = {
+    "lemonsqueezy": (5.0, 0.50, 1.5),
+    "payoneer":     (1.0, 0.00, 2.0),
+    "wise":         (0.65, 4.14, 0.0),
+    "upwork_10":    (10.0, 0.99, 0.0),
+    "upwork_5":     (5.0, 0.99, 0.0),
+    "upwork_15":    (15.0, 0.99, 0.0),
+    "stripe_intl":  (2.9, 0.30, 2.5),
+    "fiverr":       (20.0, 1.00, 0.0),
+}
+
+def reconcile_csv(input_csv: Path, output_csv: Path):
+    rows_out = []
+    with open(input_csv, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            provider = row.get("provider", "lemonsqueezy").strip().lower()
+            gross = float(row.get("gross_usd", 0.0))
+            actual_net = float(row.get("actual_net_usd", 0.0))
+            pct, fix, fx = PROVIDER_RATES.get(provider, (5.0, 0.50, 0.0))
+            expected_fee = gross * ((pct + fx) / 100.0) + fix
+            expected_net = max(0.0, gross - expected_fee)
+            variance = actual_net - expected_net
+            flag = "OK" if abs(variance) <= max(0.50, gross * 0.0025) else "FEE_VARIANCE_ALERT"
+            rows_out.append({
+                "tx_id": row.get("tx_id", ""),
+                "provider": provider,
+                "gross_usd": f"{gross:.2f}",
+                "expected_fee_usd": f"{expected_fee:.2f}",
+                "expected_net_usd": f"{expected_net:.2f}",
+                "actual_net_usd": f"{actual_net:.2f}",
+                "variance_usd": f"{variance:.2f}",
+                "audit_status": flag
+            })
+
+    with open(output_csv, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "tx_id", "provider", "gross_usd", "expected_fee_usd",
+            "expected_net_usd", "actual_net_usd", "variance_usd", "audit_status"
+        ])
+        writer.writeheader()
+        writer.writerows(rows_out)
+    print(f"Reconciled {len(rows_out)} transactions -> {output_csv}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="CalcGrid Pro Bulk Payout Reconciler")
+    parser.add_argument("--input", required=True, help="Input transactions CSV")
+    parser.add_argument("--output", default="reconciled_ledger.csv", help="Output reconciled CSV")
+    args = parser.parse_args()
+    reconcile_csv(Path(args.input), Path(args.output))
+"""
+
+    sample_transactions_csv = (
+        "tx_id,provider,gross_usd,actual_net_usd\n"
+        "TX-1001,lemonsqueezy,49.00,45.32\n"
+        "TX-1002,upwork_10,1200.00,1079.01\n"
+        "TX-1003,payoneer,2500.00,2400.00\n"
+        "TX-1004,wise,3000.00,2976.36\n"
+    )
+
+    saas_rows = [
+        ["Month", "Starting_MRR_USD", "New_MRR_USD", "Churned_MRR_4.5Pct", "Net_MRR_USD", "Gross_Margin_85Pct", "CAC_Spend_USD", "Net_Cash_Flow_USD"],
+        ["Month 1", "1000.00", "500.00", "45.00", "1455.00", "1236.75", "600.00", "636.75"],
+        ["Month 2", "1455.00", "600.00", "65.48", "1989.53", "1691.10", "720.00", "971.10"],
+        ["Month 3", "1989.53", "750.00", "89.53", "2650.00", "2252.50", "900.00", "1352.50"],
+        ["Month 6", "4200.00", "1100.00", "189.00", "5111.00", "4344.35", "1200.00", "3144.35"],
+        ["Month 12", "9800.00", "1800.00", "441.00", "11159.00", "9485.15", "1800.00", "7685.15"],
+    ]
+
+    cross_border_rows = [
+        ["Provider_And_Scenario", "Base_Fee_Pct", "Fixed_Fee_USD", "FX_Spread_Pct", "Net_on_500_USD", "Net_on_2500_USD", "Net_on_10000_USD", "Verified_Date"],
+        ["Wise Wire", "0.65", "4.14", "0.0", "492.61", "2479.61", "9930.86", "2026-10"],
+        ["Payoneer Local", "1.0", "0.00", "2.0", "485.00", "2425.00", "9700.00", "2026-10"],
+        ["Upwork (0% Direct Contract - Freelancer Plus)", "0.0", "0.99", "0.0", "499.01", "2499.01", "9999.01", "2026-10"],
+        ["Upwork (5% Direct Contract Standard / Example)", "5.0", "0.99", "0.0", "474.01", "2374.01", "9499.01", "2026-10"],
+        ["Upwork (10% Example Marketplace Rate)", "10.0", "0.99", "0.0", "449.01", "2249.01", "8999.01", "2026-10"],
+        ["Upwork (15% Example Marketplace Rate)", "15.0", "0.99", "0.0", "424.01", "2124.01", "8499.01", "2026-10"],
+        ["Lemon Squeezy MoR", "5.0", "0.50", "1.5", "467.00", "2337.00", "9349.50", "2026-10"],
+    ]
+
+    roas_rows = [
+        ["AOV_USD", "COGS_And_Fees_USD", "Contribution_Margin_USD", "Break_Even_ROAS", "Monthly_Ad_Spend_USD", "Target_ROAS", "Monthly_Net_Profit_USD"],
+        ["60.00", "24.00", "36.00", "1.67", "2000.00", "2.50", "1000.00"],
+        ["85.00", "29.00", "56.00", "1.52", "3000.00", "2.40", "1743.53"],
+        ["120.00", "36.00", "84.00", "1.43", "5000.00", "3.00", "5500.00"],
+    ]
+
+    def rows_to_csv(rows: list[list[str]]) -> str:
+        return "\n".join(",".join(r) for r in rows) + "\n"
+
+    xlsx_bytes = create_multi_tab_xlsx_bytes([
+        ("SaaS_12Mo_Cohort_Model", saas_rows),
+        ("Cross_Border_Fee_Matrix", cross_border_rows),
+        ("ROAS_Unit_Economics", roas_rows),
+    ])
+
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr("01_cli_batch_auditor/calcgrid_batch_reconciler.py", batch_reconciler_py)
+        zf.writestr("01_cli_batch_auditor/sample_transactions.csv", sample_transactions_csv)
+        zf.writestr("02_spreadsheet_models/calcgrid_financial_models.xlsx", xlsx_bytes)
+        zf.writestr("02_spreadsheet_models/saas_12mo_cohort_and_cashflow_model.csv", rows_to_csv(saas_rows))
+        zf.writestr("02_spreadsheet_models/cross_border_payout_comparison_matrix.csv", rows_to_csv(cross_border_rows))
+        zf.writestr("02_spreadsheet_models/roas_and_unit_economics_model.csv", rows_to_csv(roas_rows))
+        for p in DIST_DIR.rglob("*"):
+            if p.is_file():
+                rel = p.relative_to(DIST_DIR)
+                zf.write(p, f"03_offline_html_instruments/{rel}")
+
+    return zip_path
+
+
+def compile_all() -> dict:
+    TOOLS_DIR.mkdir(parents=True, exist_ok=True)
+    ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+
+    src_images_dir = Path(__file__).resolve().parent / "images"
+    if src_images_dir.exists():
+        for img_file in src_images_dir.glob("*.png"):
+            shutil.copy2(img_file, IMAGES_DIR / img_file.name)
+
+    (ASSETS_DIR / "styles.css").write_text(build_css(), encoding="utf-8")
+    (ASSETS_DIR / "tools-runtime.js").write_text(build_runtime_js(), encoding="utf-8")
+
+    (DIST_DIR / "index.html").write_text(build_index_page(), encoding="utf-8")
+    (DIST_DIR / "legal.html").write_text(build_legal_page(), encoding="utf-8")
+
+    for tool in TOOLS_CATALOG:
+        html_out = build_tool_page(tool)
+        (TOOLS_DIR / f"{tool['slug']}.html").write_text(html_out, encoding="utf-8")
+
+    build_seo_artifacts()
+    private_zip_path = build_private_pro_digital_product_zip()
+
+    return {
+        "tools_compiled": len(TOOLS_CATALOG),
+        "total_html_pages": len(TOOLS_CATALOG) + 2,
+        "public_dist_dir": str(DIST_DIR),
+        "private_pro_zip": str(private_zip_path),
+        "public_zip_exposed": any(DIST_DIR.rglob("*.zip")),
+        "ads_enabled": bool(ADSENSE_CLIENT_ID),
+        "checkout_enabled": bool(LEMON_SQUEEZY_CHECKOUT_URL)
+    }
+
+
+if __name__ == "__main__":
+    print(json.dumps(compile_all(), indent=2))

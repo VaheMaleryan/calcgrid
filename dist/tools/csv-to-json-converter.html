@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instant Browser CSV to JSON &amp; SQL Converter — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Convert CSV spreadsheet rows with headers into formatted JSON arrays locally in your browser." />
+  <link rel="canonical" href="https://calcgrid-tools.pages.dev/tools/csv-to-json-converter.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Instant Browser CSV to JSON & SQL Converter", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Convert CSV spreadsheet rows with headers into formatted JSON arrays locally in your browser.", "url": "https://calcgrid-tools.pages.dev/tools/csv-to-json-converter.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Are numeric and boolean columns automatically typed?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, cells matching numbers or `true`/`false` are automatically converted to native JSON numbers and booleans."}}]}]}</script>
+</head>
+<body>
+  
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../index.html#payment-calculators">Fee Ledgers</a>
+        <a href="../index.html#saas-calculators">Unit Economics</a>
+        <a href="../index.html#dev-utilities">Developer Instruments</a>
+        <a href="../legal.html">Methodology &amp; Terms</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Developer Utilities</span>
+      <span>BASIS: STANDARD FINANCIAL &amp; TECHNICAL SPECIFICATION (OCTOBER 2026)</span>
+    </div>
+    <header class="tool-header">
+      <h1>Instant Browser CSV to JSON &amp; SQL Converter</h1>
+      <p>Convert CSV spreadsheet rows with headers into formatted JSON arrays locally in your browser.</p>
+    </header>
+
+    
+    <div class="workspace-grid" id="interactive-tool-root" data-tool-type="dev_tool" data-tool-config="{&quot;dev_mode&quot;: &quot;csv_to_json&quot;, &quot;sample_input&quot;: &quot;product_id,name,price_usd,in_stock\n101,Pro CLI Pack,29.00,true\n102,Automation Templates,19.00,true\n103,Enterprise License,99.00,false&quot;}">
+      <div>
+        <div class="parameters-sheet">
+          <div class="sheet-heading">
+            <span>FIG. 01 — SOURCE PAYLOAD</span>
+            <span>LOCAL BROWSER EXECUTION</span>
+          </div>
+          <div class="field-group">
+            <label for="dev-input">Input Buffer (Processed 100% Client-Side)</label>
+            <textarea id="dev-input">product_id,name,price_usd,in_stock
+101,Pro CLI Pack,29.00,true
+102,Automation Templates,19.00,true
+103,Enterprise License,99.00,false</textarea>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="btn-run-dev" class="btn-primary">Execute Transformation</button>
+            <button type="button" id="btn-copy-dev" class="btn-secondary">Copy Output</button>
+          </div>
+          <div class="field-group" style="margin-top:20px">
+            <label>Formatted Output</label>
+            <pre id="dev-output" class="code-output"></pre>
+          </div>
+        </div>
+
+        
+
+        <div class="doc-section">
+          <span class="kicker">SPECIFICATION</span>
+          <h3>Technical Notes</h3>
+          <div class="formula-block">Parses the header row for property keys and automatically casts numeric and boolean cell values into typed JSON objects.</div>
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item"><h4>Are numeric and boolean columns automatically typed?</h4><p>Yes, cells matching numbers or `true`/`false` are automatically converted to native JSON numbers and booleans.</p></div>
+        </div>
+      </div>
+
+      <aside>
+        
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>Built for accountants, agencies, and high-volume freelancers who need bulk CSV reconciliation and multi-sheet workbooks beyond single-transaction web calculators.</p>
+        <ul class="reference-list">
+          <li>01 / Bulk CSV Fee &amp; FX Reconciler CLI (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (30 Tools)</li>
+        </ul>
+        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="json-to-typescript-schema-converter.html">JSON to TypeScript Interface &amp; Zod Schema Converter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="cron-expression-explainer.html">Cron Expression Explainer &amp; Schedule Validator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="jwt-token-decoder.html">Offline JWT Token Header &amp; Payload Decoder &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="sql-query-formatter.html">SQL Query Pretty Printer &amp; Clause Formatter &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="base64-url-hash-encoder.html">UTF-8 Safe Base64 &amp; URL Encoder / Decoder &rarr;</a></li>
+        </ul>
+      </div>
+    
+      </aside>
+    </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy, Consent &amp; Disclaimers</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>

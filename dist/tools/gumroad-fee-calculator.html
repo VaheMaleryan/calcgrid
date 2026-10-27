@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gumroad 10% + Processing Fee Calculator — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Calculate Gumroad&#x27;s 10% flat commission plus credit card processing fees and your net creator take-home pay." />
+  <link rel="canonical" href="https://calcgrid-tools.pages.dev/tools/gumroad-fee-calculator.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Gumroad 10% + Processing Fee Calculator", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Calculate Gumroad's 10% flat commission plus credit card processing fees and your net creator take-home pay.", "url": "https://calcgrid-tools.pages.dev/tools/gumroad-fee-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Did Gumroad become a Merchant of Record?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, Gumroad handles global tax collection on digital sales, charging a 10% + $0.50 platform fee plus standard payment processor fees."}}, {"@type": "Question", "name": "How much do Gumroad Discover sales cost?", "acceptedAnswer": {"@type": "Answer", "text": "Sales generated organically through Gumroad Discover carry a 30% total fee instead of the standard direct-link fee."}}]}]}</script>
+</head>
+<body>
+  
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../index.html#payment-calculators">Fee Ledgers</a>
+        <a href="../index.html#saas-calculators">Unit Economics</a>
+        <a href="../index.html#dev-utilities">Developer Instruments</a>
+        <a href="../legal.html">Methodology &amp; Terms</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Payment &amp; Fee Calculators</span>
+      <span>BASIS: GUMROAD CREATOR FEE SCHEDULE (10% + $0.50 + PROCESSING) (OCTOBER 2026)</span>
+    </div>
+    <header class="tool-header">
+      <h1>Gumroad 10% + Processing Fee Calculator</h1>
+      <p>Calculate Gumroad&#x27;s 10% flat commission plus credit card processing fees and your net creator take-home pay.</p>
+    </header>
+
+    
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="fee_calc" data-tool-config="{&quot;label_amount&quot;: &quot;Product Sale Price ($ USD)&quot;, &quot;default_amount&quot;: 39, &quot;percent_fee&quot;: 10.0, &quot;fixed_fee&quot;: 0.8, &quot;fx_markup_percent&quot;: 2.9, &quot;label_pct&quot;: &quot;Gumroad Flat Commission (%)&quot;, &quot;label_fixed&quot;: &quot;Fixed Per-Sale Fee ($0.50 + $0.30 card fee)&quot;, &quot;label_fx&quot;: &quot;Card Processing Fee (%)&quot;}">
+          <div>
+            <div class="parameters-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 01 — INPUT PARAMETERS</span>
+                <span>VERIFIED: OCTOBER 2026</span>
+              </div>
+              
+              <div class="field-group">
+                <label for="in-amount">Product Sale Price ($ USD)</label>
+                <input type="number" id="in-amount" value="39" min="0" step="any" />
+              </div>
+              <div class="field-group">
+                <label for="in-pct">Gumroad Flat Commission (%)</label>
+                <input type="number" id="in-pct" value="10.0" min="0" max="99" step="0.01" />
+              </div>
+              <div class="field-group">
+                <label for="in-fixed">Fixed Per-Sale Fee ($0.50 + $0.30 card fee)</label>
+                <input type="number" id="in-fixed" value="0.8" min="0" step="0.01" />
+              </div>
+              <div class="field-group">
+                <label for="in-fx">Card Processing Fee (%)</label>
+                <input type="number" id="in-fx" value="2.9" min="0" max="99" step="0.01" />
+              </div>
+            </div>
+
+            <div class="doc-section">
+              <span class="kicker">FIG. 03 — MULTI-VOLUME SENSITIVITY MATRIX</span>
+              <h3>Tiered Settlement &amp; Reverse Gross-Up Schedule</h3>
+              <p style="font-size:0.83rem;color:var(--ink-secondary);margin-bottom:8px">Live comparison across transaction volumes using your active fee parameters above:</p>
+              <div style="overflow-x:auto">
+                <table class="matrix-table">
+                  <thead>
+                    <tr>
+                      <th>Gross Volume</th>
+                      <th>Total Fee</th>
+                      <th>Net Payout</th>
+                      <th>Effective %</th>
+                      <th>Invoice to Net</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sensitivity-matrix-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            
+
+            <div class="doc-section">
+              <span class="kicker">SPECIFICATION &amp; SOURCE ATTRIBUTION</span>
+              <h3>Calculation Methodology</h3>
+              <div class="formula-block">Net Creator Revenue = Sale Price - (Sale Price × 10% Gumroad Fee) - $0.50 - (Sale Price × 2.9% + $0.30 Card Fee).</div>
+              <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
+                REFERENCE BASIS: Gumroad Creator Fee Schedule (10% + $0.50 + Processing) &bull; ASSUMPTIONS VERIFIED: October 2026
+              </p>
+              <h3>Reference Notes &amp; FAQ</h3>
+              <div class="faq-item"><h4>Did Gumroad become a Merchant of Record?</h4><p>Yes, Gumroad handles global tax collection on digital sales, charging a 10% + $0.50 platform fee plus standard payment processor fees.</p></div><div class="faq-item"><h4>How much do Gumroad Discover sales cost?</h4><p>Sales generated organically through Gumroad Discover carry a 30% total fee instead of the standard direct-link fee.</p></div>
+            </div>
+          </div>
+
+          <aside>
+            <div class="ledger-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 02 — SETTLEMENT LEDGER</span>
+                <span>LIVE CALCULATION</span>
+              </div>
+              <div class="ledger-primary">
+                <span class="ledger-primary-label">Net Settlement Received</span>
+                <div class="ledger-primary-value" id="out-net">$0.00</div>
+              </div>
+              <div class="ledger-rows">
+                <div class="ledger-row">
+                  <span>Total Platform &amp; FX Deductions</span>
+                  <strong id="out-fee">$0.00</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Effective Fee Burden</span>
+                  <strong id="out-rate">0.00%</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Gross Invoice Required to Net Target</span>
+                  <strong id="out-reverse">$0.00</strong>
+                </div>
+              </div>
+              <div class="ledger-actions">
+                <button type="button" id="btn-export-csv" class="btn-secondary">Export CSV Statement</button>
+                <button type="button" id="btn-copy-permalink" class="btn-secondary">Copy Permalink</button>
+              </div>
+            </div>
+            
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>Built for accountants, agencies, and high-volume freelancers who need bulk CSV reconciliation and multi-sheet workbooks beyond single-transaction web calculators.</p>
+        <ul class="reference-list">
+          <li>01 / Bulk CSV Fee &amp; FX Reconciler CLI (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (30 Tools)</li>
+        </ul>
+        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="payoneer-fee-calculator.html">Payoneer Fee &amp; Net Payout Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="wise-transfer-fee-calculator.html">Wise International Transfer &amp; FX Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="lemonsqueezy-fee-calculator.html">Lemon Squeezy Merchant of Record Fee Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="paddle-fee-calculator.html">Paddle SaaS Checkout &amp; MoR Fee Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="upwork-freelancer-fee-calculator.html">Upwork Variable Freelancer Fee Calculator (0%–15%) &rarr;</a></li>
+        </ul>
+      </div>
+    
+          </aside>
+        </div>
+        
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy, Consent &amp; Disclaimers</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>
