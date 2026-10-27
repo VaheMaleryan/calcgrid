@@ -121,7 +121,7 @@
     <item>
       <title>Cron Expression Explainer &amp; Schedule Validator</title>
       <link>https://vahemaleryan.github.io/calcgrid/tools/cron-expression-explainer.html</link>
-      <description>Translate 5-field Linux/GitHub Actions cron expressions into plain English and verify execution dates or support named months/weekdays.</description>
+      <description>Validate numeric five-field cron syntax and describe each field. Execution dates and named months/weekdays are not supported.</description>
       <guid>https://vahemaleryan.github.io/calcgrid/tools/cron-expression-explainer.html</guid>
     </item>
     <item>

@@ -798,8 +798,7 @@ TOOLS_CATALOG = [{'slug': 'cross-border-payout-comparison-engine',
  {'slug': 'cron-expression-explainer',
   'title': 'Cron Expression Explainer & Schedule Validator',
   'category': 'Developer Utilities',
-  'short_desc': 'Translate 5-field Linux/GitHub Actions cron expressions into plain English and verify '
-                'execution dates or support named months/weekdays.',
+  'short_desc': 'Validate numeric five-field cron syntax and describe each field. Execution dates and named months/weekdays are not supported.',
   'tool_type': 'dev_tool',
   'config': {'dev_mode': 'cron', 'sample_input': '*/15 9-17 * * 1-5'},
   'formula_explanation': 'Standard 5-field Cron syntax: [Minute 0-59] [Hour 0-23] [Day of Month 1-31] [Month '
