@@ -1970,13 +1970,12 @@ def build_not_found_page() -> str:
 
 
 def build_seo_artifacts():
-    now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     urls = [f"{SITE_URL}/", f"{SITE_URL}/legal.html"] + [
         f"{SITE_URL}/tools/{t['slug']}.html" for t in TOOLS_CATALOG
     ]
 
     sitemap_entries = "".join(
-        f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{now_iso}</lastmod>\n  </url>\n"
+        f"  <url>\n    <loc>{u}</loc>\n  </url>\n"
         for u in urls
     )
     sitemap_xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{sitemap_entries}</urlset>\n'
@@ -2252,7 +2251,7 @@ def compile_all() -> dict:
   Referrer-Policy: no-referrer
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'
 """, encoding="utf-8")
 
     (ASSETS_DIR / "styles.css").write_text(build_css(), encoding="utf-8")
