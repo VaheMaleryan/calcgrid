@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
   schedule:
-    # Runs weekly autonomous rebuild, QA health check, and IndexNow refresh
+    # Runs weekly autonomous rebuild, QA health check, and freshness audit
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
@@ -25,13 +25,12 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run Autonomous Compiler, QA Verifier & IndexNow Ping
+      - name: Run Autonomous Compiler, Mathematical Suite & Security Verifier
         env:
           SITE_URL: ${{ vars.SITE_URL || 'https://calcgrid-tools.pages.dev' }}
-          LEMON_SQUEEZY_URL: ${{ vars.LEMON_SQUEEZY_URL || 'downloads/calcgrid-pro-offline-suite.zip' }}
+          LEMON_SQUEEZY_URL: ${{ vars.LEMON_SQUEEZY_URL || '' }}
           ADSENSE_CLIENT_ID: ${{ vars.ADSENSE_CLIENT_ID || '' }}
-          ENABLE_LIVE_INDEXNOW: ${{ vars.ENABLE_LIVE_INDEXNOW || '0' }}
-        run: python3 engine/autopilot.py
+        run: python3 engine/autopilot.py --auto-rollback
 
       - name: Upload Static Site Artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3

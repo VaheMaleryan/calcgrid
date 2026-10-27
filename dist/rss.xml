@@ -3,7 +3,19 @@
   <channel>
     <title>CalcGrid — Financial &amp; Technical Ledger</title>
     <link>https://calcgrid-tools.pages.dev/</link>
-    <description>30 Client-Side Payment Calculators, SaaS Metrics &amp; Dev Utilities</description>
+    <description>Country-Aware Freelancer Payout Engine, Browser CSV Auditor &amp; 30 Client-Side Calculators</description>
+    <item>
+      <title>Cross-Border Freelancer Payout, Reverse Invoice &amp; Tax Comparison Engine</title>
+      <link>https://calcgrid-tools.pages.dev/tools/cross-border-payout-comparison-engine.html</link>
+      <description>Compare end-to-end net take-home pay and required reverse invoice amounts across Upwork, Direct Contracts, Fiverr, Payoneer, Wise, and SWIFT for Armenia, Georgia, Serbia, Philippines, and India.</description>
+      <guid>https://calcgrid-tools.pages.dev/tools/cross-border-payout-comparison-engine.html</guid>
+    </item>
+    <item>
+      <title>Private Browser CSV Transaction &amp; Hidden FX Fee Auditor</title>
+      <link>https://calcgrid-tools.pages.dev/tools/private-csv-payout-fee-auditor.html</link>
+      <description>Audit Stripe, Payoneer, Wise, Upwork, and Lemon Squeezy CSV payout statements 100% locally in your browser to detect hidden FX markups and fee variances.</description>
+      <guid>https://calcgrid-tools.pages.dev/tools/private-csv-payout-fee-auditor.html</guid>
+    </item>
     <item>
       <title>Payoneer Fee &amp; Net Payout Calculator</title>
       <link>https://calcgrid-tools.pages.dev/tools/payoneer-fee-calculator.html</link>

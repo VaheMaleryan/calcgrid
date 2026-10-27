@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-10-27T13:34:13Z",
+  "publishing_policy": "Conservative 3-episode initial cohort; evaluate UTM click-through before scaling output.",
+  "oauth_integrations_configured": {
+    "youtube_shorts_api": false,
+    "instagram_reels_graph_api": false,
+    "tiktok_content_posting_api": false
+  },
+  "episodes": [
+    {
+      "episode_id": "ep01_upwork_payoneer_armenia",
+      "format_type": "corridor_comparison_walkthrough",
+      "title": "What Happens to a $1,000 Upwork Invoice After Platform, Payoneer FX & 1% Tax?",
+      "target_audience_question": "How much of a $1,000 Upwork contract actually reaches an Armenian or Georgian bank account, and what gross bid is needed to net $1,000?",
+      "tool_slug": "cross-border-payout-comparison-engine",
+      "tracked_url": "https://calcgrid-tools.pages.dev/tools/cross-border-payout-comparison-engine.html?country=AM&amount=1000&origin_pct=10&tax=1.0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep01_upwork_payoneer_armenia",
+      "caption_with_link": "Why a $1,000 freelance contract often turns into ~$863.32 after multi-stage deductions:\n\n1. Marketplace fee (10% example + $0.99): -$100.99\n2. Payout rail + ~2% FX conversion spread: -$26.97\n3. 1% simplified IT turnover tax provision: -$8.72\n= $863.32 Net Take-Home (or invoice $1,158.15 to net $1,000.00).\n\nCompare Wise, Payoneer, and SWIFT across Armenia, Georgia, Serbia, Philippines, and India with your own numbers:\nhttps://calcgrid-tools.pages.dev/tools/cross-border-payout-comparison-engine.html?country=AM&amount=1000&origin_pct=10&tax=1.0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep01_upwork_payoneer_armenia",
+      "video_file": "marketing_outbox/videos/ep01_upwork_payoneer_armenia.mp4",
+      "subtitle_file": "marketing_outbox/subtitles/ep01_upwork_payoneer_armenia.srt",
+      "duration_sec": 24.0,
+      "file_size_bytes": 3903344,
+      "publish_status": "READY_AWAITING_OAUTH_AUTHORIZATION",
+      "measured_utm_clicks": 0
+    },
+    {
+      "episode_id": "ep02_reverse_invoice_math",
+      "format_type": "reverse_gross_up_proof",
+      "title": "Why Adding 10% to a $1,000 Invoice Does NOT Net $1,000 (Reverse Gross-Up Formula)",
+      "target_audience_question": "How do I calculate the exact invoice amount to charge a client so I receive my exact target net payout after fees?",
+      "tool_slug": "upwork-freelancer-fee-calculator",
+      "tracked_url": "https://calcgrid-tools.pages.dev/tools/upwork-freelancer-fee-calculator.html?amount=1000&pct=10&fixed=0.99&fx=0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep02_reverse_invoice_math",
+      "caption_with_link": "Adding +10% to a $1,000 invoice nets $990, not $1,000.\n\nExact Reverse Gross-Up Formula:\nRequired Gross = (Target Net + Fixed Fee) / (1 - Total Fee %)\nFor $1,000 net at 10% + $0.99 withdrawal: ($1,000 + $0.99) / 0.90 = $1,112.21.\n\nTest any 0%\u201315% contract rate or export a 6-tier CSV schedule:\nhttps://calcgrid-tools.pages.dev/tools/upwork-freelancer-fee-calculator.html?amount=1000&pct=10&fixed=0.99&fx=0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep02_reverse_invoice_math",
+      "video_file": "marketing_outbox/videos/ep02_reverse_invoice_math.mp4",
+      "subtitle_file": "marketing_outbox/subtitles/ep02_reverse_invoice_math.srt",
+      "duration_sec": 24.0,
+      "file_size_bytes": 3135275,
+      "publish_status": "READY_AWAITING_OAUTH_AUTHORIZATION",
+      "measured_utm_clicks": 0
+    },
+    {
+      "episode_id": "ep03_csv_hidden_fx_audit",
+      "format_type": "csv_auditor_demo",
+      "title": "How to Audit Your Payoneer, Wise & Stripe CSV Statements for Hidden FX Markups",
+      "target_audience_question": "How can I check how much money I lost to hidden currency conversion spreads across my payout CSV history without uploading financial data to a server?",
+      "tool_slug": "private-csv-payout-fee-auditor",
+      "tracked_url": "https://calcgrid-tools.pages.dev/tools/private-csv-payout-fee-auditor.html?utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep03_csv_hidden_fx_audit",
+      "caption_with_link": "How to spot unitemized 2%\u20133% FX conversion spreads and SWIFT intermediary deductions in your payout history:\n\n\u2022 Paste or drop your CSV statement into CalcGrid's Browser CSV Auditor\n\u2022 Runs 100% locally in browser JavaScript memory (zero server uploads)\n\u2022 Flags every transaction with >0.25% variance against published provider schedules\n\nTry the free browser CSV auditor:\nhttps://calcgrid-tools.pages.dev/tools/private-csv-payout-fee-auditor.html?utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep03_csv_hidden_fx_audit",
+      "video_file": "marketing_outbox/videos/ep03_csv_hidden_fx_audit.mp4",
+      "subtitle_file": "marketing_outbox/subtitles/ep03_csv_hidden_fx_audit.srt",
+      "duration_sec": 24.0,
+      "file_size_bytes": 3152154,
+      "publish_status": "READY_AWAITING_OAUTH_AUTHORIZATION",
+      "measured_utm_clicks": 0
+    }
+  ]
+}

@@ -1,14 +1,439 @@
 #!/usr/bin/env python3
 """
-Master Catalog of 30 Interactive Client-Side Calculators & Developer Utilities.
-Each tool defines:
-  - slug, title, category, short_desc, meta_keywords
-  - tool_type: 'fee_calc' | 'saas_calc' | 'dev_tool' | 'ops_calc'
-  - params / interactive formula configuration
-  - detailed educational guide & FAQ entries (for organic search & AdSense compliance)
+Master Catalog of 32 Interactive Client-Side Calculators, Flagship Payout Engines & Developer Utilities.
+Includes:
+  - COMPETITOR_BENCHMARK_MATRIX: Research on 10 competing calculator sites and underserved gaps
+  - COUNTRY_CORRIDORS: Source-verified cross-border payout availability, fee ranges, and simplified tax presets
+    for Armenia, Georgia, Serbia, Philippines, and India (no fabricated live FX rates)
+  - TOOLS_CATALOG: 2 Flagship Interactive Engines ('corridor_engine', 'csv_auditor') + 30 Core Calculators
 """
 
+COMPETITOR_BENCHMARK_MATRIX = [
+    {
+        "rank": 1,
+        "name": "FeeProbe (feeprobe.com)",
+        "strengths": "Clean UI, side-by-side Stripe/PayPal/Wise comparison for US/UK, basic reverse fee calculation.",
+        "underserved_gaps": "Ignores multi-stage freelance chains (e.g., Upwork -> Payoneer -> Local Bank), no emerging-market corridor restrictions (e.g., Wise receiving limits in Armenia), no local turnover tax, no CSV batch auditing."
+    },
+    {
+        "rank": 2,
+        "name": "Teamz Lab Payment Processor Fee Calculator",
+        "strengths": "Covers PayPal, Stripe, Wise Business, Payoneer, Bank Wire, and Revolut with currency options.",
+        "underserved_gaps": "Models single-hop transfers only; does not combine marketplace commission + payout rail FX spread + local tax into a reverse invoice solver; no browser CSV statement auditor."
+    },
+    {
+        "rank": 3,
+        "name": "Baznek Platform & Fee Comparison Center",
+        "strengths": "Pairwise comparisons (Wise vs Payoneer, Upwork vs Fiverr, Stripe vs PayPal).",
+        "underserved_gaps": "Lacks country-specific rail availability warnings, SWIFT intermediary bank uncertainty ranges ($10-$30 mid-route deductions), and multi-stage target-net invoice math."
+    },
+    {
+        "rank": 4,
+        "name": "HelloFees (hellofees.com)",
+        "strengths": "Compares Stripe, PayPal, Square, and Shopify Payments across 60+ countries for e-commerce.",
+        "underserved_gaps": "Built for e-commerce checkout only; omits Upwork/Fiverr/Lemon Squeezy MoR payouts and emerging-market IE tax regimes (Armenia 1% IT, Georgia 1% SBS)."
+    },
+    {
+        "rank": 5,
+        "name": "Calcimator Payment Gateway Calculator",
+        "strengths": "Highlights forex conversion markups on Stripe, PayPal, Adyen, and Braintree.",
+        "underserved_gaps": "Single-transaction only; no sensitivity matrix across volume tiers and no CSV reconciliation."
+    },
+    {
+        "rank": 6,
+        "name": "GetInvoicePDF Payment Fee Calculator",
+        "strengths": "Simple invoice gross-up calculator for Stripe and PayPal.",
+        "underserved_gaps": "No cross-border payout rails (Payoneer/Wise/SWIFT), no uncertainty bands, and no multi-hop deduction modeling."
+    },
+    {
+        "rank": 7,
+        "name": "QuadraPay Payment Gateway Cost Calculator",
+        "strengths": "Calculates effective monthly merchant rate across card volume and per-transaction fees.",
+        "underserved_gaps": "Targets traditional retail card processing; lacks freelancer marketplace and Merchant-of-Record fee structures."
+    },
+    {
+        "rank": 8,
+        "name": "DepositFix Payment Gateways Calculator",
+        "strengths": "Useful for B2B HubSpot/Stripe checkout cost estimation.",
+        "underserved_gaps": "No international contractor payout routing or FX spread auditing."
+    },
+    {
+        "rank": 9,
+        "name": "Payoneer Native Fee & Checkout Calculator",
+        "strengths": "First-party Payoneer volume calculator.",
+        "underserved_gaps": "Marketing tool that omits side-by-side comparison against Wise mid-market rates or Upwork Direct Contracts."
+    },
+    {
+        "rank": 10,
+        "name": "Wise Native Pricing & Corridor Estimator",
+        "strengths": "Accurate single-transfer Wise route fees.",
+        "underserved_gaps": "Does not integrate upstream marketplace commissions (Upwork 0%-15%, Fiverr 20%, Lemon Squeezy 5%+$0.50) or downstream local entrepreneur taxes."
+    }
+]
+
+COUNTRY_CORRIDORS = {
+    "AM": {
+        "name": "Armenia",
+        "currency": "AMD",
+        "default_fx_placeholder": 388.0,
+        "fx_note": "User-editable reference rate (AMD per 1 USD). Enter your bank or CBA rate; CalcGrid never fabricates live FX feeds.",
+        "verified_date": "2026-10-27",
+        "official_sources": "RA Tax Code (Turnover Tax & High-Tech Registry), Payoneer Pricing Schedule, Wise Country Availability Docs, Lemon Squeezy MoR Payouts",
+        "rails": {
+            "payoneer": {
+                "available": True,
+                "status_badge": "SUPPORTED & WIDELY USED",
+                "pct_fee": 1.0,
+                "fixed_fee": 0.0,
+                "fx_spread_expected": 2.0,
+                "fx_spread_min": 1.5,
+                "fx_spread_max": 3.0,
+                "intermediary_min": 0.0,
+                "intermediary_max": 0.0,
+                "note": "Direct withdrawals to Armenian banks (Ameriabank, Inecobank, Ardshinbank, etc.) or Payoneer card. Typical local currency withdrawal markup is ~2% (range 1.5%–3.0%). Annual fee $29.95 applies if annual volume < $6,000."
+            },
+            "wise": {
+                "available": False,
+                "status_badge": "RECEIVING RESTRICTED FOR RESIDENTS",
+                "pct_fee": 0.65,
+                "fixed_fee": 4.14,
+                "fx_spread_expected": 0.0,
+                "fx_spread_min": 0.0,
+                "fx_spread_max": 0.5,
+                "intermediary_min": 0.0,
+                "intermediary_max": 15.0,
+                "note": "Wise does not currently issue local USD/EUR receiving account details to residents of Armenia. Incoming direct transfers from foreign clients must typically route via SWIFT/Payoneer unless using an eligible foreign entity."
+            },
+            "swift": {
+                "available": True,
+                "status_badge": "SUPPORTED (HIGH FIXED & INTERMEDIARY FEES)",
+                "pct_fee": 0.2,
+                "fixed_fee": 25.0,
+                "fx_spread_expected": 1.2,
+                "fx_spread_min": 0.8,
+                "fx_spread_max": 2.0,
+                "intermediary_min": 10.0,
+                "intermediary_max": 35.0,
+                "note": "Supported by all Armenian banks; requires formal invoice/contract for compliance. Correspondent intermediary banks typically deduct $10–$35 mid-route."
+            },
+            "lemonsqueezy": {
+                "available": True,
+                "status_badge": "SUPPORTED (MERCHANT OF RECORD WIRE)",
+                "pct_fee": 5.0,
+                "fixed_fee": 0.50,
+                "fx_spread_expected": 1.5,
+                "fx_spread_min": 1.5,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 0.0,
+                "intermediary_max": 15.0,
+                "note": "Official Merchant of Record for SaaS & digital products; handles global VAT/GST and supports international wire payouts to Armenia ($50 minimum payout)."
+            }
+        },
+        "tax_presets": [
+            {"label": "1.0% — Certified High-Tech / IT Turnover Tax (up to 115M AMD/yr cap)", "rate": 1.0},
+            {"label": "0.0% — Micro-Business Regime (up to 24M AMD/yr eligible activities)", "rate": 0.0},
+            {"label": "10.0% — General Turnover Tax Reference Tier", "rate": 10.0}
+        ],
+        "tax_caveat": "Armenia provides a 1% turnover tax rate for eligible high-tech/IT activities under the 115M AMD annual threshold, and 0% micro-business status under 24M AMD for qualifying activities. Non-IT services face higher turnover or profit tax rates. Verify your activity code with a licensed Armenian accountant."
+    },
+    "GE": {
+        "name": "Georgia",
+        "currency": "GEL",
+        "default_fx_placeholder": 2.72,
+        "fx_note": "User-editable reference rate (GEL per 1 USD). Enter your NBG or bank rate.",
+        "verified_date": "2026-10-27",
+        "official_sources": "Revenue Service of Georgia (rs.ge Small Business Status), Wise Georgia Pricing, Payoneer Pricing Schedule",
+        "rails": {
+            "payoneer": {
+                "available": True,
+                "status_badge": "SUPPORTED (TBC & BOG INTEGRATED)",
+                "pct_fee": 1.0,
+                "fixed_fee": 0.0,
+                "fx_spread_expected": 2.0,
+                "fx_spread_min": 1.8,
+                "fx_spread_max": 3.0,
+                "intermediary_min": 0.0,
+                "intermediary_max": 0.0,
+                "note": "Widely integrated with TBC Bank and Bank of Georgia; local withdrawal to GEL carries ~2%–3% conversion markup."
+            },
+            "wise": {
+                "available": True,
+                "status_badge": "SUPPORTED (MID-MARKET FX)",
+                "pct_fee": 0.65,
+                "fixed_fee": 4.14,
+                "fx_spread_expected": 0.0,
+                "fx_spread_min": 0.0,
+                "fx_spread_max": 0.3,
+                "intermediary_min": 0.0,
+                "intermediary_max": 5.0,
+                "note": "Georgian residents can open multi-currency Wise accounts and convert at the mid-market rate with transparent route fees."
+            },
+            "swift": {
+                "available": True,
+                "status_badge": "SUPPORTED (INTERMEDIARY DEDUCTIONS)",
+                "pct_fee": 0.2,
+                "fixed_fee": 20.0,
+                "fx_spread_expected": 1.2,
+                "fx_spread_min": 0.8,
+                "fx_spread_max": 2.0,
+                "intermediary_min": 10.0,
+                "intermediary_max": 30.0,
+                "note": "Direct wire to TBC or Bank of Georgia; intermediary correspondent fees ($10–$30) apply unless sent OUR."
+            },
+            "lemonsqueezy": {
+                "available": True,
+                "status_badge": "SUPPORTED (MOR BANK PAYOUT)",
+                "pct_fee": 5.0,
+                "fixed_fee": 0.50,
+                "fx_spread_expected": 1.5,
+                "fx_spread_min": 1.5,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 0.0,
+                "intermediary_max": 10.0,
+                "note": "Supports digital product and SaaS payouts to Georgian bank accounts."
+            }
+        },
+        "tax_presets": [
+            {"label": "1.0% — IE Small Business Status (up to 500,000 GEL/yr)", "rate": 1.0},
+            {"label": "3.0% — IE Small Business Status (Turnover above 500,000 GEL)", "rate": 3.0},
+            {"label": "0.0% — Pre-Tax Payout Comparison", "rate": 0.0}
+        ],
+        "tax_caveat": "Georgia's Individual Entrepreneur Small Business Status taxes gross turnover at 1% up to 500,000 GEL/year (3% above cap). Certain consulting, legal, accounting, and medical services are excluded from the 1% regime."
+    },
+    "RS": {
+        "name": "Serbia",
+        "currency": "RSD",
+        "default_fx_placeholder": 108.5,
+        "fx_note": "User-editable reference rate (RSD per 1 USD). Enter your NBS middle exchange rate.",
+        "verified_date": "2026-10-27",
+        "official_sources": "Tax Administration of Serbia (purs.gov.rs Paušal Rules), National Bank of Serbia, Wise & Payoneer Schedules",
+        "rails": {
+            "payoneer": {
+                "available": True,
+                "status_badge": "SUPPORTED",
+                "pct_fee": 1.0,
+                "fixed_fee": 0.0,
+                "fx_spread_expected": 2.0,
+                "fx_spread_min": 1.8,
+                "fx_spread_max": 3.0,
+                "intermediary_min": 0.0,
+                "intermediary_max": 0.0,
+                "note": "Popular among Serbian marketplace freelancers; ~2%–3% conversion spread when withdrawing to RSD."
+            },
+            "wise": {
+                "available": True,
+                "status_badge": "SUPPORTED (MID-MARKET FX)",
+                "pct_fee": 0.65,
+                "fixed_fee": 4.14,
+                "fx_spread_expected": 0.0,
+                "fx_spread_min": 0.0,
+                "fx_spread_max": 0.3,
+                "intermediary_min": 0.0,
+                "intermediary_max": 5.0,
+                "note": "Operational for Serbian residents with mid-market rate conversion and transparent route fees."
+            },
+            "swift": {
+                "available": True,
+                "status_badge": "SUPPORTED (REQUIRES LOR / INFLOW BASIS)",
+                "pct_fee": 0.3,
+                "fixed_fee": 20.0,
+                "fx_spread_expected": 1.5,
+                "fx_spread_min": 1.0,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 10.0,
+                "intermediary_max": 30.0,
+                "note": "Requires foreign inflow basis declaration (šifra osnova priliva) with local Serbian banks."
+            },
+            "lemonsqueezy": {
+                "available": True,
+                "status_badge": "SUPPORTED (MOR WIRE PAYOUT)",
+                "pct_fee": 5.0,
+                "fixed_fee": 0.50,
+                "fx_spread_expected": 1.5,
+                "fx_spread_min": 1.5,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 0.0,
+                "intermediary_max": 15.0,
+                "note": "Merchant of Record payouts for software and digital products."
+            }
+        },
+        "tax_presets": [
+            {"label": "10.0% — Illustrative Effective Paušal Reserve (up to 6M RSD cap)", "rate": 10.0},
+            {"label": "0.0% — Pre-Tax Payout Comparison", "rate": 0.0},
+            {"label": "15.0% — Conservative Tax & Social Reserve Example", "rate": 15.0}
+        ],
+        "tax_caveat": "Serbia's Preduzetnik Paušalac regime charges a fixed monthly RSD amount (determined by municipality and activity code, up to 6,000,000 RSD annual turnover) rather than a flat percentage, and requires passing the 9-criteria Independence Test (test samostalnosti)."
+    },
+    "PH": {
+        "name": "Philippines",
+        "currency": "PHP",
+        "default_fx_placeholder": 58.2,
+        "fx_note": "User-editable reference rate (PHP per 1 USD). Enter your BSP or bank rate.",
+        "verified_date": "2026-10-27",
+        "official_sources": "Bureau of Internal Revenue (bir.gov.ph 8% Gross Receipts Option), Wise Philippines, Payoneer Philippines",
+        "rails": {
+            "payoneer": {
+                "available": True,
+                "status_badge": "SUPPORTED (GCASH & LOCAL BANKS)",
+                "pct_fee": 1.0,
+                "fixed_fee": 0.0,
+                "fx_spread_expected": 2.0,
+                "fx_spread_min": 1.8,
+                "fx_spread_max": 3.0,
+                "intermediary_min": 0.0,
+                "intermediary_max": 0.0,
+                "note": "Integrated with Upwork and GCash; ~2% conversion spread above mid-market rate."
+            },
+            "wise": {
+                "available": True,
+                "status_badge": "SUPPORTED (FAST PHP / GCASH / MAYA)",
+                "pct_fee": 0.60,
+                "fixed_fee": 3.50,
+                "fx_spread_expected": 0.0,
+                "fx_spread_min": 0.0,
+                "fx_spread_max": 0.2,
+                "intermediary_min": 0.0,
+                "intermediary_max": 0.0,
+                "note": "Full Wise account support in the Philippines with mid-market PHP conversion to local banks (BPI, BDO, UnionBank) and e-wallets."
+            },
+            "swift": {
+                "available": True,
+                "status_badge": "SUPPORTED (HIGH REMITTANCE FEES)",
+                "pct_fee": 0.25,
+                "fixed_fee": 25.0,
+                "fx_spread_expected": 1.5,
+                "fx_spread_min": 1.0,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 10.0,
+                "intermediary_max": 30.0,
+                "note": "Traditional SWIFT wires incur correspondent bank deductions and wider PHP conversion spreads."
+            },
+            "lemonsqueezy": {
+                "available": True,
+                "status_badge": "SUPPORTED (MOR PAYOUTS)",
+                "pct_fee": 5.0,
+                "fixed_fee": 0.50,
+                "fx_spread_expected": 1.5,
+                "fx_spread_min": 1.5,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 0.0,
+                "intermediary_max": 10.0,
+                "note": "Supports digital creator payouts to Philippine bank accounts."
+            }
+        },
+        "tax_presets": [
+            {"label": "8.0% — BIR 8% Gross Receipts Tax Option (Under PHP 3M VAT threshold)", "rate": 8.0},
+            {"label": "0.0% — Pre-Tax Payout Comparison", "rate": 0.0}
+        ],
+        "tax_caveat": "Self-employed professionals in the Philippines earning under the PHP 3,000,000 VAT threshold can elect the 8% flat income tax rate on gross receipts in excess of PHP 250,000 under the TRAIN Law."
+    },
+    "IN": {
+        "name": "India",
+        "currency": "INR",
+        "default_fx_placeholder": 84.1,
+        "fx_note": "User-editable reference rate (INR per 1 USD). Enter your RBI reference or bank card rate.",
+        "verified_date": "2026-10-27",
+        "official_sources": "Income Tax Act Section 44ADA, RBI FEMA Export Purpose Code P0802, Wise India eFIRC Docs, Payoneer India FIRA Schedule",
+        "rails": {
+            "payoneer": {
+                "available": True,
+                "status_badge": "SUPPORTED (AUTO DIGITAL FIRA)",
+                "pct_fee": 1.0,
+                "fixed_fee": 0.0,
+                "fx_spread_expected": 2.2,
+                "fx_spread_min": 2.0,
+                "fx_spread_max": 3.0,
+                "intermediary_min": 0.0,
+                "intermediary_max": 0.0,
+                "note": "Provides automatic digital FIRA certificates for RBI/GST export compliance; total conversion + withdrawal cost is ~2.2%–3.0%."
+            },
+            "wise": {
+                "available": True,
+                "status_badge": "SUPPORTED (MID-MARKET + EFIRC FEE)",
+                "pct_fee": 0.65,
+                "fixed_fee": 2.50,
+                "fx_spread_expected": 0.0,
+                "fx_spread_min": 0.0,
+                "fx_spread_max": 0.3,
+                "intermediary_min": 0.0,
+                "intermediary_max": 2.50,
+                "note": "Uses mid-market INR exchange rate; automated digital eFIRC / FIRA certificate available for export compliance."
+            },
+            "swift": {
+                "available": True,
+                "status_badge": "SUPPORTED (PURPOSE CODE P0802)",
+                "pct_fee": 0.15,
+                "fixed_fee": 15.0,
+                "fx_spread_expected": 1.8,
+                "fx_spread_min": 1.0,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 10.0,
+                "intermediary_max": 25.0,
+                "note": "Direct bank inward remittance (HDFC/ICICI/SBI) requires RBI Purpose Code (e.g., P0802 for software); bank FX spread varies unless negotiated."
+            },
+            "lemonsqueezy": {
+                "available": True,
+                "status_badge": "SUPPORTED (MOR WIRE PAYOUT)",
+                "pct_fee": 5.0,
+                "fixed_fee": 0.50,
+                "fx_spread_expected": 1.5,
+                "fx_spread_min": 1.5,
+                "fx_spread_max": 2.5,
+                "intermediary_min": 0.0,
+                "intermediary_max": 15.0,
+                "note": "Merchant of Record payouts for SaaS and digital products."
+            }
+        },
+        "tax_presets": [
+            {"label": "7.5% — Illustrative Effective Tax Provision (Sec 44ADA 50% Deemed Profit)", "rate": 7.5},
+            {"label": "0.0% — Pre-Tax Payout Comparison", "rate": 0.0}
+        ],
+        "tax_caveat": "Under Section 44ADA Presumptive Taxation, eligible Indian professionals with gross receipts up to INR 75 Lakh (when >=95% of receipts are digital) declare 50% of gross receipts as taxable income, taxed at applicable individual slab rates. Export of services under GST LUT is zero-rated."
+    }
+}
+
 TOOLS_CATALOG = [
+    # =========================================================================
+    # FLAGSHIP COMPETITIVE ADVANTAGE INSTRUMENTS (PRIORITY #1, #2, #3)
+    # =========================================================================
+    {
+        "slug": "cross-border-payout-comparison-engine",
+        "title": "Cross-Border Freelancer Payout, Reverse Invoice & Tax Comparison Engine",
+        "category": "Payment & Fee Calculators",
+        "short_desc": "Compare end-to-end net take-home pay and required reverse invoice amounts across Upwork, Direct Contracts, Fiverr, Payoneer, Wise, and SWIFT for Armenia, Georgia, Serbia, Philippines, and India.",
+        "tool_type": "corridor_engine",
+        "config": {
+            "default_country": "AM",
+            "default_amount": 1000,
+            "default_origin_pct": 10.0,
+            "default_origin_fixed": 0.99,
+            "verified_date": "2026-10-27",
+            "source_name": "Multi-Provider Corridor Schedule (Wise, Payoneer, Upwork, RA/GE/RS/PH/IN Tax Codes)"
+        },
+        "formula_explanation": "Stage 1 (Platform Deduction): After_Platform = Gross × (1 - Platform_Pct) - Platform_Fixed. Stage 2 (Payout Rail & FX Uncertainty Band): Net_USD = After_Platform × (1 - Rail_Pct - FX_Spread_[Min..Max]) - Rail_Fixed - Intermediary_[Min..Max]. Stage 3 (Local Tax Provision): Final_Net = Net_USD × (1 - Local_Tax_Pct). Multi-Stage Reverse Invoice Solver: Required_Gross = (Target_Net / ((1 - Tax_Pct) × (1 - Rail_Pct - FX_Spread)) + Rail_Fixed + Platform_Fixed) / (1 - Platform_Pct).",
+        "faqs": [
+            ("Why do generic fee calculators overestimate freelancer take-home pay?", "Most calculators only subtract a single gateway fee (like Upwork's 10% or Stripe's 2.9%). In reality, cross-border freelancers face a 4-stage deduction chain: (1) Marketplace/client platform fee, (2) Payout rail withdrawal fee, (3) Currency conversion (FX) spread or SWIFT intermediary deduction ($10–$35), and (4) Local entrepreneur turnover tax."),
+            ("Why is Wise marked as restricted for receiving in Armenia while supported in Georgia and the Philippines?", "Wise's multi-currency receiving account features vary by resident jurisdiction. Residents of Armenia cannot currently open local USD/EUR receiving bank details on Wise, making Payoneer, Lemon Squeezy MoR, or direct bank wires the primary options, whereas residents of Georgia, Serbia, the Philippines, and India have broader Wise route access."),
+            ("Does this calculator invent live exchange rates?", "Never. Exchange rates fluctuate every minute and banks apply custom spreads. We provide a user-editable Reference Exchange Rate field and calculate transparent Best-Case to Worst-Case Net Payout ranges so you can see the exact impact of FX markups and SWIFT intermediary fees.")
+        ]
+    },
+    {
+        "slug": "private-csv-payout-fee-auditor",
+        "title": "Private Browser CSV Transaction & Hidden FX Fee Auditor",
+        "category": "Payment & Fee Calculators",
+        "short_desc": "Audit Stripe, Payoneer, Wise, Upwork, and Lemon Squeezy CSV payout statements 100% locally in your browser to detect hidden FX markups and fee variances.",
+        "tool_type": "csv_auditor",
+        "config": {
+            "sample_csv": "tx_id,provider,gross_usd,actual_net_usd\nTX-1001,lemonsqueezy,49.00,45.32\nTX-1002,upwork_10,1200.00,1079.01\nTX-1003,payoneer,2500.00,2400.00\nTX-1004,wise,3000.00,2976.36\nTX-1005,stripe_intl,500.00,465.00",
+            "verified_date": "2026-10-27",
+            "source_name": "Published Provider Fee Schedules (Lemon Squeezy, Upwork, Payoneer, Wise, Stripe)"
+        },
+        "formula_explanation": "For each CSV transaction row: Expected_Fee = Gross_USD × ((Published_Base_Pct + Published_FX_Spread_Pct) / 100) + Published_Fixed_Fee. Expected_Net = Gross_USD - Expected_Fee. Fee_Leakage_Variance = Actual_Net_USD - Expected_Net. Rows with hidden fee leakage exceeding max($0.50, 0.25% of Gross) are flagged as FEE_VARIANCE_ALERT.",
+        "faqs": [
+            ("Are my financial CSV rows uploaded to any server?", "No. 100% of CSV parsing, fee variance math, and report generation runs inside your browser's local JavaScript memory. No transaction data ever leaves your device."),
+            ("What does FEE_VARIANCE_ALERT mean on a Payoneer or Stripe row?", "It means the actual net settlement you received was lower than the provider's baseline fee schedule—typically caused by an undisclosed 2.5%–3.5% currency conversion spread, an international card surcharge (+1.5%), or an intermediary bank deduction.")
+        ]
+    },
     # =========================================================================
     # VERTICAL 1: CROSS-BORDER PAYOUT & FREELANCER FEE CALCULATORS
     # =========================================================================

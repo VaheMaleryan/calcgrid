@@ -1,17 +1,26 @@
 {
-  "timestamp": "2026-10-27T13:14:13Z",
+  "timestamp": "2026-10-27T13:34:14Z",
+  "all_checks_passed": true,
+  "rollback_triggered": false,
   "build": {
-    "tools_compiled": 30,
-    "total_html_pages": 32,
+    "tools_compiled": 32,
+    "total_html_pages": 35,
     "public_dist_dir": "/Users/vahemaleryan/.gemini/antigravity/scratch/autonomous-utility-engine/dist",
     "private_pro_zip": "/Users/vahemaleryan/.gemini/antigravity/scratch/autonomous-utility-engine/private_products/calcgrid-pro-offline-suite.zip",
     "public_zip_exposed": false,
     "ads_enabled": false,
     "checkout_enabled": false
   },
+  "freshness_audit": {
+    "passed": true,
+    "schedules_checked": 17,
+    "max_allowed_age_days": 90,
+    "stale_schedules": []
+  },
   "math_verification": {
     "passed": true,
-    "tools_math_and_runtime_tested": 30,
+    "tools_math_and_runtime_tested": 32,
+    "flagship_engines_verified": 2,
     "fee_calculators_verified": 10,
     "saas_calculators_verified": 9,
     "dev_tools_verified": 11,
@@ -22,14 +31,23 @@
     "public_zip_exposed": false,
     "git_history_zip_exposed": false,
     "xlsx_worksheets_verified": 3,
-    "html_pages_verified": 32,
-    "json_ld_schemas_verified": 30,
-    "internal_links_verified": 463,
+    "html_pages_verified": 35,
+    "json_ld_schemas_verified": 32,
+    "internal_links_verified": 623,
     "issues": []
+  },
+  "smm_pipeline": {
+    "episodes_rendered": 3,
+    "oauth_configured": {
+      "youtube_shorts_api": false,
+      "instagram_reels_graph_api": false,
+      "tiktok_content_posting_api": false
+    }
   },
   "telemetry": {
     "total_events": 1,
     "js_errors": 0,
+    "utm_events": 0,
     "top_paths": {
       "/tools/software-project-estimation-calculator.html": 1
     }

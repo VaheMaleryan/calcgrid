@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .DS_Store
 private_products/
+*.zip
+marketing_outbox/videos/*.mp4

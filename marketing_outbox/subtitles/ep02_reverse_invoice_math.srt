@@ -1,0 +1,14 @@
+1
+00:00:00,000 --> 00:00:10,096
+COMMON INVOICE MISTAKE: Adding +10% to $1,000 = $1,100.00
+10% fee on $1,100 = $110 -> Nets $990.00 (Short $10)
+
+2
+00:00:10,096 --> 00:00:20,193
+EXACT ALGEBRAIC GROSS-UP FORMULA: Gross = (Target Net + Fixed) / (1 - Fee%)
+($1,000.00 + $0.99) / (1 - 0.10)
+
+3
+00:00:20,193 --> 00:00:30,289
+VERIFIED SETTLEMENT PROOF: Required Gross Invoice: $1,112.21
+$1,112.21 - 10% ($111.22) - $0.99 = $1,000.00 Net

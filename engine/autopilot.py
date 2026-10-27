@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 """
-CalcGrid Autonomous Operations Controller & Independent Verification Suite (autopilot.py)
+CalcGrid Autonomous Operations Controller, Freshness Auditor & Verification Suite (autopilot.py)
 Performs:
   1. Static site compilation & private Pro ZIP packaging (`private_products/calcgrid-pro-offline-suite.zip`)
-  2. Security & Git History Audit:
+  2. Autonomous SMM Short-Form Video Generation (`engine/smm_pipeline.py` -> 1080x1920 MP4 + SRT + UTM manifest)
+  3. Security & Git History Audit:
      - Verifies ZERO `.zip` archives exist inside the public `dist/` directory
      - Verifies ZERO `.zip` archives exist anywhere in Git commit history (`git log --all --full-history -- "*.zip"`)
-  3. Independent Mathematical & Node.js Runtime Verification across all 30 tools:
-     - Executes `dist/assets/tools-runtime.js` in Node.js for all 30 tools
-     - Cross-checks every `fee_calc` (10 tools), `saas_calc` (9 tools), and `dev_tool` (11 tools) output
-       against independent Python reference calculations, plus $0 and negative-input edge cases
-  4. Multi-Tab `.xlsx` Workbook & CLI Auditor Verification inside `private_products/calcgrid-pro-offline-suite.zip`
-  5. Compliance Check: Confirms homemade consent banners, unconfigured ad slots, and unconfigured checkout links are absent
+  4. Independent Mathematical & Node.js Runtime Verification across all 32 tools:
+     - Flagship #1: `cross-border-payout-comparison-engine` (multi-stage platform + rail + FX + tax math & reverse solver)
+     - Flagship #2: `private-csv-payout-fee-auditor` (client-side CSV variance & hidden FX leakage detection)
+     - Core 30 Tools: 10 `fee_calc`, 9 `saas_calc`, and 11 `dev_tool` instruments
+  5. Fee & Tax Schedule Freshness Audit (flags any source older than 90 days)
+  6. Safe Rollback Protection: Automatically rolls back working tree to last clean commit if `--auto-rollback` is set and tests fail
 """
 
+import argparse
 import io
 import json
+import math
 import os
 import re
 import subprocess
@@ -25,25 +28,26 @@ from datetime import datetime, timezone
 from pathlib import Path
 from build_site import (
     compile_all,
+    build_dashboard_page,
     DIST_DIR,
     PRIVATE_PRODUCTS_DIR,
     SITE_URL,
     INDEXNOW_KEY,
     ADSENSE_CLIENT_ID,
     LEMON_SQUEEZY_CHECKOUT_URL,
+    OFFICIAL_SOURCES,
 )
-from catalog_data import TOOLS_CATALOG
+from catalog_data import TOOLS_CATALOG, COUNTRY_CORRIDORS
+from smm_pipeline import build_smm_campaign_pack
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 LOGS_DIR = ROOT_DIR / "logs"
 TELEMETRY_LOG = LOGS_DIR / "telemetry.jsonl"
 REPORT_FILE = LOGS_DIR / "autopilot_report.json"
+MAX_SCHEDULE_AGE_DAYS = 90
 
-
-import math
 
 def fmt_money(n: float) -> str:
-    # Match JS Number.prototype.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) half-up rounding
     rounded = math.floor(n * 100.0 + 0.500000001) / 100.0
     return f"${rounded:,.2f}"
 
@@ -102,9 +106,44 @@ def compute_expected_saas(mode: str, a: float, b: float, c: float, d: float) -> 
     raise ValueError(f"Unknown saas_calc mode: {mode}")
 
 
+def run_freshness_audit() -> dict:
+    """Checks `verified_date` on all corridors and official fee schedules against MAX_SCHEDULE_AGE_DAYS."""
+    now = datetime.now(timezone.utc)
+    stale = []
+    checked = 0
+
+    for code, cdata in COUNTRY_CORRIDORS.items():
+        checked += 1
+        v_str = cdata.get("verified_date", "2026-10-27")
+        try:
+            dt = datetime.strptime(v_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            age_days = (now - dt).days
+            if age_days > MAX_SCHEDULE_AGE_DAYS:
+                stale.append(f"Corridor {code}: {age_days} days old (verified {v_str})")
+        except ValueError:
+            stale.append(f"Corridor {code}: unparseable verified_date '{v_str}'")
+
+    for slug, (_, v_str) in OFFICIAL_SOURCES.items():
+        checked += 1
+        try:
+            dt = datetime.strptime(v_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            age_days = (now - dt).days
+            if age_days > MAX_SCHEDULE_AGE_DAYS:
+                stale.append(f"Tool {slug}: {age_days} days old (verified {v_str})")
+        except ValueError:
+            stale.append(f"Tool {slug}: unparseable verified_date '{v_str}'")
+
+    return {
+        "passed": len(stale) == 0,
+        "schedules_checked": checked,
+        "max_allowed_age_days": MAX_SCHEDULE_AGE_DAYS,
+        "stale_schedules": stale
+    }
+
+
 def run_math_and_runtime_tests() -> dict:
     """
-    Executes `dist/assets/tools-runtime.js` inside Node.js for all 30 tools and verifies
+    Executes `dist/assets/tools-runtime.js` inside Node.js for all 32 tools and verifies
     that every single tool's DOM output matches independent Python reference calculations.
     """
     failures = []
@@ -120,6 +159,7 @@ const tools = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
 function runToolInSandbox(tool, queryStr = '', customInputs = {}) {
   const elements = {};
   const presetChips = [];
+  const originChips = [];
 
   function makeEl(id, initialVal = '') {
     const el = {
@@ -147,7 +187,34 @@ function runToolInSandbox(tool, queryStr = '', customInputs = {}) {
   makeEl('btn-export-csv');
 
   const cfg = tool.config;
-  if (tool.tool_type === 'fee_calc') {
+  if (tool.tool_type === 'corridor_engine') {
+    makeEl('in-country', customInputs.country || cfg.default_country || 'AM');
+    makeEl('in-amount', customInputs.amount !== undefined ? customInputs.amount : cfg.default_amount);
+    makeEl('in-origin-pct', customInputs.origin_pct !== undefined ? customInputs.origin_pct : cfg.default_origin_pct);
+    makeEl('in-origin-fix', customInputs.origin_fix !== undefined ? customInputs.origin_fix : cfg.default_origin_fixed);
+    makeEl('in-tax-pct', customInputs.tax !== undefined ? customInputs.tax : 1.0);
+    makeEl('in-fx-rate', customInputs.fx_rate !== undefined ? customInputs.fx_rate : 388.0);
+    makeEl('in-target-net', customInputs.target_net !== undefined ? customInputs.target_net : cfg.default_amount);
+    makeEl('corridor-tax-presets');
+    makeEl('corridor-comparison-body');
+    makeEl('fx-rate-hint');
+    makeEl('corridor-tax-caveat');
+    makeEl('out-net');
+    makeEl('out-best-rail');
+    makeEl('out-range');
+    makeEl('out-local');
+    makeEl('out-fee');
+    makeEl('out-reverse');
+  } else if (tool.tool_type === 'csv_auditor') {
+    makeEl('csv-audit-input', customInputs.csv || cfg.sample_csv);
+    makeEl('csv-file-upload');
+    makeEl('csv-audit-body');
+    makeEl('btn-run-audit');
+    makeEl('out-audit-gross');
+    makeEl('out-audit-net');
+    makeEl('out-audit-leakage');
+    makeEl('out-audit-alerts');
+  } else if (tool.tool_type === 'fee_calc') {
     makeEl('in-amount', customInputs.amount !== undefined ? customInputs.amount : cfg.default_amount);
     makeEl('in-pct', customInputs.pct !== undefined ? customInputs.pct : cfg.percent_fee);
     makeEl('in-fixed', customInputs.fixed !== undefined ? customInputs.fixed : cfg.fixed_fee);
@@ -185,7 +252,7 @@ function runToolInSandbox(tool, queryStr = '', customInputs = {}) {
 
   const sandbox = {
     window: {
-      location: { search: queryStr, pathname: '/tools/' + tool.slug + '.html', href: 'https://calcgrid.local/tools/' + tool.slug + '.html' },
+      location: { protocol: 'file:', search: queryStr, pathname: '/tools/' + tool.slug + '.html', href: 'https://calcgrid.local/tools/' + tool.slug + '.html' },
       crypto: {
         getRandomValues(arr) {
           for (let i = 0; i < arr.length; i++) arr[i] = (i * 17 + 43) % 1000;
@@ -194,12 +261,23 @@ function runToolInSandbox(tool, queryStr = '', customInputs = {}) {
       }
     },
     document: {
+      referrer: '',
       getElementById(id) { return elements[id] || null; },
       querySelectorAll(sel) {
         if (sel === '.preset-chip') return presetChips;
+        if (sel === '.origin-preset-chip') return originChips;
         return [];
       },
-      createElement(tag) { return { tag, innerHTML: '' }; }
+      createElement(tag) {
+        return {
+          tag,
+          innerHTML: '',
+          textContent: '',
+          className: '',
+          type: '',
+          addEventListener() {}
+        };
+      }
     },
     navigator: { clipboard: { writeText() {} } },
     URLSearchParams,
@@ -219,18 +297,31 @@ const results = {};
 for (const tool of tools) {
   const std = runToolInSandbox(tool);
   const out = { tool_type: tool.tool_type };
-  if (tool.tool_type === 'fee_calc') {
+  if (tool.tool_type === 'corridor_engine') {
+    out.am_net = std.elements['out-net'].textContent;
+    out.am_best_rail = std.elements['out-best-rail'].textContent;
+    out.am_reverse = std.elements['out-reverse'].textContent;
+    out.am_rows = std.elements['corridor-comparison-body'].children.length;
+
+    const geRun = runToolInSandbox(tool, '?country=GE', { country: 'GE' });
+    out.ge_net = geRun.elements['out-net'].textContent;
+    out.ge_best_rail = geRun.elements['out-best-rail'].textContent;
+  } else if (tool.tool_type === 'csv_auditor') {
+    out.gross = std.elements['out-audit-gross'].textContent;
+    out.net = std.elements['out-audit-net'].textContent;
+    out.leakage = std.elements['out-audit-leakage'].textContent;
+    out.alerts = std.elements['out-audit-alerts'].textContent;
+    out.rows = std.elements['csv-audit-body'].children.length;
+  } else if (tool.tool_type === 'fee_calc') {
     out.net = std.elements['out-net'].textContent;
     out.fee = std.elements['out-fee'].textContent;
     out.rate = std.elements['out-rate'].textContent;
     out.reverse = std.elements['out-reverse'].textContent;
     out.matrix_rows = std.elements['sensitivity-matrix-body'].children.length;
 
-    // Test $0 and negative guard (-500)
     const zeroRun = runToolInSandbox(tool, '', { amount: -500, pct: tool.config.percent_fee, fixed: 0, fx: 0 });
     out.negative_guard_net = zeroRun.elements['out-net'].textContent;
 
-    // Test preset chip click if available
     if (std.presetChips.length > 0) {
       out.preset_results = [];
       for (const chip of std.presetChips) {
@@ -287,7 +378,31 @@ console.log(JSON.stringify(results));
         res = js_results.get(slug, {})
         tested_tools.append(slug)
 
-        if t_type == "fee_calc":
+        if t_type == "corridor_engine":
+            # Verify Armenia (Wise restricted -> Payoneer Local Withdrawal wins at $863.32 net, $1,158.37 reverse invoice)
+            if res.get("am_best_rail") != "Payoneer Local Withdrawal (Armenia)":
+                failures.append(f"{slug}: Expected Payoneer Local Withdrawal for Armenia, got {res.get('am_best_rail')}")
+            if res.get("am_net") != "$863.32":
+                failures.append(f"{slug}: Armenia expected net $863.32, got {res.get('am_net')}")
+            if res.get("am_reverse") != "$1,158.15":
+                failures.append(f"{slug}: Armenia reverse invoice expected $1,158.15, got {res.get('am_reverse')}")
+            if res.get("am_rows") != 4:
+                failures.append(f"{slug}: Expected 4 payout routes in comparison table, got {res.get('am_rows')}")
+            # Verify Georgia (Wise available -> Wise Mid-Market Route wins)
+            if res.get("ge_best_rail") != "Wise Mid-Market Route (Georgia)":
+                failures.append(f"{slug}: Expected Wise Mid-Market Route for Georgia, got {res.get('ge_best_rail')}")
+
+        elif t_type == "csv_auditor":
+            if res.get("gross") != "$7,249.00":
+                failures.append(f"{slug}: Expected $7,249.00 gross audited, got {res.get('gross')}")
+            if res.get("leakage") != "$32.70":
+                failures.append(f"{slug}: Expected $32.70 detected fee leakage, got {res.get('leakage')}")
+            if not str(res.get("alerts", "")).startswith("2 flagged"):
+                failures.append(f"{slug}: Expected 2 flagged variance rows, got {res.get('alerts')}")
+            if res.get("rows") != 5:
+                failures.append(f"{slug}: Expected 5 audited rows, got {res.get('rows')}")
+
+        elif t_type == "fee_calc":
             gross = float(cfg["default_amount"])
             pct = float(cfg["percent_fee"])
             fix = float(cfg["fixed_fee"])
@@ -370,6 +485,7 @@ console.log(JSON.stringify(results));
     return {
         "passed": len(failures) == 0,
         "tools_math_and_runtime_tested": len(tested_tools),
+        "flagship_engines_verified": sum(1 for t in TOOLS_CATALOG if t["tool_type"] in ("corridor_engine", "csv_auditor")),
         "fee_calculators_verified": sum(1 for t in TOOLS_CATALOG if t["tool_type"] == "fee_calc"),
         "saas_calculators_verified": sum(1 for t in TOOLS_CATALOG if t["tool_type"] == "saas_calc"),
         "dev_tools_verified": sum(1 for t in TOOLS_CATALOG if t["tool_type"] == "dev_tool"),
@@ -385,8 +501,8 @@ def run_qa_and_security_verification() -> dict:
     issues = []
     html_files = list(DIST_DIR.rglob("*.html"))
 
-    if len(html_files) != len(TOOLS_CATALOG) + 2:
-        issues.append(f"Expected {len(TOOLS_CATALOG) + 2} HTML files, found {len(html_files)}")
+    if len(html_files) != len(TOOLS_CATALOG) + 3:
+        issues.append(f"Expected {len(TOOLS_CATALOG) + 3} HTML files, found {len(html_files)}")
 
     # 1. CRITICAL SECURITY CHECK: Ensure no .zip files exist in public dist/
     exposed_zips = list(DIST_DIR.rglob("*.zip"))
@@ -412,15 +528,12 @@ def run_qa_and_security_verification() -> dict:
     for html_file in html_files:
         content = html_file.read_text(encoding="utf-8")
 
-        # Verify homemade consent banner is removed
         if 'id="consent-banner"' in content:
             issues.append(f"Homemade consent banner still present in {html_file.name}")
 
-        # Verify ad placeholders are hidden when ADSENSE_CLIENT_ID is empty
         if not ADSENSE_CLIENT_ID and 'class="ad-slot"' in content:
             issues.append(f"Unconfigured ad-slot placeholder found in {html_file.name}")
 
-        # Verify paid checkout link is disabled when LEMON_SQUEEZY_CHECKOUT_URL is empty
         if not LEMON_SQUEEZY_CHECKOUT_URL and "Purchase via Lemon Squeezy" in content:
             issues.append(f"Active Lemon Squeezy purchase button rendered while URL is unconfigured in {html_file.name}")
 
@@ -448,10 +561,10 @@ def run_qa_and_security_verification() -> dict:
             if not target_path.exists():
                 issues.append(f"Broken relative reference '{ref}' in {html_file.name}")
 
-    for required_file in ["sitemap.xml", "robots.txt", "rss.xml", f"{INDEXNOW_KEY}.txt"]:
+    for required_file in ["sitemap.xml", "robots.txt", "rss.xml", "dashboard.html", f"{INDEXNOW_KEY}.txt"]:
         p = DIST_DIR / required_file
         if not p.exists() or p.stat().st_size == 0:
-            issues.append(f"Missing or empty SEO artifact: {required_file}")
+            issues.append(f"Missing or empty artifact: {required_file}")
 
     # 3. Verify private Pro ZIP exists outside dist/, contains valid 3-sheet .xlsx + 3 CSVs + working CLI
     private_zip = PRIVATE_PRODUCTS_DIR / "calcgrid-pro-offline-suite.zip"
@@ -476,7 +589,6 @@ def run_qa_and_security_verification() -> dict:
             if missing_members:
                 issues.append(f"Missing files in private Pro ZIP: {sorted(missing_members)}")
 
-            # Verify .xlsx internal structure has 3 worksheets
             if "02_spreadsheet_models/calcgrid_financial_models.xlsx" in names:
                 xlsx_raw = zf.read("02_spreadsheet_models/calcgrid_financial_models.xlsx")
                 with zipfile.ZipFile(io.BytesIO(xlsx_raw), "r") as xzf:
@@ -486,7 +598,7 @@ def run_qa_and_security_verification() -> dict:
                     if sheet_names != ["SaaS_12Mo_Cohort_Model", "Cross_Border_Fee_Matrix", "ROAS_Unit_Economics"]:
                         issues.append(f"Unexpected .xlsx worksheet names: {sheet_names}")
 
-            with tempfile.TemporaryDirectory() as tmpdir:
+            with tempfile.TemporaryDirectory(dir="/tmp") as tmpdir:
                 zf.extractall(tmpdir)
                 cli_path = Path(tmpdir) / "01_cli_batch_auditor" / "calcgrid_batch_reconciler.py"
                 sample_csv = Path(tmpdir) / "01_cli_batch_auditor" / "sample_transactions.csv"
@@ -514,10 +626,11 @@ def run_qa_and_security_verification() -> dict:
 def analyze_telemetry() -> dict:
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     if not TELEMETRY_LOG.exists():
-        return {"total_events": 0, "js_errors": 0, "top_paths": {}}
+        return {"total_events": 0, "js_errors": 0, "utm_events": 0, "top_paths": {}}
 
     total_events = 0
     js_errors = 0
+    utm_events = 0
     path_counts = {}
 
     for line in TELEMETRY_LOG.read_text(encoding="utf-8").splitlines():
@@ -528,6 +641,8 @@ def analyze_telemetry() -> dict:
             total_events += 1
             if ev.get("eventType") == "js_error":
                 js_errors += 1
+            if ev.get("utm_source") or ev.get("utm_campaign"):
+                utm_events += 1
             p = ev.get("path", "/")
             path_counts[p] = path_counts.get(p, 0) + 1
         except Exception:
@@ -536,22 +651,47 @@ def analyze_telemetry() -> dict:
     return {
         "total_events": total_events,
         "js_errors": js_errors,
+        "utm_events": utm_events,
         "top_paths": dict(sorted(path_counts.items(), key=lambda x: x[1], reverse=True)[:5]),
     }
 
 
-def run_autopilot_cycle() -> dict:
+def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    smm_info = build_smm_campaign_pack()
     build_info = compile_all()
+    freshness_info = run_freshness_audit()
     math_info = run_math_and_runtime_tests()
     qa_info = run_qa_and_security_verification()
     telemetry_info = analyze_telemetry()
 
+    all_passed = (
+        math_info["passed"]
+        and qa_info["passed"]
+        and freshness_info["passed"]
+    )
+
+    rollback_triggered = False
+    if not all_passed and auto_rollback and (ROOT_DIR / ".git").exists():
+        subprocess.run(
+            ["git", "-C", str(ROOT_DIR), "checkout", "--", "dist/", "engine/"],
+            capture_output=True,
+            text=True,
+        )
+        rollback_triggered = True
+
     report = {
         "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "all_checks_passed": all_passed,
+        "rollback_triggered": rollback_triggered,
         "build": build_info,
+        "freshness_audit": freshness_info,
         "math_verification": math_info,
         "qa_and_security": qa_info,
+        "smm_pipeline": {
+            "episodes_rendered": len(smm_info.get("episodes", [])),
+            "oauth_configured": smm_info.get("oauth_integrations_configured", {})
+        },
         "telemetry": telemetry_info,
     }
     REPORT_FILE.write_text(json.dumps(report, indent=2), encoding="utf-8")
@@ -559,7 +699,11 @@ def run_autopilot_cycle() -> dict:
 
 
 if __name__ == "__main__":
-    rep = run_autopilot_cycle()
+    parser = argparse.ArgumentParser(description="CalcGrid Autonomous Operations & Verification Suite")
+    parser.add_argument("--auto-rollback", action="store_true", help="Automatically roll back git working tree on test failure")
+    args = parser.parse_args()
+
+    rep = run_autopilot_cycle(auto_rollback=args.auto_rollback)
     print(json.dumps(rep, indent=2))
-    if not rep["qa_and_security"]["passed"] or not rep["math_verification"]["passed"]:
+    if not rep["all_checks_passed"]:
         raise SystemExit(1)

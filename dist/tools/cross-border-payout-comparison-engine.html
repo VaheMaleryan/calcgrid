@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cross-Border Freelancer Payout, Reverse Invoice &amp; Tax Comparison Engine — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Compare end-to-end net take-home pay and required reverse invoice amounts across Upwork, Direct Contracts, Fiverr, Payoneer, Wise, and SWIFT for Armenia, Georgia, Serbia, Philippines, and India." />
+  <link rel="canonical" href="https://calcgrid-tools.pages.dev/tools/cross-border-payout-comparison-engine.html" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Cross-Border Freelancer Payout, Reverse Invoice & Tax Comparison Engine", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Compare end-to-end net take-home pay and required reverse invoice amounts across Upwork, Direct Contracts, Fiverr, Payoneer, Wise, and SWIFT for Armenia, Georgia, Serbia, Philippines, and India.", "url": "https://calcgrid-tools.pages.dev/tools/cross-border-payout-comparison-engine.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do generic fee calculators overestimate freelancer take-home pay?", "acceptedAnswer": {"@type": "Answer", "text": "Most calculators only subtract a single gateway fee (like Upwork's 10% or Stripe's 2.9%). In reality, cross-border freelancers face a 4-stage deduction chain: (1) Marketplace/client platform fee, (2) Payout rail withdrawal fee, (3) Currency conversion (FX) spread or SWIFT intermediary deduction ($10\u2013$35), and (4) Local entrepreneur turnover tax."}}, {"@type": "Question", "name": "Why is Wise marked as restricted for receiving in Armenia while supported in Georgia and the Philippines?", "acceptedAnswer": {"@type": "Answer", "text": "Wise's multi-currency receiving account features vary by resident jurisdiction. Residents of Armenia cannot currently open local USD/EUR receiving bank details on Wise, making Payoneer, Lemon Squeezy MoR, or direct bank wires the primary options, whereas residents of Georgia, Serbia, the Philippines, and India have broader Wise route access."}}, {"@type": "Question", "name": "Does this calculator invent live exchange rates?", "acceptedAnswer": {"@type": "Answer", "text": "Never. Exchange rates fluctuate every minute and banks apply custom spreads. We provide a user-editable Reference Exchange Rate field and calculate transparent Best-Case to Worst-Case Net Payout ranges so you can see the exact impact of FX markups and SWIFT intermediary fees."}}]}]}</script>
+</head>
+<body>
+  
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <span class="brand-name">CalcGrid</span>
+        <span class="brand-meta">Financial &amp; Technical Ledger / 2026</span>
+      </a>
+      <nav class="nav-links">
+        <a href="../tools/cross-border-payout-comparison-engine.html">Country Payout Engine</a>
+        <a href="../tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
+        <a href="../index.html#payment-calculators">Fee Ledgers</a>
+        <a href="../index.html#saas-calculators">Unit Economics</a>
+        <a href="../dashboard.html">Earnings &amp; Ops Proof</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb-bar">
+      <span><a href="../index.html">Directory Index</a> &nbsp;/&nbsp; Payment &amp; Fee Calculators</span>
+      <span>BASIS: WISE, PAYONEER, UPWORK &amp; RA/GE/RS/PH/IN TAX SCHEDULES (2026-10-27)</span>
+    </div>
+    <header class="tool-header">
+      <h1>Cross-Border Freelancer Payout, Reverse Invoice &amp; Tax Comparison Engine</h1>
+      <p>Compare end-to-end net take-home pay and required reverse invoice amounts across Upwork, Direct Contracts, Fiverr, Payoneer, Wise, and SWIFT for Armenia, Georgia, Serbia, Philippines, and India.</p>
+    </header>
+
+    
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="corridor_engine" data-tool-config="{&quot;default_country&quot;: &quot;AM&quot;, &quot;default_amount&quot;: 1000, &quot;default_origin_pct&quot;: 10.0, &quot;default_origin_fixed&quot;: 0.99, &quot;verified_date&quot;: &quot;2026-10-27&quot;, &quot;source_name&quot;: &quot;Multi-Provider Corridor Schedule (Wise, Payoneer, Upwork, RA/GE/RS/PH/IN Tax Codes)&quot;}">
+          <div>
+            <div class="parameters-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 01 — MULTI-STAGE CORRIDOR &amp; REVERSE INVOICE PARAMETERS</span>
+                <span>VERIFIED: 2026-10-27</span>
+              </div>
+
+              <div class="field-group">
+                <label for="in-country">1. Freelancer / Agency Residence Country &amp; Local Currency</label>
+                <select id="in-country"><option value="AM">Armenia (AMD)</option><option value="GE">Georgia (GEL)</option><option value="RS">Serbia (RSD)</option><option value="PH">Philippines (PHP)</option><option value="IN">India (INR)</option></select>
+                <span class="field-hint">Checks documented rail availability (e.g., Wise receiving restrictions in Armenia vs. Georgia/Philippines) and local simplified tax rules.</span>
+              </div>
+
+              <div class="field-group">
+                <label>2. Client Origin Channel Presets (Marketplace or Direct Invoice)</label>
+                <div class="presets-bar" style="margin-bottom:8px;padding-bottom:8px">
+                  <button type="button" class="preset-chip origin-preset-chip" data-pct="0" data-fix="0">0% Direct Client Invoice</button>
+                  <button type="button" class="preset-chip origin-preset-chip" data-pct="0" data-fix="0.99">0% Upwork Direct (Freelancer Plus)</button>
+                  <button type="button" class="preset-chip origin-preset-chip" data-pct="5" data-fix="0.99">5% Upwork Direct Standard / Example</button>
+                  <button type="button" class="preset-chip origin-preset-chip" data-pct="10" data-fix="0.99">10% Upwork Example Marketplace</button>
+                  <button type="button" class="preset-chip origin-preset-chip" data-pct="15" data-fix="0.99">15% Upwork Example Marketplace</button>
+                  <button type="button" class="preset-chip origin-preset-chip" data-pct="20" data-fix="1.00">20% Fiverr Commission</button>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <div>
+                    <label for="in-origin-pct" style="font-size:0.76rem">Platform Fee (%)</label>
+                    <input type="number" id="in-origin-pct" value="10.0" min="0" max="90" step="0.1" />
+                  </div>
+                  <div>
+                    <label for="in-origin-fix" style="font-size:0.76rem">Platform Fixed Fee ($)</label>
+                    <input type="number" id="in-origin-fix" value="0.99" min="0" step="0.01" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="in-amount">3. Gross Client Invoice / Contract Amount ($ USD)</label>
+                <input type="number" id="in-amount" value="1000" min="0" step="any" />
+              </div>
+
+              <div class="field-group">
+                <label for="in-target-net">4. Target Net Take-Home Goal ($ USD — For Reverse Invoice Solver)</label>
+                <input type="number" id="in-target-net" value="1000" min="0" step="any" />
+                <span class="field-hint">Solves the exact gross USD invoice you must send the client to receive this net amount after platform, payout rail, FX spread, and local tax.</span>
+              </div>
+
+              <div class="field-group">
+                <label for="in-tax-pct">5. Local Turnover / Simplified Tax Provision (%)</label>
+                <div class="presets-bar" id="corridor-tax-presets" style="margin-bottom:8px;padding-bottom:8px"></div>
+                <input type="number" id="in-tax-pct" value="1.0" min="0" max="60" step="0.1" />
+                <span class="field-hint" id="corridor-tax-caveat"></span>
+              </div>
+
+              <div class="field-group">
+                <label for="in-fx-rate">6. Reference Local Exchange Rate (User-Editable — No Live FX Fabricated)</label>
+                <input type="number" id="in-fx-rate" value="388.0" min="0.0001" step="any" />
+                <span class="field-hint" id="fx-rate-hint"></span>
+              </div>
+            </div>
+
+            <div class="doc-section">
+              <span class="kicker">FIG. 03 — SIDE-BY-SIDE PAYOUT RAIL &amp; UNCERTAINTY MATRIX</span>
+              <h3>End-to-End Route Comparison (With FX &amp; Intermediary Uncertainty Bands)</h3>
+              <p style="font-size:0.83rem;color:var(--ink-secondary);margin-bottom:10px">
+                Compares net settlement after platform fees, payout rail fees, currency conversion spreads, SWIFT intermediary deductions, and local turnover tax:
+              </p>
+              <div style="overflow-x:auto">
+                <table class="matrix-table">
+                  <thead>
+                    <tr>
+                      <th>Payout Route &amp; Jurisdiction Status</th>
+                      <th>Expected Net (After Tax)</th>
+                      <th>Uncertainty Band (Worst–Best)</th>
+                      <th>Total Burden %</th>
+                      <th>Invoice Needed for Target Net</th>
+                    </tr>
+                  </thead>
+                  <tbody id="corridor-comparison-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            
+
+            <div class="doc-section">
+              <span class="kicker">SPECIFICATION &amp; SOURCE ATTRIBUTION</span>
+              <h3>Multi-Stage Calculation &amp; Reverse Gross-Up Methodology</h3>
+              <div class="formula-block">Stage 1 (Platform Deduction): After_Platform = Gross × (1 - Platform_Pct) - Platform_Fixed. Stage 2 (Payout Rail &amp; FX Uncertainty Band): Net_USD = After_Platform × (1 - Rail_Pct - FX_Spread_[Min..Max]) - Rail_Fixed - Intermediary_[Min..Max]. Stage 3 (Local Tax Provision): Final_Net = Net_USD × (1 - Local_Tax_Pct). Multi-Stage Reverse Invoice Solver: Required_Gross = (Target_Net / ((1 - Tax_Pct) × (1 - Rail_Pct - FX_Spread)) + Rail_Fixed + Platform_Fixed) / (1 - Platform_Pct).</div>
+              <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
+                REFERENCE BASIS: Wise, Payoneer, Upwork &amp; RA/GE/RS/PH/IN Tax Schedules &bull; ASSUMPTIONS VERIFIED: 2026-10-27
+              </p>
+              <h3>Reference Notes &amp; FAQ</h3>
+              <div class="faq-item"><h4>Why do generic fee calculators overestimate freelancer take-home pay?</h4><p>Most calculators only subtract a single gateway fee (like Upwork&#x27;s 10% or Stripe&#x27;s 2.9%). In reality, cross-border freelancers face a 4-stage deduction chain: (1) Marketplace/client platform fee, (2) Payout rail withdrawal fee, (3) Currency conversion (FX) spread or SWIFT intermediary deduction ($10–$35), and (4) Local entrepreneur turnover tax.</p></div><div class="faq-item"><h4>Why is Wise marked as restricted for receiving in Armenia while supported in Georgia and the Philippines?</h4><p>Wise&#x27;s multi-currency receiving account features vary by resident jurisdiction. Residents of Armenia cannot currently open local USD/EUR receiving bank details on Wise, making Payoneer, Lemon Squeezy MoR, or direct bank wires the primary options, whereas residents of Georgia, Serbia, the Philippines, and India have broader Wise route access.</p></div><div class="faq-item"><h4>Does this calculator invent live exchange rates?</h4><p>Never. Exchange rates fluctuate every minute and banks apply custom spreads. We provide a user-editable Reference Exchange Rate field and calculate transparent Best-Case to Worst-Case Net Payout ranges so you can see the exact impact of FX markups and SWIFT intermediary fees.</p></div>
+            </div>
+          </div>
+
+          <aside>
+            <div class="ledger-sheet">
+              <div class="sheet-heading">
+                <span>FIG. 02 — OPTIMAL ROUTE LEDGER</span>
+                <span>LIVE CORRIDOR SOLVER</span>
+              </div>
+              <div class="ledger-primary">
+                <span class="ledger-primary-label">Highest Available Net Take-Home</span>
+                <div class="ledger-primary-value" id="out-net">$0.00</div>
+              </div>
+              <div class="ledger-rows">
+                <div class="ledger-row">
+                  <span>Optimal Available Route</span>
+                  <strong id="out-best-rail">—</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Uncertainty Range (FX / Bank Spread)</span>
+                  <strong id="out-range">$0.00 to $0.00</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Estimated Local Currency Net</span>
+                  <strong id="out-local">0 AMD</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Total Multi-Stage Deductions</span>
+                  <strong id="out-fee">$0.00 (0.00%)</strong>
+                </div>
+                <div class="ledger-row">
+                  <span>Required Gross Invoice for Target Net</span>
+                  <strong id="out-reverse">$0.00</strong>
+                </div>
+              </div>
+              <div class="ledger-actions">
+                <button type="button" id="btn-export-csv" class="btn-secondary">Export Corridor CSV</button>
+                <button type="button" id="btn-copy-permalink" class="btn-secondary">Copy Permalink</button>
+              </div>
+            </div>
+            
+      <div class="reference-card" id="pro-offline-bundle">
+        <span class="kicker">COMMERCIAL B2B &amp; FREELANCER EDITION</span>
+        <img src="../assets/images/pro-suite-box.png" alt="CalcGrid Pro Bulk Reconciler & Financial Models" />
+        <h3>CalcGrid Pro Batch Auditor &amp; Financial Models ($19)</h3>
+        <p>While single-transaction calculators and our 50-row Browser CSV Auditor are 100% free, the Pro Pack equips agencies and accountants with unlimited CLI batch automation and multi-sheet workbooks.</p>
+        <ul class="reference-list">
+          <li>01 / Unlimited CLI Batch CSV Fee &amp; FX Reconciler (calcgrid_batch_reconciler.py)</li>
+          <li>02 / Multi-Tab Excel Workbook (.xlsx) + 3 Separate CSV Models (SaaS Cohort, Cross-Border Fee Matrix, ROAS Model)</li>
+          <li>03 / Air-Gapped Offline HTML Instrument Suite (32 Tools)</li>
+        </ul>
+        <div class="btn-disabled" aria-disabled="true">Checkout Disabled — Merchant Verification Pending</div>
+      </div>
+
+      <div class="reference-card" style="background:var(--surface)">
+        <span class="kicker">INDEX // RELATED INSTRUMENTS</span>
+        <ul style="list-style:none;border-top:1px solid var(--rule)">
+          <li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="private-csv-payout-fee-auditor.html">Private Browser CSV Transaction &amp; Hidden FX Fee Auditor &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="payoneer-fee-calculator.html">Payoneer Fee &amp; Net Payout Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="wise-transfer-fee-calculator.html">Wise International Transfer &amp; FX Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="lemonsqueezy-fee-calculator.html">Lemon Squeezy Merchant of Record Fee Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="gumroad-fee-calculator.html">Gumroad 10% + Processing Fee Calculator &rarr;</a></li><li style="padding:7px 0;border-bottom:1px solid var(--rule);font-size:0.83rem"><a href="paddle-fee-calculator.html">Paddle SaaS Checkout &amp; MoR Fee Calculator &rarr;</a></li>
+        </ul>
+      </div>
+    
+          </aside>
+        </div>
+        
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../dashboard.html">Operations &amp; Earnings Proof</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+  <script src="../assets/tools-runtime.js"></script>
+</body>
+</html>
