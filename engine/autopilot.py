@@ -751,6 +751,7 @@ if __name__ == "__main__":
             "GIT_COMMITTER_NAME": "CalcGrid Autopilot",
             "GIT_COMMITTER_EMAIL": "autopilot@calcgrid.io",
         }
+        (DIST_DIR / ".nojekyll").write_text("", encoding="utf-8")
         subprocess.run(["git", "-C", str(ROOT_DIR), "add", "-A"], check=True, env=git_env)
         # Ensure logs/ and private_products/ are untracked if previously tracked
         subprocess.run(["git", "-C", str(ROOT_DIR), "rm", "-r", "--cached", "--ignore-unmatch", "logs", "private_products"], check=False, capture_output=True, env=git_env)
@@ -759,6 +760,20 @@ if __name__ == "__main__":
             subprocess.run(["git", "-C", str(ROOT_DIR), "commit", "-m", args.commit], check=True, capture_output=True, env=git_env)
         head_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "rev-parse", "--short", "HEAD"], capture_output=True, text=True, env=git_env)
         rep["git_commit"] = head_proc.stdout.strip()
+        # Create/update local gh-pages branch containing strictly the compiled public dist/ directory
+        tree_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "write-tree", "--prefix=dist/"], capture_output=True, text=True, env=git_env)
+        if tree_proc.returncode == 0 and tree_proc.stdout.strip():
+            dist_tree = tree_proc.stdout.strip()
+            commit_tree_proc = subprocess.run(
+                ["git", "-C", str(ROOT_DIR), "commit-tree", dist_tree, "-m", f"Deploy CalcGrid static dist ({rep['git_commit']})"],
+                capture_output=True,
+                text=True,
+                env=git_env,
+            )
+            if commit_tree_proc.returncode == 0 and commit_tree_proc.stdout.strip():
+                gh_pages_sha = commit_tree_proc.stdout.strip()
+                subprocess.run(["git", "-C", str(ROOT_DIR), "update-ref", "refs/heads/gh-pages", gh_pages_sha], check=True, env=git_env)
+                rep["gh_pages_commit"] = gh_pages_sha[:7]
         REPORT_FILE.write_text(json.dumps(rep, indent=2), encoding="utf-8")
 
     print(json.dumps(rep, indent=2))
