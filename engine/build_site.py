@@ -33,11 +33,36 @@ IMAGES_DIR = ASSETS_DIR / "images"
 PRIVATE_PRODUCTS_DIR = ROOT_DIR / "private_products"
 LOGS_DIR = ROOT_DIR / "logs"
 MARKETING_DIR = ROOT_DIR / "marketing_outbox"
+LAUNCH_CONFIG_PATH = ROOT_DIR / "launch_config.json"
 
-SITE_URL = os.environ.get("SITE_URL", "https://vahemaleryan.github.io/calcgrid")
+
+def _load_launch_config() -> dict:
+    if LAUNCH_CONFIG_PATH.exists():
+        try:
+            return json.loads(LAUNCH_CONFIG_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {}
+
+
+_LAUNCH_CFG = _load_launch_config()
+SITE_URL = (
+    os.environ.get("SITE_URL")
+    or os.environ.get("CF_PAGES_URL")
+    or _LAUNCH_CFG.get("site_url")
+    or "https://calcgrid.pages.dev"
+).rstrip("/")
 INDEXNOW_KEY = "8f92a1c4e7b34d109a8e2c5f6b7d8e91"
-LEMON_SQUEEZY_CHECKOUT_URL = os.environ.get("LEMON_SQUEEZY_URL", "").strip()
-ADSENSE_CLIENT_ID = os.environ.get("ADSENSE_CLIENT_ID", "").strip()
+LEMON_SQUEEZY_CHECKOUT_URL = (
+    os.environ.get("LEMON_SQUEEZY_URL")
+    or _LAUNCH_CFG.get("lemon_squeezy_checkout_url")
+    or ""
+).strip()
+ADSENSE_CLIENT_ID = (
+    os.environ.get("ADSENSE_CLIENT_ID")
+    or _LAUNCH_CFG.get("adsense_client_id")
+    or ""
+).strip()
 
 OFFICIAL_SOURCES = {
     "cross-border-payout-comparison-engine": ("Wise, Payoneer, Upwork & RA/GE/RS/PH/IN Tax Schedules", "2026-10-27"),

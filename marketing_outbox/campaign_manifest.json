@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-27T13:51:01Z",
+  "generated_at": "2026-10-27T14:04:22Z",
   "publishing_policy": "Conservative 3-episode initial cohort; evaluate UTM click-through before scaling output.",
   "oauth_integrations_configured": {
     "youtube_shorts_api": false,
@@ -13,14 +13,16 @@
       "title": "What Happens to a $1,000 Upwork Invoice After Platform, Payoneer FX & 1% Gross Turnover Tax?",
       "target_audience_question": "How much of a $1,000 Upwork contract actually reaches an Armenian or Georgian bank account after platform fees, FX spread, and gross turnover tax, and what gross invoice is required to net $1,000?",
       "tool_slug": "cross-border-payout-comparison-engine",
-      "tracked_url": "https://vahemaleryan.github.io/calcgrid/tools/cross-border-payout-comparison-engine.html?country=AM&amount=1000&origin_pct=10&tax=1.0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep01_upwork_payoneer_armenia",
-      "caption_with_link": "Why a $1,000 freelance contract turns into ~$862.04 after multi-stage deductions & gross turnover tax:\n\n1. Marketplace fee (10% example + $0.99): -$100.99 ($899.01 transferred)\n2. Payout rail + ~2% FX conversion spread: -$26.97 ($872.04 received)\n3. 1% turnover tax on $1,000.00 FULL GROSS invoice (RA Tax Code Art. 257): -$10.00\n= $862.04 Net Take-Home (or invoice $1,159.86 to net $1,000.00).\n\nNote: The 1% high-tech rate and 0% micro-business regime apply strictly to qualifying activities and eligible taxpayers (standard turnover tax is 5%). Educational mathematical estimate only, not tax advice.\n\nCompare Wise, Payoneer, and SWIFT across Armenia, Georgia, Serbia, Philippines, and India:\nhttps://vahemaleryan.github.io/calcgrid/tools/cross-border-payout-comparison-engine.html?country=AM&amount=1000&origin_pct=10&tax=1.0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep01_upwork_payoneer_armenia",
+      "tracked_url": "https://calcgrid.pages.dev/tools/cross-border-payout-comparison-engine.html?country=AM&amount=1000&origin_pct=10&tax=1.0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep01_upwork_payoneer_armenia",
+      "caption_with_link": "Why a $1,000 freelance contract turns into ~$862.04 after multi-stage deductions & gross turnover tax:\n\n1. Marketplace fee (10% example + $0.99): -$100.99 ($899.01 transferred)\n2. Payout rail + ~2% FX conversion spread: -$26.97 ($872.04 received)\n3. 1% turnover tax on $1,000.00 FULL GROSS invoice (RA Tax Code Art. 257): -$10.00\n= $862.04 Net Take-Home (or invoice $1,159.86 to net $1,000.00).\n\nNote: The 1% high-tech rate and 0% micro-business regime apply strictly to qualifying activities and eligible taxpayers (standard turnover tax is 5%). Educational mathematical estimate only, not tax advice.\n\nCompare Wise, Payoneer, and SWIFT across Armenia, Georgia, Serbia, Philippines, and India:\nhttps://calcgrid.pages.dev/tools/cross-border-payout-comparison-engine.html?country=AM&amount=1000&origin_pct=10&tax=1.0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep01_upwork_payoneer_armenia",
       "video_file": "marketing_outbox/videos/ep01_upwork_payoneer_armenia.mp4",
       "subtitle_file": "marketing_outbox/subtitles/ep01_upwork_payoneer_armenia.srt",
       "content_sha256": "cbee4d35c3d29363607d655afeb17c6df312e525d00e9550c00dfa20a2e82fe0",
       "duration_sec": 24.0,
       "file_size_bytes": 3965379,
-      "publish_status": "HOLD_PENDING_VERIFICATION_AND_OAUTH",
+      "math_claims_verified": true,
+      "math_claim_audit_errors": [],
+      "publish_status": "VERIFIED_AND_APPROVED_AWAITING_OAUTH_TOKEN",
       "measured_utm_clicks": 0
     },
     {
@@ -29,14 +31,16 @@
       "title": "Why Adding 10% to a $1,000 Invoice Does NOT Net $1,000 (Reverse Gross-Up Formula)",
       "target_audience_question": "How do I calculate the exact invoice amount to charge a client so I receive my exact target net payout after fees?",
       "tool_slug": "upwork-freelancer-fee-calculator",
-      "tracked_url": "https://vahemaleryan.github.io/calcgrid/tools/upwork-freelancer-fee-calculator.html?amount=1000&pct=10&fixed=0.99&fx=0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep02_reverse_invoice_math",
-      "caption_with_link": "Adding +10% to a $1,000 invoice nets $990, not $1,000.\n\nExact Reverse Gross-Up Formula:\nRequired Gross = (Target Net + Fixed Fee) / (1 - Total Fee %)\nFor $1,000 net at 10% + $0.99 withdrawal: ($1,000 + $0.99) / 0.90 = $1,112.21.\n\nTest any 0%\u201315% contract rate or export a 6-tier CSV schedule:\nhttps://vahemaleryan.github.io/calcgrid/tools/upwork-freelancer-fee-calculator.html?amount=1000&pct=10&fixed=0.99&fx=0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep02_reverse_invoice_math",
+      "tracked_url": "https://calcgrid.pages.dev/tools/upwork-freelancer-fee-calculator.html?amount=1000&pct=10&fixed=0.99&fx=0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep02_reverse_invoice_math",
+      "caption_with_link": "Adding +10% to a $1,000 invoice nets $990, not $1,000.\n\nExact Reverse Gross-Up Formula:\nRequired Gross = (Target Net + Fixed Fee) / (1 - Total Fee %)\nFor $1,000 net at 10% + $0.99 withdrawal: ($1,000 + $0.99) / 0.90 = $1,112.21.\n\nTest any 0%\u201315% contract rate or export a 6-tier CSV schedule:\nhttps://calcgrid.pages.dev/tools/upwork-freelancer-fee-calculator.html?amount=1000&pct=10&fixed=0.99&fx=0&utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep02_reverse_invoice_math",
       "video_file": "marketing_outbox/videos/ep02_reverse_invoice_math.mp4",
       "subtitle_file": "marketing_outbox/subtitles/ep02_reverse_invoice_math.srt",
       "content_sha256": "9e86b02fcbae0f9e45f9dc17647f47489ff6c800fbfd5477481abaa815646988",
       "duration_sec": 24.0,
       "file_size_bytes": 2331967,
-      "publish_status": "HOLD_PENDING_VERIFICATION_AND_OAUTH",
+      "math_claims_verified": true,
+      "math_claim_audit_errors": [],
+      "publish_status": "VERIFIED_AND_APPROVED_AWAITING_OAUTH_TOKEN",
       "measured_utm_clicks": 0
     },
     {
@@ -45,14 +49,16 @@
       "title": "How to Audit Your Payoneer, Wise & Stripe CSV Statements for Hidden FX Markups",
       "target_audience_question": "How can I check how much money I lost to hidden currency conversion spreads across my payout CSV history without uploading financial data to a server?",
       "tool_slug": "private-csv-payout-fee-auditor",
-      "tracked_url": "https://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html?utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep03_csv_hidden_fx_audit",
-      "caption_with_link": "How to spot unitemized 2%\u20133% FX conversion spreads and SWIFT intermediary deductions in your payout history:\n\n\u2022 Paste or drop your CSV statement into CalcGrid's Browser CSV Auditor\n\u2022 Runs 100% locally in browser JavaScript memory (zero server uploads)\n\u2022 Flags every transaction with >0.25% variance against published provider schedules\n\nTry the free browser CSV auditor:\nhttps://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html?utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep03_csv_hidden_fx_audit",
+      "tracked_url": "https://calcgrid.pages.dev/tools/private-csv-payout-fee-auditor.html?utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep03_csv_hidden_fx_audit",
+      "caption_with_link": "How to spot unitemized 2%\u20133% FX conversion spreads and SWIFT intermediary deductions in your payout history:\n\n\u2022 Paste or drop your CSV statement into CalcGrid's Browser CSV Auditor\n\u2022 Runs 100% locally in browser JavaScript memory (zero server uploads)\n\u2022 Flags every transaction with >0.25% variance against published provider schedules\n\nTry the free browser CSV auditor:\nhttps://calcgrid.pages.dev/tools/private-csv-payout-fee-auditor.html?utm_source=short_video&utm_medium=organic_smm&utm_campaign=ep03_csv_hidden_fx_audit",
       "video_file": "marketing_outbox/videos/ep03_csv_hidden_fx_audit.mp4",
       "subtitle_file": "marketing_outbox/subtitles/ep03_csv_hidden_fx_audit.srt",
       "content_sha256": "e94129198fe7471a48d59bc4116fb35f61de12904a7f110258e54afb9a78808f",
       "duration_sec": 24.0,
       "file_size_bytes": 2393723,
-      "publish_status": "HOLD_PENDING_VERIFICATION_AND_OAUTH",
+      "math_claims_verified": true,
+      "math_claim_audit_errors": [],
+      "publish_status": "VERIFIED_AND_APPROVED_AWAITING_OAUTH_TOKEN",
       "measured_utm_clicks": 0
     }
   ]

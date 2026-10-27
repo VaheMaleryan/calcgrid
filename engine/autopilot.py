@@ -699,10 +699,14 @@ def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
     qa_info = run_qa_and_security_verification()
     telemetry_info = analyze_telemetry()
 
+    smm_episodes = smm_info.get("episodes", [])
+    smm_claims_verified = len(smm_episodes) > 0 and all(ep.get("math_claims_verified") for ep in smm_episodes)
+
     all_passed = (
         math_info["passed"]
         and qa_info["passed"]
         and freshness_info["passed"]
+        and smm_claims_verified
     )
 
     rollback_triggered = False
@@ -725,7 +729,9 @@ def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
         "math_verification": math_info,
         "qa_and_security": qa_info,
         "smm_pipeline": {
-            "episodes_rendered": len(smm_info.get("episodes", [])),
+            "episodes_rendered": len(smm_episodes),
+            "all_financial_claims_verified": smm_claims_verified,
+            "episode_statuses": {ep["episode_id"]: ep["publish_status"] for ep in smm_episodes},
             "oauth_configured": smm_info.get("oauth_integrations_configured", {})
         },
         "telemetry": telemetry_info,
@@ -738,7 +744,25 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="CalcGrid Autonomous Operations & Verification Suite")
     parser.add_argument("--auto-rollback", action="store_true", help="Automatically roll back git working tree on test failure")
     parser.add_argument("--commit", type=str, default="", help="Commit verified changes to git with the given commit message if all checks pass")
+    parser.add_argument("--lemon-squeezy-url", type=str, default="", help="Set live Lemon Squeezy checkout URL in launch_config.json before building")
+    parser.add_argument("--site-url", type=str, default="", help="Set live public SITE_URL in launch_config.json before building")
     args = parser.parse_args()
+
+    cfg_path = ROOT_DIR / "launch_config.json"
+    if args.lemon_squeezy_url or args.site_url:
+        cfg_data = {}
+        if cfg_path.exists():
+            try:
+                cfg_data = json.loads(cfg_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        if args.lemon_squeezy_url:
+            cfg_data["lemon_squeezy_checkout_url"] = args.lemon_squeezy_url.strip()
+            os.environ["LEMON_SQUEEZY_URL"] = args.lemon_squeezy_url.strip()
+        if args.site_url:
+            cfg_data["site_url"] = args.site_url.strip().rstrip("/")
+            os.environ["SITE_URL"] = args.site_url.strip().rstrip("/")
+        cfg_path.write_text(json.dumps(cfg_data, indent=2) + "\n", encoding="utf-8")
 
     rep = run_autopilot_cycle(auto_rollback=args.auto_rollback)
     if args.commit and rep["all_checks_passed"] and (ROOT_DIR / ".git").exists():
@@ -751,7 +775,6 @@ if __name__ == "__main__":
             "GIT_COMMITTER_NAME": "CalcGrid Autopilot",
             "GIT_COMMITTER_EMAIL": "autopilot@calcgrid.io",
         }
-        (DIST_DIR / ".nojekyll").write_text("", encoding="utf-8")
         subprocess.run(["git", "-C", str(ROOT_DIR), "add", "-A"], check=True, env=git_env)
         # Ensure logs/ and private_products/ are untracked if previously tracked
         subprocess.run(["git", "-C", str(ROOT_DIR), "rm", "-r", "--cached", "--ignore-unmatch", "logs", "private_products"], check=False, capture_output=True, env=git_env)
@@ -760,20 +783,8 @@ if __name__ == "__main__":
             subprocess.run(["git", "-C", str(ROOT_DIR), "commit", "-m", args.commit], check=True, capture_output=True, env=git_env)
         head_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "rev-parse", "--short", "HEAD"], capture_output=True, text=True, env=git_env)
         rep["git_commit"] = head_proc.stdout.strip()
-        # Create/update local gh-pages branch containing strictly the compiled public dist/ directory
-        tree_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "write-tree", "--prefix=dist/"], capture_output=True, text=True, env=git_env)
-        if tree_proc.returncode == 0 and tree_proc.stdout.strip():
-            dist_tree = tree_proc.stdout.strip()
-            commit_tree_proc = subprocess.run(
-                ["git", "-C", str(ROOT_DIR), "commit-tree", dist_tree, "-m", f"Deploy CalcGrid static dist ({rep['git_commit']})"],
-                capture_output=True,
-                text=True,
-                env=git_env,
-            )
-            if commit_tree_proc.returncode == 0 and commit_tree_proc.stdout.strip():
-                gh_pages_sha = commit_tree_proc.stdout.strip()
-                subprocess.run(["git", "-C", str(ROOT_DIR), "update-ref", "refs/heads/gh-pages", gh_pages_sha], check=True, env=git_env)
-                rep["gh_pages_commit"] = gh_pages_sha[:7]
+        # Remove local gh-pages ref if present so repo is strictly used for Cloudflare Pages Git deployments
+        subprocess.run(["git", "-C", str(ROOT_DIR), "branch", "-D", "gh-pages"], check=False, capture_output=True, env=git_env)
         REPORT_FILE.write_text(json.dumps(rep, indent=2), encoding="utf-8")
 
     print(json.dumps(rep, indent=2))

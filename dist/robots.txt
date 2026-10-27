@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://vahemaleryan.github.io/calcgrid/sitemap.xml
+Sitemap: https://calcgrid.pages.dev/sitemap.xml
