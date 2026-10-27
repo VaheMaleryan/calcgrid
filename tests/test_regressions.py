@@ -128,6 +128,22 @@ class ReleaseBoundaries(unittest.TestCase):
         self.assertFalse(build_site.LEMON_SQUEEZY_CHECKOUT_URL)
         self.assertFalse(build_site.ADSENSE_CLIENT_ID)
 
+    def test_cloudflare_urls_and_offline_links_are_separate(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            original = '<a href="../index.html">Home</a><a href="foo.html#bar">Tool</a><a href="https://example.com/legal.html">Reference</a><link rel="canonical" href="' + build_site.SITE_URL + '/tools/foo.html" />'
+            page = output / 'page.html'
+            page.write_text(original)
+            with patch.object(build_site, 'DIST_DIR', output), patch.dict(build_site._LAUNCH_CFG, {'hosting_provider':'cloudflare'}):
+                build_site.finalize_cloudflare_output()
+            result = page.read_text()
+            self.assertIn('href="../"', result)
+            self.assertIn('href="foo#bar"', result)
+            self.assertIn('https://example.com/legal.html', result)
+            self.assertIn(build_site.SITE_URL + '/tools/foo"', result)
+            self.assertIn('foo.html#bar', original)
+
     def test_automation_never_discards_source_changes(self):
         self.assertNotIn('"checkout", "--", "dist/", "engine/"', inspect.getsource(autopilot.run_autopilot_cycle))
 

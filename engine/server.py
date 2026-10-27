@@ -20,6 +20,11 @@ class CalcGridServerHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(DIST_DIR), **kwargs)
 
+    def translate_path(self, path):
+        translated = super().translate_path(path)
+        clean_page = Path(translated + ".html")
+        return str(clean_page) if not Path(translated).exists() and clean_page.is_file() else translated
+
     def do_GET(self):
         if self.path == "/api/health":
             report = {}

@@ -25,7 +25,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from catalog_data import COUNTRY_CORRIDORS
-from build_site import BRAND_NAME, SITE_URL, LOGS_DIR, MARKETING_DIR, _load_launch_config
+from build_site import BRAND_NAME, public_url, SITE_URL, LOGS_DIR, MARKETING_DIR, _load_launch_config
 
 VIDEOS_DIR = MARKETING_DIR / "videos"
 SUBTITLES_DIR = MARKETING_DIR / "subtitles"
@@ -424,8 +424,8 @@ def build_smm_campaign_pack(allow_publish: bool = False) -> dict:
         media_info = render_vertical_mp4(ep)
         q_join = "&" if ep["utm_query"] else ""
         tracked_url = (
-            f"{SITE_URL}/tools/{ep['tool_slug']}.html?"
-            f"{ep['utm_query']}{q_join}utm_source=short_video&utm_medium=organic_smm&utm_campaign={ep_id}"
+            public_url("tools/" + ep["tool_slug"] + ".html") + "?"
+            + f"{ep['utm_query']}{q_join}utm_source=short_video&utm_medium=organic_smm&utm_campaign={ep_id}"
         )
 
         ep_record = {

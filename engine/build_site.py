@@ -135,6 +135,37 @@ SOURCE_LINKS = {
     "paypal-goods-services-fee-calculator": ("PayPal merchant fees", "https://www.paypal.com/us/business/paypal-business-fees"),
 }
 
+def public_url(path: str = "") -> str:
+    """Use the production origin; Cloudflare's HTML redirects use extensionless destinations."""
+    if _LAUNCH_CFG.get("hosting_provider") == "cloudflare" and path.endswith(".html"):
+        path = path[:-5]
+        if path == "index":
+            path = ""
+    return SITE_URL + "/" + path
+
+
+def finalize_cloudflare_output() -> None:
+    if _LAUNCH_CFG.get("hosting_provider") != "cloudflare":
+        return
+    def clean_link(match):
+        value = match.group(2)
+        if value.startswith(("http:", "https:")) and not value.startswith(SITE_URL + "/"):
+            return match.group()
+        value = re.sub(r"index\.html(?=[#?]|$)", "", value)
+        value = re.sub(r"\.html(?=[#?]|$)", "", value)
+        if not value or value.startswith(("#", "?")):
+            value = "./" + value
+        return match.group(1) + '="' + value + '"'
+    for path in DIST_DIR.rglob("*"):
+        if path.suffix not in {".html", ".xml", ".txt"}:
+            continue
+        content = path.read_text(encoding="utf-8")
+        content = re.sub(re.escape(SITE_URL) + r'/([^"\s<>]*?)\.html', lambda m: SITE_URL + '/' + m.group(1), content)
+        if path.suffix == ".html":
+            content = re.sub(r'(href)="([^"]*\.html[^"]*)"', clean_link, content)
+        path.write_text(content, encoding="utf-8")
+
+
 def build_css() -> str:
     return """
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap');
@@ -2236,6 +2267,8 @@ def compile_all() -> dict:
 
     build_seo_artifacts()
     private_zip_path = build_private_pro_digital_product_zip()
+    # Keep offline files portable, then adapt only the public output to Pages clean URLs.
+    finalize_cloudflare_output()
 
     return {
         "tools_compiled": len(TOOLS_CATALOG),

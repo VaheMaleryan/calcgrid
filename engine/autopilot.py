@@ -587,7 +587,7 @@ def run_qa_and_security_verification() -> dict:
                 continue
             target_path = (html_file.parent / ref.split("#")[0].split("?")[0]).resolve()
             internal_links_checked += 1
-            if not target_path.exists():
+            if not target_path.exists() and not target_path.with_suffix(".html").exists():
                 issues.append(f"Broken relative reference '{ref}' in {html_file.name}")
 
         if "dashboard.html" in content:
