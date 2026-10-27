@@ -895,13 +895,16 @@ const CALCGRID_CORRIDORS = {corridors_json};
       const netUsdWorst = Math.max(0, afterOrigin * (1 - railRateWorst) - rail.fixed_fee - rail.intermediary_max);
 
       const tRate = Math.min(0.95, Math.max(0, taxPct / 100));
-      const finalNetExp = netUsdExp * (1 - tRate);
-      const finalNetBest = netUsdBest * (1 - tRate);
-      const finalNetWorst = netUsdWorst * (1 - tRate);
+      // Per Article 257 of RA Tax Code (and gross turnover regimes), turnover tax is assessed on FULL GROSS sales turnover
+      const grossTurnoverTax = gross * tRate;
+      const finalNetExp = Math.max(0, netUsdExp - grossTurnoverTax);
+      const finalNetBest = Math.max(0, netUsdBest - grossTurnoverTax);
+      const finalNetWorst = Math.max(0, netUsdWorst - grossTurnoverTax);
 
       return {{
         afterOrigin: afterOrigin,
         netUsdExp: netUsdExp,
+        grossTurnoverTax: grossTurnoverTax,
         finalNetExp: finalNetExp,
         finalNetBest: finalNetBest,
         finalNetWorst: finalNetWorst,
@@ -916,9 +919,11 @@ const CALCGRID_CORRIDORS = {corridors_json};
       const tRate = Math.min(0.95, Math.max(0, taxPct / 100));
       const midIntermediary = (rail.intermediary_min + rail.intermediary_max) / 2;
 
-      const beforeTax = targetNet / Math.max(0.05, 1 - tRate);
-      const beforeRail = (beforeTax + rail.fixed_fee + midIntermediary) / Math.max(0.05, 1 - railRateExp);
-      const requiredGross = (beforeRail + originFix) / Math.max(0.05, 1 - oRate);
+      // Exact algebraic gross-up when turnover tax (tRate) is assessed on Gross (G):
+      // FinalNet = ((G * (1 - oRate) - originFix) * (1 - railRateExp) - rail.fixed_fee - midIntermediary) - G * tRate
+      const retentionFactor = Math.max(0.05, (1 - oRate) * (1 - railRateExp) - tRate);
+      const fixedDeductions = originFix * (1 - railRateExp) + rail.fixed_fee + midIntermediary;
+      const requiredGross = (targetNet + fixedDeductions) / retentionFactor;
       return requiredGross;
     }}
 
@@ -1523,7 +1528,7 @@ def render_navbar(prefix: str = "") -> str:
         <a href="{prefix}tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
         <a href="{prefix}index.html#payment-calculators">Fee Ledgers</a>
         <a href="{prefix}index.html#saas-calculators">Unit Economics</a>
-        <a href="{prefix}dashboard.html">Earnings &amp; Ops Proof</a>
+        <a href="{prefix}legal.html">Methodology &amp; Terms</a>
         {checkout_nav_item}
       </nav>
     </div>
@@ -2133,7 +2138,7 @@ def build_tool_page(tool: dict) -> str:
   <footer>
     <div class="footer-inner">
       <span>&copy; {datetime.now().year} CalcGrid Publication. Client-side computation engine.</span>
-      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../dashboard.html">Operations &amp; Earnings Proof</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
     </div>
   </footer>
   <script src="../assets/tools-runtime.js"></script>
@@ -2277,7 +2282,7 @@ def build_index_page() -> str:
   <footer>
     <div class="footer-inner">
       <span>&copy; {datetime.now().year} CalcGrid Publication. All calculations execute client-side.</span>
-      <span><a href="dashboard.html">Operations &amp; Earnings Proof</a> &nbsp;&bull;&nbsp; <a href="legal.html">Privacy, Consent &amp; Disclaimers</a> &nbsp;&bull;&nbsp; <a href="sitemap.xml">XML Sitemap</a> &nbsp;&bull;&nbsp; <a href="rss.xml">RSS Feed</a></span>
+      <span><a href="legal.html">Privacy, Consent &amp; Disclaimers</a> &nbsp;&bull;&nbsp; <a href="sitemap.xml">XML Sitemap</a> &nbsp;&bull;&nbsp; <a href="rss.xml">RSS Feed</a></span>
     </div>
   </footer>
   <script src="assets/tools-runtime.js"></script>
@@ -2814,9 +2819,17 @@ def compile_all() -> dict:
     (ASSETS_DIR / "styles.css").write_text(build_css(), encoding="utf-8")
     (ASSETS_DIR / "tools-runtime.js").write_text(build_runtime_js(), encoding="utf-8")
 
+    # Ensure private dashboard is NEVER inside public dist/
+    public_dash = DIST_DIR / "dashboard.html"
+    if public_dash.exists():
+        public_dash.unlink()
+
     (DIST_DIR / "index.html").write_text(build_index_page(), encoding="utf-8")
     (DIST_DIR / "legal.html").write_text(build_legal_page(), encoding="utf-8")
-    (DIST_DIR / "dashboard.html").write_text(build_dashboard_page(), encoding="utf-8")
+
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    private_dash_path = LOGS_DIR / "private_dashboard.html"
+    private_dash_path.write_text(build_dashboard_page(), encoding="utf-8")
 
     for tool in TOOLS_CATALOG:
         html_out = build_tool_page(tool)
@@ -2827,10 +2840,12 @@ def compile_all() -> dict:
 
     return {
         "tools_compiled": len(TOOLS_CATALOG),
-        "total_html_pages": len(TOOLS_CATALOG) + 3,
+        "total_html_pages": len(TOOLS_CATALOG) + 2,
         "public_dist_dir": str(DIST_DIR),
         "private_pro_zip": str(private_zip_path),
+        "private_dashboard_path": str(private_dash_path),
         "public_zip_exposed": any(DIST_DIR.rglob("*.zip")),
+        "public_dashboard_exposed": (DIST_DIR / "dashboard.html").exists(),
         "ads_enabled": bool(ADSENSE_CLIENT_ID),
         "checkout_enabled": bool(LEMON_SQUEEZY_CHECKOUT_URL)
     }

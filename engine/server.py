@@ -30,6 +30,17 @@ class CalcGridServerHandler(SimpleHTTPRequestHandler):
                     pass
             self._send_json(200, {"ok": True, "status": "healthy", "autopilot": report})
             return
+        if self.path.startswith("/admin/dashboard"):
+            priv_dash = LOGS_DIR / "private_dashboard.html"
+            if priv_dash.exists():
+                body = priv_dash.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+                return
         super().do_GET()
 
     def do_POST(self):

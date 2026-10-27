@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Armenia Freelancer, Sole Proprietor &amp; Turnover Tax Calculator — CalcGrid Technical &amp; Financial Ledger</title>
-  <meta name="description" content="Estimate net take-home income in Armenia after turnover tax, stamp duty (Zinapah), and fixed social contributions." />
+  <title>Armenia Freelancer, Sole Proprietor &amp; Gross Turnover Tax Calculator (Art. 257) — CalcGrid Technical &amp; Financial Ledger</title>
+  <meta name="description" content="Estimate net take-home income in Armenia with turnover tax assessed on full gross sales revenue (RA Tax Code Art. 257), fixed social/stamp contributions, and banking fees." />
   <link rel="canonical" href="https://calcgrid-tools.pages.dev/tools/armenia-it-tax-turnover-calculator.html" />
   <link rel="stylesheet" href="../assets/styles.css" />
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Armenia Freelancer, Sole Proprietor & Turnover Tax Calculator", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Estimate net take-home income in Armenia after turnover tax, stamp duty (Zinapah), and fixed social contributions.", "url": "https://calcgrid-tools.pages.dev/tools/armenia-it-tax-turnover-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Note on tax rates in Armenia", "acceptedAnswer": {"@type": "Answer", "text": "Tax regimes in Armenia depend on your exact activity classification (e.g. Micro-entrepreneurship, Turnover Tax, High-Tech incentives, or General VAT system). Adjust the percentage slider to match your accountant's confirmed rate."}}, {"@type": "Question", "name": "What fixed monthly contributions apply to Armenian Individual Entrepreneurs (IE)?", "acceptedAnswer": {"@type": "Answer", "text": "IEs typically pay monthly social pension contributions and the national defense stamp duty (Zinapah) scaled by income brackets."}}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Armenia Freelancer, Sole Proprietor & Gross Turnover Tax Calculator (Art. 257)", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Estimate net take-home income in Armenia with turnover tax assessed on full gross sales revenue (RA Tax Code Art. 257), fixed social/stamp contributions, and banking fees.", "url": "https://calcgrid-tools.pages.dev/tools/armenia-it-tax-turnover-calculator.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How is the turnover tax base defined under Article 257 of Armenia's Tax Code?", "acceptedAnswer": {"@type": "Answer", "text": "Article 257 defines the turnover tax base as gross sales turnover. Marketplace commissions (such as Upwork or Fiverr fees) and payment processor withdrawal fees do not reduce the gross turnover tax base."}}, {"@type": "Question", "name": "Does every freelancer automatically qualify for the 1% High-Tech rate or 0% Micro-Business regime?", "acceptedAnswer": {"@type": "Answer", "text": "No. The 1% rate applies strictly to qualifying high-tech/IT activities and eligible taxpayers under the 115M AMD threshold, while the 0% micro-business regime (under 24M AMD) excludes consulting and several professional services. Verify your exact classification with a licensed Armenian accountant."}}]}]}</script>
 </head>
 <body>
   
@@ -23,7 +23,7 @@
         <a href="../tools/private-csv-payout-fee-auditor.html">Browser CSV Auditor</a>
         <a href="../index.html#payment-calculators">Fee Ledgers</a>
         <a href="../index.html#saas-calculators">Unit Economics</a>
-        <a href="../dashboard.html">Earnings &amp; Ops Proof</a>
+        <a href="../legal.html">Methodology &amp; Terms</a>
         
       </nav>
     </div>
@@ -35,33 +35,33 @@
       <span>BASIS: RA TAX CODE — TURNOVER TAX &amp; INDIVIDUAL ENTREPRENEUR SCHEDULE (2026-10-27)</span>
     </div>
     <header class="tool-header">
-      <h1>Armenia Freelancer, Sole Proprietor &amp; Turnover Tax Calculator</h1>
-      <p>Estimate net take-home income in Armenia after turnover tax, stamp duty (Zinapah), and fixed social contributions.</p>
+      <h1>Armenia Freelancer, Sole Proprietor &amp; Gross Turnover Tax Calculator (Art. 257)</h1>
+      <p>Estimate net take-home income in Armenia with turnover tax assessed on full gross sales revenue (RA Tax Code Art. 257), fixed social/stamp contributions, and banking fees.</p>
     </header>
 
     
-        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="fee_calc" data-tool-config="{&quot;label_amount&quot;: &quot;Monthly Gross Revenue (AMD or USD equiv.)&quot;, &quot;default_amount&quot;: 1000000, &quot;percent_fee&quot;: 5.0, &quot;fixed_fee&quot;: 15000, &quot;fx_markup_percent&quot;: 0.0, &quot;label_pct&quot;: &quot;Effective Turnover / Income Tax Rate (%)&quot;, &quot;label_fixed&quot;: &quot;Monthly Fixed Social + Stamp Duty (AMD)&quot;, &quot;label_fx&quot;: &quot;Bank / Payment Gateway Fee (%)&quot;}">
+        <div class="workspace-grid" id="interactive-tool-root" data-tool-type="fee_calc" data-tool-config="{&quot;label_amount&quot;: &quot;Monthly Gross Sales Turnover (AMD or USD equiv. \u2014 Art. 257 Gross Base)&quot;, &quot;default_amount&quot;: 1000000, &quot;percent_fee&quot;: 1.0, &quot;fixed_fee&quot;: 15000, &quot;fx_markup_percent&quot;: 0.0, &quot;label_pct&quot;: &quot;Gross Turnover Tax Rate (% on Full Gross Revenue)&quot;, &quot;label_fixed&quot;: &quot;Monthly Fixed Social + Stamp Duty (Zinapah)&quot;, &quot;label_fx&quot;: &quot;Bank / Payout Gateway Fee (% on Gross)&quot;, &quot;presets&quot;: [{&quot;label&quot;: &quot;1% (Qualifying High-Tech / IT \u2014 Eligibility Required)&quot;, &quot;pct&quot;: 1.0}, {&quot;label&quot;: &quot;0% (Eligible Micro-Business &lt;24M AMD \u2014 Restrictions Apply)&quot;, &quot;pct&quot;: 0.0}, {&quot;label&quot;: &quot;5% (Example Turnover Rate)&quot;, &quot;pct&quot;: 5.0}, {&quot;label&quot;: &quot;10% (General Turnover Tax Reference)&quot;, &quot;pct&quot;: 10.0}], &quot;source_name&quot;: &quot;Republic of Armenia Tax Code (Article 257 Gross Turnover Base)&quot;, &quot;verified_date&quot;: &quot;2026-10-27&quot;}">
           <div>
             <div class="parameters-sheet">
               <div class="sheet-heading">
                 <span>FIG. 01 — INPUT PARAMETERS</span>
                 <span>VERIFIED: 2026-10-27</span>
               </div>
-              
+              <div class="presets-bar"><span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--ink-muted);align-self:center;margin-right:4px">FEE PRESETS:</span><button type="button" class="preset-chip" data-pct="1.0">1% (Qualifying High-Tech / IT — Eligibility Required)</button><button type="button" class="preset-chip" data-pct="0.0">0% (Eligible Micro-Business &lt;24M AMD — Restrictions Apply)</button><button type="button" class="preset-chip" data-pct="5.0">5% (Example Turnover Rate)</button><button type="button" class="preset-chip" data-pct="10.0">10% (General Turnover Tax Reference)</button></div>
               <div class="field-group">
-                <label for="in-amount">Monthly Gross Revenue (AMD or USD equiv.)</label>
+                <label for="in-amount">Monthly Gross Sales Turnover (AMD or USD equiv. — Art. 257 Gross Base)</label>
                 <input type="number" id="in-amount" value="1000000" min="0" step="any" />
               </div>
               <div class="field-group">
-                <label for="in-pct">Effective Turnover / Income Tax Rate (%)</label>
-                <input type="number" id="in-pct" value="5.0" min="0" max="99" step="0.01" />
+                <label for="in-pct">Gross Turnover Tax Rate (% on Full Gross Revenue)</label>
+                <input type="number" id="in-pct" value="1.0" min="0" max="99" step="0.01" />
               </div>
               <div class="field-group">
-                <label for="in-fixed">Monthly Fixed Social + Stamp Duty (AMD)</label>
+                <label for="in-fixed">Monthly Fixed Social + Stamp Duty (Zinapah)</label>
                 <input type="number" id="in-fixed" value="15000" min="0" step="0.01" />
               </div>
               <div class="field-group">
-                <label for="in-fx">Bank / Payment Gateway Fee (%)</label>
+                <label for="in-fx">Bank / Payout Gateway Fee (% on Gross)</label>
                 <input type="number" id="in-fx" value="0.0" min="0" max="99" step="0.01" />
               </div>
             </div>
@@ -91,12 +91,12 @@
             <div class="doc-section">
               <span class="kicker">SPECIFICATION &amp; SOURCE ATTRIBUTION</span>
               <h3>Calculation Methodology</h3>
-              <div class="formula-block">Net Monthly Income = Gross Revenue - (Gross × Tax Rate %) - Fixed Monthly Contributions - Banking Fees.</div>
+              <div class="formula-block">Per RA Tax Code Article 257, Turnover Tax is calculated on Gross Sales Turnover (before deducting platform or bank fees): Turnover_Tax = Gross_Turnover × Tax_Rate%. Net Monthly Income = Gross_Turnover - Turnover_Tax - (Gross_Turnover × Bank_Fee%) - Fixed_Monthly_Contributions.</div>
               <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
                 REFERENCE BASIS: RA Tax Code — Turnover Tax &amp; Individual Entrepreneur Schedule &bull; ASSUMPTIONS VERIFIED: 2026-10-27
               </p>
               <h3>Reference Notes &amp; FAQ</h3>
-              <div class="faq-item"><h4>Note on tax rates in Armenia</h4><p>Tax regimes in Armenia depend on your exact activity classification (e.g. Micro-entrepreneurship, Turnover Tax, High-Tech incentives, or General VAT system). Adjust the percentage slider to match your accountant&#x27;s confirmed rate.</p></div><div class="faq-item"><h4>What fixed monthly contributions apply to Armenian Individual Entrepreneurs (IE)?</h4><p>IEs typically pay monthly social pension contributions and the national defense stamp duty (Zinapah) scaled by income brackets.</p></div>
+              <div class="faq-item"><h4>How is the turnover tax base defined under Article 257 of Armenia&#x27;s Tax Code?</h4><p>Article 257 defines the turnover tax base as gross sales turnover. Marketplace commissions (such as Upwork or Fiverr fees) and payment processor withdrawal fees do not reduce the gross turnover tax base.</p></div><div class="faq-item"><h4>Does every freelancer automatically qualify for the 1% High-Tech rate or 0% Micro-Business regime?</h4><p>No. The 1% rate applies strictly to qualifying high-tech/IT activities and eligible taxpayers under the 115M AMD threshold, while the 0% micro-business regime (under 24M AMD) excludes consulting and several professional services. Verify your exact classification with a licensed Armenian accountant.</p></div>
             </div>
           </div>
 
@@ -158,7 +158,7 @@
   <footer>
     <div class="footer-inner">
       <span>&copy; 2026 CalcGrid Publication. Client-side computation engine.</span>
-      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../dashboard.html">Operations &amp; Earnings Proof</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
+      <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
     </div>
   </footer>
   <script src="../assets/tools-runtime.js"></script>

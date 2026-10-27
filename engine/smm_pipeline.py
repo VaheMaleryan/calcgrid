@@ -14,6 +14,7 @@ Implements Part 2 of the Autonomous Growth System:
      - Tracks real UTM visits and conversions from `logs/telemetry.jsonl` to score format effectiveness
 """
 
+import hashlib
 import json
 import os
 import shutil
@@ -34,31 +35,33 @@ EPISODE_BLUEPRINTS = [
     {
         "episode_id": "ep01_upwork_payoneer_armenia",
         "format_type": "corridor_comparison_walkthrough",
-        "title": "What Happens to a $1,000 Upwork Invoice After Platform, Payoneer FX & 1% Tax?",
-        "target_audience_question": "How much of a $1,000 Upwork contract actually reaches an Armenian or Georgian bank account, and what gross bid is needed to net $1,000?",
+        "title": "What Happens to a $1,000 Upwork Invoice After Platform, Payoneer FX & 1% Gross Turnover Tax?",
+        "target_audience_question": "How much of a $1,000 Upwork contract actually reaches an Armenian or Georgian bank account after platform fees, FX spread, and gross turnover tax, and what gross invoice is required to net $1,000?",
         "tool_slug": "cross-border-payout-comparison-engine",
         "utm_query": "country=AM&amount=1000&origin_pct=10&tax=1.0",
         "voiceover_script": (
             "If you bill one thousand dollars on Upwork at an example ten percent marketplace fee, "
             "you do not take home nine hundred dollars. "
             "First, Upwork deducts one hundred dollars plus a ninety-nine cent withdrawal fee, leaving eight hundred ninety-nine dollars and one cent. "
-            "Second, withdrawing via Payoneer to a local currency account typically deducts around three percent in receiving and foreign exchange spread, leaving eight hundred seventy-two dollars. "
-            "Third, after a one percent high-tech turnover tax provision, your net take-home is eight hundred sixty-three dollars and thirty-two cents. "
-            "To net a full one thousand dollars after all three stages, CalcGrid's Reverse Invoice Solver shows you must invoice one thousand one hundred fifty-eight dollars and fifteen cents."
+            "Second, withdrawing via Payoneer to a local currency account typically deducts around three percent in receiving and foreign exchange spread, leaving eight hundred seventy-two dollars and four cents. "
+            "Third, under Article 257 of the Armenian Tax Code, turnover tax is assessed on the full one thousand dollar gross invoice, not post-fee net proceeds. "
+            "For qualifying high-tech activities at the one percent rate, that is ten dollars in tax, leaving eight hundred sixty-two dollars and four cents net take-home. "
+            "To net a full one thousand dollars after all three stages, CalcGrid's Reverse Invoice Solver shows you must invoice one thousand one hundred fifty-nine dollars and eighty-six cents."
         ),
         "slides": [
             ("STAGE 1 // UPWORK 10% EXAMPLE FEE", "$1,000.00 Gross -> $899.01 After Platform", "Upwork 10% ($100.00) + $0.99 Withdrawal"),
-            ("STAGE 2 // PAYONEER RAIL & FX SPREAD", "$899.01 -> $872.04 Net USD Equivalent", "1% Rail + ~2% Local FX Markup ($26.97)"),
-            ("STAGE 3 // 1% IT TURNOVER TAX", "Final Net Take-Home: $863.32", "Total Multi-Stage Burden: 13.67% ($136.68)"),
-            ("REVERSE INVOICE GROSS-UP SOLVER", "Need $1,000.00 Net? Invoice $1,158.15", "Free Country-Aware Calculator at CalcGrid")
+            ("STAGE 2 // PAYONEER RAIL & FX SPREAD", "$899.01 -> $872.04 Net USD Received", "1% Rail + ~2% Local FX Markup ($26.97)"),
+            ("STAGE 3 // 1% TAX ON GROSS TURNOVER (ART. 257)", "Final Net Take-Home: $862.04 ($10.00 Tax)", "Qualifying High-Tech Only (5% Standard Turnover)"),
+            ("REVERSE INVOICE GROSS-UP SOLVER", "Need $1,000.00 Net? Invoice $1,159.86", "Educational Estimate Only — Verify Tax Eligibility")
         ],
         "caption": (
-            "Why a $1,000 freelance contract often turns into ~$863.32 after multi-stage deductions:\n\n"
-            "1. Marketplace fee (10% example + $0.99): -$100.99\n"
-            "2. Payout rail + ~2% FX conversion spread: -$26.97\n"
-            "3. 1% simplified IT turnover tax provision: -$8.72\n"
-            "= $863.32 Net Take-Home (or invoice $1,158.15 to net $1,000.00).\n\n"
-            "Compare Wise, Payoneer, and SWIFT across Armenia, Georgia, Serbia, Philippines, and India with your own numbers:"
+            "Why a $1,000 freelance contract turns into ~$862.04 after multi-stage deductions & gross turnover tax:\n\n"
+            "1. Marketplace fee (10% example + $0.99): -$100.99 ($899.01 transferred)\n"
+            "2. Payout rail + ~2% FX conversion spread: -$26.97 ($872.04 received)\n"
+            "3. 1% turnover tax on $1,000.00 FULL GROSS invoice (RA Tax Code Art. 257): -$10.00\n"
+            "= $862.04 Net Take-Home (or invoice $1,159.86 to net $1,000.00).\n\n"
+            "Note: The 1% high-tech rate and 0% micro-business regime apply strictly to qualifying activities and eligible taxpayers (standard turnover tax is 5%). Educational mathematical estimate only, not tax advice.\n\n"
+            "Compare Wise, Payoneer, and SWIFT across Armenia, Georgia, Serbia, Philippines, and India:"
         )
     },
     {
@@ -144,17 +147,29 @@ def render_vertical_mp4(ep: dict) -> dict:
     """
     Uses macOS `/usr/bin/say` + `/opt/homebrew/bin/ffmpeg` to produce a genuine, playable
     1080x1920 vertical MP4 video with synthesized voiceover and Swiss Editorial ledger typography.
-    Caches rendered MP4 if already present and non-empty.
+    Invalidates cached MP4 automatically whenever voiceover_script or slides change via SHA-256 fingerprint.
     """
     VIDEOS_DIR.mkdir(parents=True, exist_ok=True)
     ep_id = ep["episode_id"]
     out_mp4 = VIDEOS_DIR / f"{ep_id}.mp4"
     srt_file = SUBTITLES_DIR / f"{ep_id}.srt"
+    hash_file = VIDEOS_DIR / f"{ep_id}.sha256"
 
-    if out_mp4.exists() and out_mp4.stat().st_size > 10000 and srt_file.exists():
+    content_fingerprint = hashlib.sha256(
+        (ep["voiceover_script"] + json.dumps(ep["slides"], sort_keys=True)).encode("utf-8")
+    ).hexdigest()
+
+    if (
+        out_mp4.exists()
+        and out_mp4.stat().st_size > 10000
+        and srt_file.exists()
+        and hash_file.exists()
+        and hash_file.read_text(encoding="utf-8").strip() == content_fingerprint
+    ):
         return {
             "video_file": f"marketing_outbox/videos/{ep_id}.mp4",
             "subtitle_file": f"marketing_outbox/subtitles/{ep_id}.srt",
+            "content_sha256": content_fingerprint,
             "duration_sec": 24.0,
             "file_size_bytes": out_mp4.stat().st_size
         }
@@ -220,10 +235,12 @@ def render_vertical_mp4(ep: dict) -> dict:
             ]
 
         subprocess.run(cmd, check=True, capture_output=True)
+        hash_file.write_text(content_fingerprint, encoding="utf-8")
 
     return {
         "video_file": f"marketing_outbox/videos/{ep_id}.mp4",
         "subtitle_file": f"marketing_outbox/subtitles/{ep_id}.srt",
+        "content_sha256": content_fingerprint,
         "duration_sec": round(duration_sec, 1),
         "file_size_bytes": out_mp4.stat().st_size if out_mp4.exists() else 0
     }
@@ -253,7 +270,8 @@ def build_smm_campaign_pack() -> dict:
     yt_token = os.environ.get("YOUTUBE_OAUTH_TOKEN", "").strip()
     ig_token = os.environ.get("IG_ACCESS_TOKEN", "").strip()
     tt_token = os.environ.get("TIKTOK_ACCESS_TOKEN", "").strip()
-    has_live_oauth = bool(yt_token or ig_token or tt_token)
+    audit_approved = os.environ.get("SMM_AUDIT_APPROVED", "").strip().lower() == "true"
+    has_live_oauth = bool((yt_token or ig_token or tt_token) and audit_approved)
 
     episodes_out = []
     for ep in EPISODE_BLUEPRINTS:
@@ -275,9 +293,10 @@ def build_smm_campaign_pack() -> dict:
             "caption_with_link": f"{ep['caption']}\n{tracked_url}",
             "video_file": media_info["video_file"],
             "subtitle_file": media_info["subtitle_file"],
+            "content_sha256": media_info.get("content_sha256", ""),
             "duration_sec": media_info["duration_sec"],
             "file_size_bytes": media_info["file_size_bytes"],
-            "publish_status": "PUBLISHED_VIA_API" if has_live_oauth else "READY_AWAITING_OAUTH_AUTHORIZATION",
+            "publish_status": "PUBLISHED_VIA_API" if has_live_oauth else "HOLD_PENDING_VERIFICATION_AND_OAUTH",
             "measured_utm_clicks": clicks_map.get(ep_id, 0)
         })
 

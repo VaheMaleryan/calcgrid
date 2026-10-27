@@ -3,4 +3,6 @@ __pycache__/
 .DS_Store
 private_products/
 *.zip
+logs/
 marketing_outbox/videos/*.mp4
+marketing_outbox/videos/*.sha256

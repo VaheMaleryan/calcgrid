@@ -130,11 +130,11 @@ COUNTRY_CORRIDORS = {
             }
         },
         "tax_presets": [
-            {"label": "1.0% — Certified High-Tech / IT Turnover Tax (up to 115M AMD/yr cap)", "rate": 1.0},
-            {"label": "0.0% — Micro-Business Regime (up to 24M AMD/yr eligible activities)", "rate": 0.0},
-            {"label": "10.0% — General Turnover Tax Reference Tier", "rate": 10.0}
+            {"label": "1.0% — Qualifying High-Tech / IT Turnover Tax (Gross Base per Art. 257, Eligibility Required)", "rate": 1.0},
+            {"label": "0.0% — Eligible Micro-Business (<24M AMD/yr, Activity Restrictions Apply)", "rate": 0.0},
+            {"label": "10.0% — General Turnover Tax Reference Example (Gross Base)", "rate": 10.0}
         ],
-        "tax_caveat": "Armenia provides a 1% turnover tax rate for eligible high-tech/IT activities under the 115M AMD annual threshold, and 0% micro-business status under 24M AMD for qualifying activities. Non-IT services face higher turnover or profit tax rates. Verify your activity code with a licensed Armenian accountant."
+        "tax_caveat": "Per Article 257 of the Republic of Armenia Tax Code, turnover tax is assessed on full GROSS sales turnover (the gross invoice billed to the client, BEFORE deducting marketplace or payment withdrawal fees). Both the 1% high-tech rate (up to 115M AMD cap) and the 0% micro-business regime (under 24M AMD cap) apply strictly to qualifying activities and eligible taxpayers; many professional/consulting services are excluded. Confirm your eligibility with a licensed Armenian accountant."
     },
     "GE": {
         "name": "Georgia",
@@ -410,10 +410,10 @@ TOOLS_CATALOG = [
             "verified_date": "2026-10-27",
             "source_name": "Multi-Provider Corridor Schedule (Wise, Payoneer, Upwork, RA/GE/RS/PH/IN Tax Codes)"
         },
-        "formula_explanation": "Stage 1 (Platform Deduction): After_Platform = Gross × (1 - Platform_Pct) - Platform_Fixed. Stage 2 (Payout Rail & FX Uncertainty Band): Net_USD = After_Platform × (1 - Rail_Pct - FX_Spread_[Min..Max]) - Rail_Fixed - Intermediary_[Min..Max]. Stage 3 (Local Tax Provision): Final_Net = Net_USD × (1 - Local_Tax_Pct). Multi-Stage Reverse Invoice Solver: Required_Gross = (Target_Net / ((1 - Tax_Pct) × (1 - Rail_Pct - FX_Spread)) + Rail_Fixed + Platform_Fixed) / (1 - Platform_Pct).",
+        "formula_explanation": "Stage 1 (Platform Deduction): After_Platform = Gross × (1 - Platform_Pct) - Platform_Fixed. Stage 2 (Payout Rail & FX Uncertainty Band): Net_USD = After_Platform × (1 - Rail_Pct - FX_Spread_[Min..Max]) - Rail_Fixed - Intermediary_[Min..Max]. Stage 3 (Gross Turnover Tax Base — e.g. RA Tax Code Art. 257): Turnover_Tax = Gross × Local_Tax_Pct; Final_Net = Net_USD - Turnover_Tax. Multi-Stage Reverse Invoice Solver: Required_Gross = (Target_Net + Platform_Fixed × (1 - Rail_Pct - FX_Spread) + Rail_Fixed + Intermediary) / ((1 - Platform_Pct) × (1 - Rail_Pct - FX_Spread) - Local_Tax_Pct).",
         "faqs": [
-            ("Why do generic fee calculators overestimate freelancer take-home pay?", "Most calculators only subtract a single gateway fee (like Upwork's 10% or Stripe's 2.9%). In reality, cross-border freelancers face a 4-stage deduction chain: (1) Marketplace/client platform fee, (2) Payout rail withdrawal fee, (3) Currency conversion (FX) spread or SWIFT intermediary deduction ($10–$35), and (4) Local entrepreneur turnover tax."),
-            ("Why is Wise marked as restricted for receiving in Armenia while supported in Georgia and the Philippines?", "Wise's multi-currency receiving account features vary by resident jurisdiction. Residents of Armenia cannot currently open local USD/EUR receiving bank details on Wise, making Payoneer, Lemon Squeezy MoR, or direct bank wires the primary options, whereas residents of Georgia, Serbia, the Philippines, and India have broader Wise route access."),
+            ("Why is turnover tax calculated on the Gross Invoice rather than the post-fee payout?", "Under gross turnover tax regimes—such as Article 257 of Armenia's Tax Code or Georgia's Small Business Status—the tax base is your gross sales revenue (the full invoice amount billed to the client), without deducting marketplace commissions (like Upwork's 10%) or bank withdrawal fees. Subtracting tax only from the remaining post-fee payout understates your legal tax obligation."),
+            ("Who qualifies for Armenia's 1% High-Tech rate or 0% Micro-Business regime?", "Both regimes have strict statutory eligibility requirements under the RA Tax Code. The 1% turnover tax rate applies only to qualifying high-tech/IT activities and eligible taxpayers (within the 115M AMD annual threshold), and the 0% micro-business regime (under 24M AMD) excludes several professional, consulting, and specialized service categories. Always confirm your activity classification with a certified accountant."),
             ("Does this calculator invent live exchange rates?", "Never. Exchange rates fluctuate every minute and banks apply custom spreads. We provide a user-editable Reference Exchange Rate field and calculate transparent Best-Case to Worst-Case Net Payout ranges so you can see the exact impact of FX markups and SWIFT intermediary fees.")
         ]
     },
@@ -645,24 +645,32 @@ TOOLS_CATALOG = [
     },
     {
         "slug": "armenia-it-tax-turnover-calculator",
-        "title": "Armenia Freelancer, Sole Proprietor & Turnover Tax Calculator",
+        "title": "Armenia Freelancer, Sole Proprietor & Gross Turnover Tax Calculator (Art. 257)",
         "category": "Payment & Fee Calculators",
-        "short_desc": "Estimate net take-home income in Armenia after turnover tax, stamp duty (Zinapah), and fixed social contributions.",
+        "short_desc": "Estimate net take-home income in Armenia with turnover tax assessed on full gross sales revenue (RA Tax Code Art. 257), fixed social/stamp contributions, and banking fees.",
         "tool_type": "fee_calc",
         "config": {
-            "label_amount": "Monthly Gross Revenue (AMD or USD equiv.)",
+            "label_amount": "Monthly Gross Sales Turnover (AMD or USD equiv. — Art. 257 Gross Base)",
             "default_amount": 1000000,
-            "percent_fee": 5.0,
+            "percent_fee": 1.0,
             "fixed_fee": 15000,
             "fx_markup_percent": 0.0,
-            "label_pct": "Effective Turnover / Income Tax Rate (%)",
-            "label_fixed": "Monthly Fixed Social + Stamp Duty (AMD)",
-            "label_fx": "Bank / Payment Gateway Fee (%)"
+            "label_pct": "Gross Turnover Tax Rate (% on Full Gross Revenue)",
+            "label_fixed": "Monthly Fixed Social + Stamp Duty (Zinapah)",
+            "label_fx": "Bank / Payout Gateway Fee (% on Gross)",
+            "presets": [
+                {"label": "1% (Qualifying High-Tech / IT — Eligibility Required)", "pct": 1.0},
+                {"label": "0% (Eligible Micro-Business <24M AMD — Restrictions Apply)", "pct": 0.0},
+                {"label": "5% (Example Turnover Rate)", "pct": 5.0},
+                {"label": "10% (General Turnover Tax Reference)", "pct": 10.0}
+            ],
+            "source_name": "Republic of Armenia Tax Code (Article 257 Gross Turnover Base)",
+            "verified_date": "2026-10-27"
         },
-        "formula_explanation": "Net Monthly Income = Gross Revenue - (Gross × Tax Rate %) - Fixed Monthly Contributions - Banking Fees.",
+        "formula_explanation": "Per RA Tax Code Article 257, Turnover Tax is calculated on Gross Sales Turnover (before deducting platform or bank fees): Turnover_Tax = Gross_Turnover × Tax_Rate%. Net Monthly Income = Gross_Turnover - Turnover_Tax - (Gross_Turnover × Bank_Fee%) - Fixed_Monthly_Contributions.",
         "faqs": [
-            ("Note on tax rates in Armenia", "Tax regimes in Armenia depend on your exact activity classification (e.g. Micro-entrepreneurship, Turnover Tax, High-Tech incentives, or General VAT system). Adjust the percentage slider to match your accountant's confirmed rate."),
-            ("What fixed monthly contributions apply to Armenian Individual Entrepreneurs (IE)?", "IEs typically pay monthly social pension contributions and the national defense stamp duty (Zinapah) scaled by income brackets.")
+            ("How is the turnover tax base defined under Article 257 of Armenia's Tax Code?", "Article 257 defines the turnover tax base as gross sales turnover. Marketplace commissions (such as Upwork or Fiverr fees) and payment processor withdrawal fees do not reduce the gross turnover tax base."),
+            ("Does every freelancer automatically qualify for the 1% High-Tech rate or 0% Micro-Business regime?", "No. The 1% rate applies strictly to qualifying high-tech/IT activities and eligible taxpayers under the 115M AMD threshold, while the 0% micro-business regime (under 24M AMD) excludes consulting and several professional services. Verify your exact classification with a licensed Armenian accountant.")
         ]
     },
 

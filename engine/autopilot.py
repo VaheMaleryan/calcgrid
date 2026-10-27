@@ -303,6 +303,10 @@ for (const tool of tools) {
     out.am_reverse = std.elements['out-reverse'].textContent;
     out.am_rows = std.elements['corridor-comparison-body'].children.length;
 
+    const am5Run = runToolInSandbox(tool, '?country=AM&tax=5.0', { country: 'AM', tax: 5.0 });
+    out.am_5pct_net = am5Run.elements['out-net'].textContent;
+    out.am_5pct_reverse = am5Run.elements['out-reverse'].textContent;
+
     const geRun = runToolInSandbox(tool, '?country=GE', { country: 'GE' });
     out.ge_net = geRun.elements['out-net'].textContent;
     out.ge_best_rail = geRun.elements['out-best-rail'].textContent;
@@ -379,13 +383,17 @@ console.log(JSON.stringify(results));
         tested_tools.append(slug)
 
         if t_type == "corridor_engine":
-            # Verify Armenia (Wise restricted -> Payoneer Local Withdrawal wins at $863.32 net, $1,158.37 reverse invoice)
+            # Verify Armenia (RA Tax Code Art. 257 Gross Turnover Base: $1,000 gross -> $10.00 tax at 1% -> $862.04 net, $1,159.86 reverse invoice)
             if res.get("am_best_rail") != "Payoneer Local Withdrawal (Armenia)":
                 failures.append(f"{slug}: Expected Payoneer Local Withdrawal for Armenia, got {res.get('am_best_rail')}")
-            if res.get("am_net") != "$863.32":
-                failures.append(f"{slug}: Armenia expected net $863.32, got {res.get('am_net')}")
-            if res.get("am_reverse") != "$1,158.15":
-                failures.append(f"{slug}: Armenia reverse invoice expected $1,158.15, got {res.get('am_reverse')}")
+            if res.get("am_net") != "$862.04":
+                failures.append(f"{slug}: Armenia 1% gross turnover tax expected net $862.04, got {res.get('am_net')}")
+            if res.get("am_reverse") != "$1,159.86":
+                failures.append(f"{slug}: Armenia 1% reverse invoice expected $1,159.86, got {res.get('am_reverse')}")
+            if res.get("am_5pct_net") != "$822.04":
+                failures.append(f"{slug}: Armenia 5% standard gross turnover tax expected net $822.04, got {res.get('am_5pct_net')}")
+            if res.get("am_5pct_reverse") != "$1,216.23":
+                failures.append(f"{slug}: Armenia 5% reverse invoice expected $1,216.23, got {res.get('am_5pct_reverse')}")
             if res.get("am_rows") != 4:
                 failures.append(f"{slug}: Expected 4 payout routes in comparison table, got {res.get('am_rows')}")
             # Verify Georgia (Wise available -> Wise Mid-Market Route wins)
@@ -496,28 +504,40 @@ console.log(JSON.stringify(results));
 def run_qa_and_security_verification() -> dict:
     """
     Verifies HTML, JSON-LD, links, compliance (no homemade consent banner or unconfigured ad/checkout placeholders),
-    confirms the paid ZIP is NOT in `dist/` or Git history, and verifies the multi-tab `.xlsx` workbook inside the ZIP.
+    confirms the paid ZIP and private dashboard are NOT in `dist/` or Git history, and verifies the multi-tab `.xlsx` workbook inside the ZIP.
     """
     issues = []
     html_files = list(DIST_DIR.rglob("*.html"))
 
-    if len(html_files) != len(TOOLS_CATALOG) + 3:
-        issues.append(f"Expected {len(TOOLS_CATALOG) + 3} HTML files, found {len(html_files)}")
+    if len(html_files) != len(TOOLS_CATALOG) + 2:
+        issues.append(f"Expected {len(TOOLS_CATALOG) + 2} public HTML files, found {len(html_files)}")
 
-    # 1. CRITICAL SECURITY CHECK: Ensure no .zip files exist in public dist/
+    # 1. CRITICAL SECURITY CHECK: Ensure no .zip files or private dashboard exist in public dist/
     exposed_zips = list(DIST_DIR.rglob("*.zip"))
     if exposed_zips:
         issues.append(f"SECURITY VIOLATION: Paid ZIP exposed inside public dist/: {exposed_zips}")
 
+    public_dashboard_exposed = (DIST_DIR / "dashboard.html").exists()
+    if public_dashboard_exposed:
+        issues.append("PRIVACY VIOLATION: dashboard.html exposed inside public dist/")
+
+    private_dashboard_exists = (LOGS_DIR / "private_dashboard.html").exists()
+    if not private_dashboard_exists:
+        issues.append("Missing private operator dashboard at logs/private_dashboard.html")
+
     # 2. GIT HISTORY SECURITY CHECK: Ensure no .zip files exist anywhere in git commit history
     git_dir = ROOT_DIR / ".git"
     git_history_zips = []
+    git_env = {**os.environ, "GIT_CONFIG_GLOBAL": "/dev/null", "GIT_CONFIG_SYSTEM": "/dev/null"}
     if git_dir.exists():
         proc_git = subprocess.run(
             ["git", "-C", str(ROOT_DIR), "log", "--all", "--full-history", "--name-only", "--pretty=format:", "--", "*.zip"],
             capture_output=True,
             text=True,
+            env=git_env,
         )
+        if proc_git.returncode != 0:
+            issues.append(f"Git history check failed to execute: {proc_git.stderr.strip()}")
         git_history_zips = [line.strip() for line in proc_git.stdout.splitlines() if line.strip()]
         if git_history_zips:
             issues.append(f"SECURITY VIOLATION: .zip file found in Git commit history: {git_history_zips}")
@@ -561,10 +581,22 @@ def run_qa_and_security_verification() -> dict:
             if not target_path.exists():
                 issues.append(f"Broken relative reference '{ref}' in {html_file.name}")
 
-    for required_file in ["sitemap.xml", "robots.txt", "rss.xml", "dashboard.html", f"{INDEXNOW_KEY}.txt"]:
+        if "dashboard.html" in content:
+            issues.append(f"Public link to private dashboard found in {html_file.name}")
+
+    for required_file in ["sitemap.xml", "robots.txt", "rss.xml", f"{INDEXNOW_KEY}.txt"]:
         p = DIST_DIR / required_file
         if not p.exists() or p.stat().st_size == 0:
             issues.append(f"Missing or empty artifact: {required_file}")
+
+    # Verify SMM Episode 1 uses verified Article 257 Gross Turnover Tax math ($862.04 net / $1,159.86 reverse)
+    ep1_srt = ROOT_DIR / "marketing_outbox" / "subtitles" / "ep01_upwork_payoneer_armenia.srt"
+    if ep1_srt.exists():
+        srt_text = ep1_srt.read_text(encoding="utf-8")
+        if "$863.32" in srt_text or "$1,158.15" in srt_text:
+            issues.append("SMM Episode 1 subtitle still contains deprecated post-fee tax numbers ($863.32 / $1,158.15)")
+        if "$862.04" not in srt_text or "$1,159.86" not in srt_text:
+            issues.append("SMM Episode 1 subtitle missing verified Article 257 gross turnover tax numbers ($862.04 / $1,159.86)")
 
     # 3. Verify private Pro ZIP exists outside dist/, contains valid 3-sheet .xlsx + 3 CSVs + working CLI
     private_zip = PRIVATE_PRODUCTS_DIR / "calcgrid-pro-offline-suite.zip"
@@ -614,6 +646,8 @@ def run_qa_and_security_verification() -> dict:
     return {
         "passed": len(issues) == 0,
         "public_zip_exposed": len(exposed_zips) > 0,
+        "public_dashboard_exposed": public_dashboard_exposed,
+        "private_dashboard_generated": private_dashboard_exists,
         "git_history_zip_exposed": len(git_history_zips) > 0,
         "xlsx_worksheets_verified": xlsx_sheets_verified,
         "html_pages_verified": len(html_files),
@@ -673,10 +707,12 @@ def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
 
     rollback_triggered = False
     if not all_passed and auto_rollback and (ROOT_DIR / ".git").exists():
+        git_env = {**os.environ, "GIT_CONFIG_GLOBAL": "/dev/null", "GIT_CONFIG_SYSTEM": "/dev/null"}
         subprocess.run(
             ["git", "-C", str(ROOT_DIR), "checkout", "--", "dist/", "engine/"],
             capture_output=True,
             text=True,
+            env=git_env,
         )
         rollback_triggered = True
 
@@ -701,9 +737,30 @@ def run_autopilot_cycle(auto_rollback: bool = False) -> dict:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="CalcGrid Autonomous Operations & Verification Suite")
     parser.add_argument("--auto-rollback", action="store_true", help="Automatically roll back git working tree on test failure")
+    parser.add_argument("--commit", type=str, default="", help="Commit verified changes to git with the given commit message if all checks pass")
     args = parser.parse_args()
 
     rep = run_autopilot_cycle(auto_rollback=args.auto_rollback)
+    if args.commit and rep["all_checks_passed"] and (ROOT_DIR / ".git").exists():
+        git_env = {
+            **os.environ,
+            "GIT_CONFIG_GLOBAL": "/dev/null",
+            "GIT_CONFIG_SYSTEM": "/dev/null",
+            "GIT_AUTHOR_NAME": "CalcGrid Autopilot",
+            "GIT_AUTHOR_EMAIL": "autopilot@calcgrid.io",
+            "GIT_COMMITTER_NAME": "CalcGrid Autopilot",
+            "GIT_COMMITTER_EMAIL": "autopilot@calcgrid.io",
+        }
+        subprocess.run(["git", "-C", str(ROOT_DIR), "add", "-A"], check=True, env=git_env)
+        # Ensure logs/ and private_products/ are untracked if previously tracked
+        subprocess.run(["git", "-C", str(ROOT_DIR), "rm", "-r", "--cached", "--ignore-unmatch", "logs", "private_products"], check=False, capture_output=True, env=git_env)
+        status_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "status", "--porcelain"], capture_output=True, text=True, env=git_env)
+        if status_proc.stdout.strip():
+            subprocess.run(["git", "-C", str(ROOT_DIR), "commit", "-m", args.commit], check=True, capture_output=True, env=git_env)
+        head_proc = subprocess.run(["git", "-C", str(ROOT_DIR), "rev-parse", "--short", "HEAD"], capture_output=True, text=True, env=git_env)
+        rep["git_commit"] = head_proc.stdout.strip()
+        REPORT_FILE.write_text(json.dumps(rep, indent=2), encoding="utf-8")
+
     print(json.dumps(rep, indent=2))
     if not rep["all_checks_passed"]:
         raise SystemExit(1)
