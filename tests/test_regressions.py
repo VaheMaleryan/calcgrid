@@ -146,7 +146,7 @@ assert.ok(schema.includes('"full name": string')); assert.ok(schema.includes('z.
     def test_cron_validation_and_quoted_csv_conversion(self):
         self.run_js(r'''
 const dev = mode => tools.find(t => t.config.dev_mode === mode);
-for (const input of ['99 99 99 99 99','a b c d e','*/0 * * * *','5-2 * * * *']) assert.ok(runToolInSandbox(dev('cron'),'',{input}).elements['dev-output'].textContent.startsWith('Error:'));
+for (const input of ['99 99 99 99 99','a b c d e','*/0 * * * *','5-2 * * * *','*/999999999999999999999999 * * * *']) assert.ok(runToolInSandbox(dev('cron'),'',{input}).elements['dev-output'].textContent.startsWith('Error:'));
 assert.ok(runToolInSandbox(dev('cron'),'',{input:'*/15 9-17 * * 1-5'}).elements['dev-output'].textContent.startsWith('Valid'));
 const csv = 'name,id,active\n"Doe, Jane",001,true';
 const data = JSON.parse(runToolInSandbox(dev('csv_to_json'),'',{input:csv}).elements['dev-output'].textContent);

@@ -581,7 +581,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
         const netProfit = orders * margin - c;
         r1Label = 'Break-Even ROAS Required';
         r1Val = margin <= 0 || a <= 0 ? 'Not achievable' : beRoas.toFixed(2) + 'x';
-        r2Label = 'Max Profitable CPA';
+        r2Label = 'Break-Even CPA Ceiling';
         r2Val = fmtMoney(Math.max(0, margin));
         r3Label = 'Estimated Monthly Net Profit';
         r3Val = fmtMoney(netProfit);
@@ -711,7 +711,7 @@ const CALCGRID_CORRIDORS = {"AM": {"name": "Armenia", "currency": "AMD", "defaul
           const limits = [[0,59],[0,23],[1,31],[1,12],[0,7]];
           const valid = parts.length === 5 && parts.every((field,i) => field.split(',').every(piece => {
             const split = piece.split('/');
-            if (split.length > 2 || (split.length === 2 && (!/^\d+$/.test(split[1]) || Number(split[1]) < 1))) return false;
+            if (split.length > 2 || (split.length === 2 && (!/^\d+$/.test(split[1]) || !Number.isSafeInteger(Number(split[1])) || Number(split[1]) < 1))) return false;
             if (split[0] === '*') return true;
             if (!/^\d+(?:-\d+)?$/.test(split[0])) return false;
             const ends = split[0].split('-').map(Number);
