@@ -34,7 +34,7 @@ PRIVATE_PRODUCTS_DIR = ROOT_DIR / "private_products"
 LOGS_DIR = ROOT_DIR / "logs"
 MARKETING_DIR = ROOT_DIR / "marketing_outbox"
 
-SITE_URL = os.environ.get("SITE_URL", "https://calcgrid-tools.pages.dev")
+SITE_URL = os.environ.get("SITE_URL", "https://vahemaleryan.github.io/calcgrid")
 INDEXNOW_KEY = "8f92a1c4e7b34d109a8e2c5f6b7d8e91"
 LEMON_SQUEEZY_CHECKOUT_URL = os.environ.get("LEMON_SQUEEZY_URL", "").strip()
 ADSENSE_CLIENT_ID = os.environ.get("ADSENSE_CLIENT_ID", "").strip()
