@@ -7,7 +7,7 @@
   <meta name="description" content="Estimate Wise (TransferWise) variable transfer percentage, fixed wire cost, and net recipient amount." />
   <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/wise-transfer-fee-calculator.html" />
   <link rel="stylesheet" href="../assets/styles.css" />
-  <meta name="theme-color" content="#174f46" />
+  <meta name="theme-color" content="#234c3f" />
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="../assets/favicon.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
@@ -28,20 +28,22 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="navbar"><div class="nav-inner">
-      <a href="../index.html" class="brand" aria-label="PayoutFolio home"><svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 5h15a9 9 0 0 1 0 18H14v8H6V5Z" fill="currentColor"/><path d="M14 12h7a2 2 0 0 1 0 4h-7v-4Z" fill="#f6f5f0"/><path d="M25 24v7h6v-9" stroke="currentColor" stroke-width="3"/></svg><span class="brand-name">PayoutFolio</span></a>
+      <a href="../index.html" class="brand" aria-label="PayoutFolio home"><svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 5h15a9 9 0 0 1 0 18H14v8H6V5Z" fill="currentColor"/><path d="M14 12h7a2 2 0 0 1 0 4h-7v-4Z" fill="#f7f8f5"/><path d="M25 24v7h6v-9" stroke="currentColor" stroke-width="3"/></svg><span class="brand-name">PayoutFolio</span></a>
       <nav class="nav-links" aria-label="Main navigation"><a href="../tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
         <a href="../tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
         <a href="../index.html#directory">All calculators</a>
-        <a href="../legal.html">Methodology</a></nav>
+        <a href="../legal.html">Methodology</a>
+        <a href="../tools/cross-border-payout-comparison-engine.html" class="nav-cta">Compare a payout &nearr;</a></nav>
       <details class="mobile-menu"><summary>Menu &nbsp; +</summary><nav aria-label="Mobile navigation"><a href="../tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
         <a href="../tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
         <a href="../index.html#directory">All calculators</a>
-        <a href="../legal.html">Methodology</a></nav></details>
+        <a href="../legal.html">Methodology</a>
+        <a href="../tools/cross-border-payout-comparison-engine.html" class="nav-cta">Compare a payout &nearr;</a></nav></details>
     </div></header>
   <main class="container" id="main-content">
     <div class="breadcrumb-bar">
       <span><a href="../index.html">All calculators</a> &nbsp;/&nbsp; Payment &amp; Fee Calculators</span>
-      <span>MODEL BASIS: WISE MID-MARKET &amp; CORRIDOR PRICING SCHEDULE (2026-10-27)</span>
+      <span>Assumptions model &nbsp;·&nbsp; 2026-10-27</span>
     </div>
     <header class="tool-header">
       <h1>Wise transfer calculator</h1>
@@ -52,7 +54,7 @@
     
         <div class="workspace-grid" id="interactive-tool-root" data-tool-type="fee_calc" data-tool-config="{&quot;label_amount&quot;: &quot;Transfer Send Amount ($ USD)&quot;, &quot;default_amount&quot;: 1500, &quot;percent_fee&quot;: 0.65, &quot;fixed_fee&quot;: 4.14, &quot;fx_markup_percent&quot;: 0.0, &quot;label_pct&quot;: &quot;Wise Variable Route Fee (%)&quot;, &quot;label_fixed&quot;: &quot;Fixed Wire / ACH Fee ($)&quot;, &quot;label_fx&quot;: &quot;Exchange Rate Spread (%) \u2014 Wise uses 0% mid-market&quot;}"><div class="parameters-sheet">
               <div class="sheet-heading">
-                <span>FIG. 01 — INPUT PARAMETERS</span>
+                <span>YOUR INPUTS</span>
                 <span>MODEL: 2026-10-27</span>
               </div>
               
@@ -74,7 +76,7 @@
               </div>
             </div><div class="ledger-sheet" aria-live="polite" aria-atomic="true">
               <div class="sheet-heading">
-                <span>FIG. 02 — SETTLEMENT LEDGER</span>
+                <span>ESTIMATED SETTLEMENT</span>
                 <span>LIVE CALCULATION</span>
               </div>
               <div class="ledger-primary">
@@ -100,7 +102,7 @@
                 <button type="button" id="btn-copy-permalink" class="btn-secondary">Copy Permalink</button>
               </div>
             </div><div class="workspace-notes"><div class="doc-section">
-              <span class="kicker">FIG. 03 — MULTI-VOLUME SENSITIVITY MATRIX</span>
+              <span class="kicker">COMPARE INVOICE SIZES</span>
               <h3>Tiered Settlement &amp; Reverse Gross-Up Schedule</h3>
               <p style="font-size:0.83rem;color:var(--ink-secondary);margin-bottom:8px">Live comparison across transaction volumes using your active fee parameters above:</p>
               <div class="table-scroll" role="region" aria-label="Calculation table, scroll horizontally for all columns" tabindex="0">
@@ -122,7 +124,7 @@
             
 
             <div class="doc-section">
-              <span class="kicker">SPECIFICATION &amp; SOURCE ATTRIBUTION</span>
+              <span class="kicker">FORMULAS &amp; ASSUMPTIONS</span>
               <h3>Calculation Methodology</h3>
               <div class="formula-block">Net Converted Amount = Send Amount - Fixed Route Fee - (Send Amount × Variable Route Fee %).</div>
               <p style="font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-muted);margin-bottom:20px">
@@ -142,7 +144,7 @@
 
   <footer>
     <div class="footer-inner">
-      <span>&copy; 2026 PayoutFolio Publication. Client-side computation engine.</span>
+      <span>&copy; 2026 PayoutFolio Publication. Independent planning tools.</span>
       <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
     </div>
   </footer>

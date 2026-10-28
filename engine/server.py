@@ -6,7 +6,7 @@ Serves `dist/` on loopback only. This server does not ingest telemetry or receiv
 
 import json
 import os
-from http.server import SimpleHTTPRequestHandler, HTTPServer
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -72,6 +72,7 @@ class CalcGridServerHandler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8098))
-    server = HTTPServer(("127.0.0.1", port), CalcGridServerHandler)
+    # Browsers keep speculative connections open; one idle socket must not block the preview.
+    server = ThreadingHTTPServer(("127.0.0.1", port), CalcGridServerHandler)
     print(f"PayoutFolio local preview running at http://localhost:{port}")
     server.serve_forever()

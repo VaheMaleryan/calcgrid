@@ -59,3 +59,9 @@ The CSV auditor requires a standardized four-column format and uses illustrative
 A normal static deployment does not provide visitor/conversion analytics, paid checkout fulfillment or autonomous social distribution. Those capabilities require separate implementation, verification and any required owner authorizations. Existing narrated videos use a branded static visual; their episode-specific visuals and legal/fee claims need review before publication.
 
 The audit added edge-case coverage for negative contribution margins, zero/100% denominators, AMD currency output, supported account eligibility, quoted CSV conversion, nested schemas, Unicode decoding, cron bounds, preserved SQL literals, existing UTM fragments, and private-CLI validation. Deliberately limited Markdown, SVG and reference-extraction helpers now describe their actual scope.
+
+## Design system
+
+The public UI uses locally hosted Instrument Serif (regular and italic) and variable Manrope. Their SIL Open Font Licenses ship in `engine/brand_assets/fonts/` and in the public/offline builds. Runtime pages do not contact a font service. Layout, copy and calculator markup live in `engine/build_site.py`.
+
+To regenerate the committed 1200 × 630 social preview with Pillow installed, run `python3 engine/render_brand_assets.py`, then rebuild the site. Asset generation is optional during deployment; the generated image and licensed fonts are committed.

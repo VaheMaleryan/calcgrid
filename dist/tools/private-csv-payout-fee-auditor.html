@@ -3,49 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A private check on your payout fees — PayoutFolio</title>
+  <title>Payout fee auditor. — PayoutFolio</title>
   <meta name="description" content="Check a standardized four-column transaction CSV against illustrative provider baselines, entirely in your browser. Raw provider exports need conversion first." />
   <link rel="canonical" href="https://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html" />
   <link rel="stylesheet" href="../assets/styles.css" />
-  <meta name="theme-color" content="#174f46" />
+  <meta name="theme-color" content="#234c3f" />
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="../assets/favicon.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PayoutFolio" />
-    <meta property="og:title" content="A private check on your payout fees" />
+    <meta property="og:title" content="Payout fee auditor." />
     <meta property="og:description" content="Check a standardized four-column transaction CSV against illustrative provider baselines, entirely in your browser. Raw provider exports need conversion first." />
     <meta property="og:url" content="https://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html" />
     <meta property="og:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
     <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="A private check on your payout fees" />
+    <meta name="twitter:title" content="Payout fee auditor." />
     <meta name="twitter:description" content="Check a standardized four-column transaction CSV against illustrative provider baselines, entirely in your browser. Raw provider exports need conversion first." />
     <meta name="twitter:image" content="https://vahemaleryan.github.io/calcgrid/assets/og-preview.png" />
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "A private check on your payout fees", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Check a standardized four-column transaction CSV against illustrative provider baselines, entirely in your browser. Raw provider exports need conversion first.", "url": "https://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Are my rows sent to a server?", "acceptedAnswer": {"@type": "Answer", "text": "No. Parsing and calculations run in your browser. Use the required tx_id,provider,gross_usd,actual_net_usd schema; native provider statement layouts are not auto-mapped."}}, {"@type": "Question", "name": "Does a flagged variance prove hidden fees?", "acceptedAnswer": {"@type": "Answer", "text": "No. It means actual net differs in either direction from the illustrative baseline beyond max($0.50, 0.25% of gross). Account-specific pricing, refunds, taxes and currency differences can also explain it."}}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "name": "Payout fee auditor.", "applicationCategory": "BusinessApplication", "operatingSystem": "Web Browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Check a standardized four-column transaction CSV against illustrative provider baselines, entirely in your browser. Raw provider exports need conversion first.", "url": "https://vahemaleryan.github.io/calcgrid/tools/private-csv-payout-fee-auditor.html"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Are my rows sent to a server?", "acceptedAnswer": {"@type": "Answer", "text": "No. Parsing and calculations run in your browser. Use the required tx_id,provider,gross_usd,actual_net_usd schema; native provider statement layouts are not auto-mapped."}}, {"@type": "Question", "name": "Does a flagged variance prove hidden fees?", "acceptedAnswer": {"@type": "Answer", "text": "No. It means actual net differs in either direction from the illustrative baseline beyond max($0.50, 0.25% of gross). Account-specific pricing, refunds, taxes and currency differences can also explain it."}}]}]}</script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="navbar"><div class="nav-inner">
-      <a href="../index.html" class="brand" aria-label="PayoutFolio home"><svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 5h15a9 9 0 0 1 0 18H14v8H6V5Z" fill="currentColor"/><path d="M14 12h7a2 2 0 0 1 0 4h-7v-4Z" fill="#f6f5f0"/><path d="M25 24v7h6v-9" stroke="currentColor" stroke-width="3"/></svg><span class="brand-name">PayoutFolio</span></a>
+      <a href="../index.html" class="brand" aria-label="PayoutFolio home"><svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 5h15a9 9 0 0 1 0 18H14v8H6V5Z" fill="currentColor"/><path d="M14 12h7a2 2 0 0 1 0 4h-7v-4Z" fill="#f7f8f5"/><path d="M25 24v7h6v-9" stroke="currentColor" stroke-width="3"/></svg><span class="brand-name">PayoutFolio</span></a>
       <nav class="nav-links" aria-label="Main navigation"><a href="../tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
         <a href="../tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
         <a href="../index.html#directory">All calculators</a>
-        <a href="../legal.html">Methodology</a></nav>
+        <a href="../legal.html">Methodology</a>
+        <a href="../tools/cross-border-payout-comparison-engine.html" class="nav-cta">Compare a payout &nearr;</a></nav>
       <details class="mobile-menu"><summary>Menu &nbsp; +</summary><nav aria-label="Mobile navigation"><a href="../tools/cross-border-payout-comparison-engine.html">Payout comparison</a>
         <a href="../tools/private-csv-payout-fee-auditor.html">CSV auditor</a>
         <a href="../index.html#directory">All calculators</a>
-        <a href="../legal.html">Methodology</a></nav></details>
+        <a href="../legal.html">Methodology</a>
+        <a href="../tools/cross-border-payout-comparison-engine.html" class="nav-cta">Compare a payout &nearr;</a></nav></details>
     </div></header>
   <main class="container" id="main-content">
     <div class="breadcrumb-bar">
       <span><a href="../index.html">All calculators</a> &nbsp;/&nbsp; Payment &amp; Fee Calculators</span>
-      <span>MODEL BASIS: PUBLISHED PROVIDER FEE SCHEDULES (STRIPE, PAYONEER, WISE, UPWORK, LEMON SQUEEZY) (2026-10-27)</span>
+      <span>Assumptions model &nbsp;·&nbsp; 2026-10-27</span>
     </div>
     <header class="tool-header">
-      <h1>A private check on your payout fees</h1>
-      <p>Check a standardized four-column transaction CSV against illustrative provider baselines, entirely in your browser. Raw provider exports need conversion first.</p>
+      <h1>Payout fee auditor.</h1>
+      <p>A second look at what landed. Check a standardized transaction CSV against illustrative fee baselines, privately on your device.</p>
       <div class="estimate-notice">Planning estimate · Rates and FX inputs are illustrative, editable assumptions. Confirm availability, fees and tax eligibility with your provider and adviser. <a href="../legal.html" style="text-decoration:underline">Methodology &amp; privacy &rarr;</a></div>
     </header>
 
@@ -61,7 +63,7 @@
                 <span class="field-hint">Supported provider codes: lemonsqueezy, payoneer, wise, upwork_10, upwork_5, upwork_15, stripe_intl, fiverr.</span>
               </div>
               <div class="field-group">
-                <label for="csv-audit-input">Or Paste CSV Rows (`tx_id,provider,gross_usd,actual_net_usd`)</label>
+                <label for="csv-audit-input">Or paste your CSV</label>
                 <p class="field-hint">Use the four-column format shown below; raw provider exports need conversion first. Up to 50 transactions. Quoted CSV fields are supported. Baselines are examples, not account-specific quotes.</p>
                 <textarea id="csv-audit-input">tx_id,provider,gross_usd,actual_net_usd
 TX-1001,lemonsqueezy,49.00,45.32
@@ -77,8 +79,8 @@ TX-1005,stripe_intl,500.00,465.00</textarea>
               </div>
             </div><div class="ledger-sheet" aria-live="polite" aria-atomic="true">
               <div class="sheet-heading">
-                <span>FIG. 02 — AUDIT SUMMARY</span>
-                <span>LIVE VARIANCE DETECTION</span>
+                <span>YOUR AUDIT SUMMARY</span>
+                <span>ILLUSTRATIVE BASELINES</span>
               </div>
               <div class="ledger-primary">
                 <span class="ledger-primary-label">Net shortfall vs. example baseline</span>
@@ -99,8 +101,8 @@ TX-1005,stripe_intl,500.00,465.00</textarea>
                 </div>
               </div>
             </div><div class="workspace-notes"><div class="doc-section">
-              <span class="kicker">FIG. 03 — LINE-BY-LINE FEE &amp; FX VARIANCE LEDGER</span>
-              <h3>Reconciled Transaction Audit Table</h3>
+              <span class="kicker">THE TRANSACTION DETAIL</span>
+              <h3>Your transaction breakdown.</h3>
               <div class="table-scroll" role="region" aria-label="Calculation table, scroll horizontally for all columns" tabindex="0">
                 <table class="matrix-table">
                   <thead>
@@ -123,7 +125,7 @@ TX-1005,stripe_intl,500.00,465.00</textarea>
 
             <div class="doc-section">
               <span class="kicker">SPECIFICATION &amp; AUDIT LOGIC</span>
-              <h3>Variance Detection Methodology</h3>
+              <h3>How the comparison works.</h3>
               <div class="formula-block">For each CSV transaction row: Expected_Fee = Gross_USD × ((Published_Base_Pct + Published_FX_Spread_Pct) / 100) + Published_Fixed_Fee. Expected_Net = Gross_USD - Expected_Fee. Fee_Leakage_Variance = Actual_Net_USD - Expected_Net. Rows with hidden fee leakage exceeding max($0.50, 0.25% of Gross) are flagged as FEE_VARIANCE_ALERT.</div>
               <h3>Frequently Asked Questions</h3>
               <div class="faq-item"><h4>Are my rows sent to a server?</h4><p>No. Parsing and calculations run in your browser. Use the required tx_id,provider,gross_usd,actual_net_usd schema; native provider statement layouts are not auto-mapped.</p></div><div class="faq-item"><h4>Does a flagged variance prove hidden fees?</h4><p>No. It means actual net differs in either direction from the illustrative baseline beyond max($0.50, 0.25% of gross). Account-specific pricing, refunds, taxes and currency differences can also explain it.</p></div>
@@ -139,7 +141,7 @@ TX-1005,stripe_intl,500.00,465.00</textarea>
 
   <footer>
     <div class="footer-inner">
-      <span>&copy; 2026 PayoutFolio Publication. Client-side computation engine.</span>
+      <span>&copy; 2026 PayoutFolio Publication. Independent planning tools.</span>
       <span><a href="../index.html">Index</a> &nbsp;&bull;&nbsp; <a href="../legal.html">Privacy &amp; Terms</a> &nbsp;&bull;&nbsp; <a href="../sitemap.xml">Sitemap</a></span>
     </div>
   </footer>
